@@ -1,6 +1,8 @@
+let running = true;
 let balls = []
 const box = { x: 0, y: 0, x1: window.innerWidth, y1: window.innerHeight }
 let compared = []
+let stillCollideds = []
 let id = 1;
 let clickCount = 0
 const DEF_BALL_RELEASED = 0
@@ -28,10 +30,9 @@ function setup() {
 }
 
 function draw() {
-    // console.log('--- New loop ---')
 
     logs = [];
-    // background(255, 255, 255, 5);
+    background(255, 255, 255, 5);
 
     compared = []
     for (const ball of balls) {
@@ -40,7 +41,6 @@ function draw() {
         ball.move();
         ball.show();
     }
-
 
     logs.push("Framecount: " + frameCount);
 
@@ -62,7 +62,17 @@ function draw() {
     // }
 }
 
-
+function keyPressed() {
+    if (key == 'p') {
+        console.log('Parado!');
+        if (running) {
+            noLoop();
+        } else {
+            loop();
+        }
+        running = !running;
+    }
+}
 function mousePressed(event) {
     console.log("mousePressed")
     if (clickCount % 2 == 0) {
@@ -91,7 +101,6 @@ function releaseBalls() {
     for (const ball of balls) {
         ball.captured = DEF_BALL_RELEASED
     }
-
 }
 function captureBall() {
 
@@ -107,8 +116,6 @@ function captureBall() {
             ball.captured = DEF_BALL_CAPTURED
         }
     }
-
-
 
 }
 
@@ -151,7 +158,7 @@ class Ball {
         stroke(200)
         circle(this.p.x, this.p.y, this.r * 2)
         stroke(0)
-        text(this.m, this.p.x, this.p.y)
+        text(this.m + " (" + this.id + ")", this.p.x - (this.r / 2), this.p.y + 4)
     }
     collideWalls(box) {
 
@@ -182,42 +189,52 @@ class Ball {
         }
     }
 
+    isCollided(a, b) {
+
+        const dx = a.p.x - b.p.x;
+        const dy = a.p.y - b.p.y;
+        const distance = floor(Math.sqrt(dx * dx + dy * dy));
+        const raysSum = a.r + b.r
+        const diference = raysSum - distance
+
+        return { res: distance < raysSum, diference, raysSum, dx, dy }
+
+    }
+
     collide() {
 
         for (const other of balls) {
 
             if (other != this && !(this.captured || other.captured)) {
 
-                const dx = this.p.x - other.p.x;
-                const dy = this.p.y - other.p.y;
-                const distance = floor(Math.sqrt(dx * dx + dy * dy));
-                const raysSum = this.r + other.r
-                const collided = distance < raysSum
-                const diference = raysSum - distance
+                const collided = this.isCollided(this, other)
+                const { diference, distance, raysSum, dx, dy } = collided
 
-                this.collided = collided
-                other.collided = collided
-                let allread = false
-                for (const cp of compared) {
+                let alreadyCompared = false
+                let wasCollided = false
 
-                    if (cp.id1 == this.id && cp.id2 == other.id) {
-                        allread = true
-                        // console.log("Allread")
-                        // noLoop();
-                        break
-                    }
+                this.collided = collided.res
+                other.collided = collided.res
+
+                const cp = compared.find(e => e.id1 == this.id && e.id2 == other.id || e.id1 == other.id && e.id2 == this.id)
+
+                if (cp) {
+                    wasCollided = cp.wasCollided
+                    alreadyCompared = true
                 }
-                compared.push({ id1: this.id, id2: other.id })
-                compared.push({ id1: other.id, id2: this.id })
 
-                if (collided && !allread) {
+                const still = stillCollideds.find(e => ((e.id1 == this.id && e.id2 == other.id) || (e.id1 == other.id && e.id2 == this.id)))
 
+                // if (collided.res && !alreadyCompared && !wasCollided) {
+                // if (collided.res && !alreadyCompared && still == undefined) {
+                if (collided.res && !alreadyCompared && still == undefined) {
 
-                    console.log('Collided', compared)
-
+                    console.log('Collided!!!!  :', this.id, ' with ', other.id, ' wasCollided: ', wasCollided, ' FC: ', frameCount)
+                    console.log(compared)
                     console.log(`Distances masses ${this.m} and ${other.m}: ${distance}  Rays sum: ${raysSum} FC: ${frameCount} DIF: ${diference}`)
                     console.log('this.m: ', this.m, ' v: ', this.v); // {x: 1.6, y: 2.6}
                     console.log('other.m: ', other.m, ' v: ', other.v); // {x: -2.4, y: 0.6}
+
                     let angle = Math.atan2(dy, dx);
                     let sin = Math.sin(angle);
                     let cos = Math.cos(angle);
@@ -253,12 +270,39 @@ class Ball {
                     console.log('this.m: ', this.m, ' v: ', this.v); // {x: 1.6, y: 2.6}
                     console.log('other.m: ', other.m, ' v: ', other.v); // {x: -2.4, y: 0.6}
 
-                    // if (frameCount > 145) noLoop()
                 }
 
+                if (!alreadyCompared) {
+                    compared.push({ id1: this.id, id2: other.id, wasCollided: collided.res })
+                    compared.push({ id1: other.id, id2: this.id, wasCollided: collided.res })
+                }
+
+
             }
+
             this.move()
             other.move()
+
+            if (this.id != other.id) {
+
+                // Remove collision
+
+                stillCollideds = stillCollideds.filter(e => !((e.id1 == this.id && e.id2 == other.id) || (e.id1 == other.id && e.id2 == this.id)))
+
+                // Add again still collided
+
+                const stillCollided = this.isCollided(this, other)
+                if (stillCollided.diference > 10) {
+                    stillCollideds.push({ id1: this.id, id2: other.id, wasCollided: stillCollided.res })
+                    stillCollideds.push({ id1: other.id, id2: this.id, wasCollided: stillCollided.res })
+                    console.log('still: ', this.id, other.id)
+                }
+
+
+            }
+
+            // if (frameCount == 553) noLoop()
+
         }
     }
 }
