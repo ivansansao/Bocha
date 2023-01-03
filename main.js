@@ -156,15 +156,19 @@ class Ball {
     collideWalls(box) {
 
         if (this.p.y - this.r <= box.y) {
+            this.p.y = this.r + box.y
             this.v.y = -this.v.y
         }
         if (this.p.x - this.r <= box.x) {
+            this.p.x = this.r + box.x
             this.v.x = -this.v.x
         }
         if (this.p.y + this.r >= box.y1) {
+            this.p.y = box.y1 - this.r
             this.v.y = -this.v.y
         }
         if (this.p.x + this.r >= box.x1) {
+            this.p.x = box.x1 - this.r
             this.v.x = -this.v.x
         }
 
