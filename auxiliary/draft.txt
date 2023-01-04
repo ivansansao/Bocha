@@ -90,3 +90,36 @@ collide2() {
 
         }
     }
+
+    function setup() {
+
+    createCanvas(window.innerWidth, window.innerHeight);
+    balls.push(new Ball({ m: 8, r: 20, v: { x: 0.5, y: 0.3 }, p: { x: 600, y: 200 } }))
+    balls.push(new Ball({ m: 100, r: 60, v: { x: -0.1, y: -0.1 }, p: { x: 190, y: 295 } }))
+    balls.push(new Ball({ m: 100, r: 60, v: { x: 0, y: 1.7 }, p: { x: 250, y: 100 } }))
+    balls.push(new Ball({ m: 200, r: 30, v: { x: 0.0, y: 0.0 }, p: { x: 700, y: 100 } }))    
+    balls.push(new Ball({ m: 200, r: 30, v: { x: -1.0, y: 0.0 }, p: { x: 1000, y: 100 } }))
+    balls.push(new Ball({ m: 800, r: 30, v: { x: 0.0, y: 0.01 }, p: { x: 500, y: 400 } }))
+    balls.push(new Ball({ m: 8000, r: 100, v: { x: 0.0, y: 0.0 }, p: { x: 320, y: 400 } }))
+
+    let ib = 0
+    while (ib < 0) {
+
+        const ball = new Ball({ m: floor(random(0, 500)), r: random(10, 70), v: { x: 0.0, y: 0.0 }, p: { x: random(0, innerWidth), y: random(0, innerHeight) } })
+
+        for (const other of balls) {
+            if (!ball.isCollided(ball, other).res) {
+                balls.push(ball)
+                ib++
+                break
+            }
+        }
+
+    }
+
+    for (const ball of balls) {
+        ball.friction = 0.9995
+    }
+
+
+}

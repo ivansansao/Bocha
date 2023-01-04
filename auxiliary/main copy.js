@@ -136,7 +136,7 @@ function showInfo() {
 
 class Ball {
 
-    constructor({ m, r, v, p }) {
+    constructor({ m, r, v, p, color }) {
 
         this.m = m // Mass scalar
         this.r = r // Ray scalar
@@ -146,6 +146,7 @@ class Ball {
         this.collided = false;
         this.id = id++;
         this.captured = 0;
+        this.color = color
 
     }
 
@@ -154,7 +155,12 @@ class Ball {
             fill(255, 0, 0)
         } else {
             const mapId = ceil(map(this.id, 1, id, 50, 240))
-            const color = 'hsla(' + mapId + ',100%,50%,0.8)';
+            if (this.color) {
+                fill(color)
+            } else {
+                const color = 'hsla(' + mapId + ',100%,50%,0.8)';
+            }
+
             fill(color)
         }
         stroke(200)
