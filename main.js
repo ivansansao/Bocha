@@ -275,10 +275,6 @@ class Ball {
                     compared.push({ id1: other.id, id2: this.id })
                 }
 
-
-            } else {
-                this.move()
-                other.move()
             }
 
         }

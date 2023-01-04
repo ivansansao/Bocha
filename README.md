@@ -22,9 +22,18 @@ Take a look at "Two-dimensional collision with two moving objects" on: https://e
 This formula can be wrote as a pseudo code below.
 ![Formula](./src/assets/formula.png?raw=true "")
 
-See this pseudo code, (is not mine):
+See this pseudo code that I adapted:
 
-~~~javascript 
+~~~javascript
+
+// Just move balls not collideds
+
+if not collided {
+    ball1.move()
+    ball2.move()
+    return
+}
+
 // Discovery new velocities
 
 theta1 = atan2(ball1.dy, ball1.dx) // Angle
@@ -32,8 +41,8 @@ theta2 = atan2(ball2.dy, ball2.dx) // Angle
 phi = atan2(ball2.y - ball1.y, ball2.x - ball1.x) // Contact angle
 m1 = ball1.mass
 m2 = ball2.mass
-v1 = sqrt(ball1.dx * ball1.dx + ball1.dy * ball1.dy) // Speed
-v2 = sqrt(ball2.dx * ball2.dx + ball2.dy * ball2.dy) // Speed
+v1 = sqrt(ball1.dx * ball1.dx + ball1.dy * ball1.dy) // Velocity
+v2 = sqrt(ball2.dx * ball2.dx + ball2.dy * ball2.dy) // Velocity
 
 dx1F = (v1 * cos(theta1 - phi) * (m1-m2) + 2*m2*v2*cos(theta2 - phi)) / (m1+m2) * cos(phi) + v1*sin(theta1-phi) * cos(phi+PI/2)
 dy1F = (v1 * cos(theta1 - phi) * (m1-m2) + 2*m2*v2*cos(theta2 - phi)) / (m1+m2) * sin(phi) + v1*sin(theta1-phi) * sin(phi+PI/2)
