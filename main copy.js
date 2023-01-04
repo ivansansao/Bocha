@@ -24,7 +24,7 @@ function setup() {
     balls.push(new Ball({ m: 800, r: 30, v: { x: 0.0, y: 0.01 }, p: { x: 500, y: 400 } }))
     balls.push(new Ball({ m: 8000, r: 100, v: { x: 0.0, y: 0.0 }, p: { x: 320, y: 400 } }))
 
-    // balls[0].friction = 0.9995
+    balls[0].friction = 0.9995
 
 
 
@@ -39,6 +39,7 @@ function draw() {
     for (const ball of balls) {
         ball.collide();
         ball.collideWalls(box);
+        ball.move();
         ball.show();
     }
 
@@ -161,13 +162,6 @@ class Ball {
         stroke(0)
         text(this.m + " (" + this.id + ")", this.p.x - (this.r / 2), this.p.y + 4)
     }
-
-    speed() {
-        return Math.sqrt(this.v.x * this.v.x + this.v.y * this.v.y);
-    }
-    angle() {
-        return Math.atan2(this.v.x, this.v.y);
-    }
     collideWalls(box) {
 
         if (this.p.y - this.r <= box.y) {
@@ -213,6 +207,7 @@ class Ball {
         return { res: distance < raysSum, diference, raysSum, dx, dy }
 
     }
+
     collide() {
 
         for (const other of balls) {
@@ -241,11 +236,11 @@ class Ball {
                 // if (collided.res && !alreadyCompared && still == undefined) {
                 if (collided.res && !alreadyCompared && still == undefined) {
 
-                    // console.log('Collided!!!!  :', this.id, ' with ', other.id, ' wasCollided: ', wasCollided, ' FC: ', frameCount)
-                    // console.log(compared)
-                    // console.log(`Distances masses ${this.m} and ${other.m}: ${distance}  Rays sum: ${raysSum} FC: ${frameCount} DIF: ${diference}`)
-                    // console.log('this.m: ', this.m, ' v: ', this.v); // {x: 1.6, y: 2.6}
-                    // console.log('other.m: ', other.m, ' v: ', other.v); // {x: -2.4, y: 0.6}
+                    console.log('Collided!!!!  :', this.id, ' with ', other.id, ' wasCollided: ', wasCollided, ' FC: ', frameCount)
+                    console.log(compared)
+                    console.log(`Distances masses ${this.m} and ${other.m}: ${distance}  Rays sum: ${raysSum} FC: ${frameCount} DIF: ${diference}`)
+                    console.log('this.m: ', this.m, ' v: ', this.v); // {x: 1.6, y: 2.6}
+                    console.log('other.m: ', other.m, ' v: ', other.v); // {x: -2.4, y: 0.6}
 
                     let angle = Math.atan2(dy, dx);
                     let sin = Math.sin(angle);
@@ -279,6 +274,8 @@ class Ball {
                     other.v.x = (cos * c2Vel.x) - (sin * c2Vel.y);
                     other.v.y = (cos * c2Vel.y) + (sin * c2Vel.x);
 
+                    console.log('this.m: ', this.m, ' v: ', this.v); // {x: 1.6, y: 2.6}
+                    console.log('other.m: ', other.m, ' v: ', other.v); // {x: -2.4, y: 0.6}
 
                 }
 
@@ -305,8 +302,7 @@ class Ball {
                 if (stillCollided.diference > 10) {
                     stillCollideds.push({ id1: this.id, id2: other.id, wasCollided: stillCollided.res })
                     stillCollideds.push({ id1: other.id, id2: this.id, wasCollided: stillCollided.res })
-                    console.log('still collided: ', this.id, other.id)
-                    noLoop()
+                    console.log('still: ', this.id, other.id)
                 }
 
 
@@ -316,5 +312,4 @@ class Ball {
 
         }
     }
-
 }

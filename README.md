@@ -9,6 +9,7 @@ Take a look at "Two-dimensional collision with two moving objects" on: https://e
 Each ball has
 - Mass
 - Velocity
+- Friction
 - Radius
 - Position on screen
 

@@ -1,0 +1,84 @@
+collide2() {
+
+        for (const other of balls) {
+
+            if (other != this && !(this.captured || other.captured)) {
+
+                const collided = this.isCollided(this, other)
+                const { diference, distance, raysSum, dx, dy } = collided
+
+                let alreadyCompared = false
+                let wasCollided = false
+
+                this.collided = collided.res
+                other.collided = collided.res
+
+                const cp = compared.find(e => e.id1 == this.id && e.id2 == other.id || e.id1 == other.id && e.id2 == this.id)
+
+                if (cp) {
+                    wasCollided = cp.wasCollided
+                    alreadyCompared = true
+                }
+
+                const still = stillCollideds.find(e => ((e.id1 == this.id && e.id2 == other.id) || (e.id1 == other.id && e.id2 == this.id)))
+
+                if (collided.res && !alreadyCompared) {
+
+                    console.log('Collided!!!!  :', this.id, ' with ', other.id, ' wasCollided: ', wasCollided, ' FC: ', frameCount)
+                    console.log(compared)
+                    console.log(`Distances masses ${this.m} and ${other.m}: ${distance}  Rays sum: ${raysSum} FC: ${frameCount} DIF: ${diference}`)
+                    console.log('this.m: ', this.m, ' v: ', this.v); // {x: 1.6, y: 2.6}
+                    console.log('other.m: ', other.m, ' v: ', other.v); // {x: -2.4, y: 0.6}
+
+                    let theta1 = this.angle();
+                    let theta2 = other.angle();
+                    let phi = Math.atan2(other.p.y - this.p.y, other.p.x - this.p.x);
+                    let m1 = this.m;
+                    let m2 = other.m;
+                    let v1 = this.speed();
+                    let v2 = other.speed();
+
+                    let dx1F = (v1 * Math.cos(theta1 - phi) * (m1 - m2) + 2 * m2 * v2 * Math.cos(theta2 - phi)) / (m1 + m2) * Math.cos(phi) + v1 * Math.sin(theta1 - phi) * Math.cos(phi + Math.PI / 2);
+                    let dy1F = (v1 * Math.cos(theta1 - phi) * (m1 - m2) + 2 * m2 * v2 * Math.cos(theta2 - phi)) / (m1 + m2) * Math.sin(phi) + v1 * Math.sin(theta1 - phi) * Math.sin(phi + Math.PI / 2);
+                    let dx2F = (v2 * Math.cos(theta2 - phi) * (m2 - m1) + 2 * m1 * v1 * Math.cos(theta1 - phi)) / (m1 + m2) * Math.cos(phi) + v2 * Math.sin(theta2 - phi) * Math.cos(phi + Math.PI / 2);
+                    let dy2F = (v2 * Math.cos(theta2 - phi) * (m2 - m1) + 2 * m1 * v1 * Math.cos(theta1 - phi)) / (m1 + m2) * Math.sin(phi) + v2 * Math.sin(theta2 - phi) * Math.sin(phi + Math.PI / 2);
+
+                    this.v.x = dx1F;
+                    this.v.y = dy1F;
+                    other.v.x = dx2F;
+                    other.v.y = dy2F;
+
+                }
+
+                if (!alreadyCompared) {
+                    compared.push({ id1: this.id, id2: other.id, wasCollided: collided.res })
+                    compared.push({ id1: other.id, id2: this.id, wasCollided: collided.res })
+                }
+
+            }
+
+            this.move()
+            other.move()
+
+            if (this.id != other.id) {
+
+                // Remove collision
+
+                stillCollideds = stillCollideds.filter(e => !((e.id1 == this.id && e.id2 == other.id) || (e.id1 == other.id && e.id2 == this.id)))
+
+                // Add again still collided
+
+                const stillCollided = this.isCollided(this, other)
+                if (stillCollided.diference > 10) {
+                    stillCollideds.push({ id1: this.id, id2: other.id, wasCollided: stillCollided.res })
+                    stillCollideds.push({ id1: other.id, id2: this.id, wasCollided: stillCollided.res })
+                    console.log('still: ', this.id, other.id)
+                }
+
+
+            }
+
+            // if (frameCount == 553) noLoop()
+
+        }
+    }
