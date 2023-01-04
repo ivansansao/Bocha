@@ -222,7 +222,6 @@ class Ball {
             if (other != this && !(this.captured || other.captured)) {
 
                 const collided = this.isCollided(this, other)
-                const { dx, dy } = collided
 
                 this.collided = collided.res
                 other.collided = collided.res
@@ -231,6 +230,7 @@ class Ball {
 
                 if (collided.res && !alreadyCompared) {
 
+                    const { dx, dy } = collided
                     let angle = Math.atan2(dy, dx);
                     let sin = Math.sin(angle);
                     let cos = Math.cos(angle);
