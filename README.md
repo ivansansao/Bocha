@@ -1,4 +1,4 @@
-# 2d elastic collision
+# Bocha
 
 Javascript 2d elastic collision
 
@@ -13,4 +13,7 @@ Each ball has
 - Radius
 - Position on screen
 
+See, there is a solution to handle ball inside to ball!
+
+GIF...
 ![Alt Text](src/assets/show1.gif)
