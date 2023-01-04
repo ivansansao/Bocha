@@ -239,7 +239,7 @@ class Ball {
 
                 // if (collided.res && !alreadyCompared && !wasCollided) {
                 // if (collided.res && !alreadyCompared && still == undefined) {
-                if (collided.res && !alreadyCompared && still == undefined) {
+                if (collided.res && !alreadyCompared) {
 
                     // console.log('Collided!!!!  :', this.id, ' with ', other.id, ' wasCollided: ', wasCollided, ' FC: ', frameCount)
                     // console.log(compared)
@@ -279,8 +279,33 @@ class Ball {
                     other.v.x = (cos * c2Vel.x) - (sin * c2Vel.y);
                     other.v.y = (cos * c2Vel.y) + (sin * c2Vel.x);
 
+                    // --
 
+                    this.move()
+                    other.move()
+
+                    // Remove collision
+
+                    stillCollideds = stillCollideds.filter(e => !((e.id1 == this.id && e.id2 == other.id) || (e.id1 == other.id && e.id2 == this.id)))
+
+                    // Add again still collided
+
+                    let stillCollided = this.isCollided(this, other)
+
+                    let x = 0
+                    while (stillCollided.diference > 0 && x < 999) {
+                        this.move()
+                        other.move()
+                        stillCollideds.push({ id1: this.id, id2: other.id, wasCollided: stillCollided.res })
+                        stillCollideds.push({ id1: other.id, id2: this.id, wasCollided: stillCollided.res })
+                        stillCollided = this.isCollided(this, other)
+                        x++
+                    }
+                } else {
+                    this.move()
+                    other.move()
                 }
+
 
                 if (!alreadyCompared) {
                     compared.push({ id1: this.id, id2: other.id, wasCollided: collided.res })
@@ -288,27 +313,9 @@ class Ball {
                 }
 
 
-            }
-
-            this.move()
-            other.move()
-
-            if (this.id != other.id) {
-
-                // Remove collision
-
-                stillCollideds = stillCollideds.filter(e => !((e.id1 == this.id && e.id2 == other.id) || (e.id1 == other.id && e.id2 == this.id)))
-
-                // Add again still collided
-
-                const stillCollided = this.isCollided(this, other)
-                if (stillCollided.diference > 10) {
-                    stillCollideds.push({ id1: this.id, id2: other.id, wasCollided: stillCollided.res })
-                    stillCollideds.push({ id1: other.id, id2: this.id, wasCollided: stillCollided.res })
-                    console.log('still collided: ', this.id, other.id)
-                    noLoop()
-                }
-
+            } else {
+                this.move()
+                other.move()
 
             }
 
