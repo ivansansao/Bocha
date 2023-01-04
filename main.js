@@ -36,7 +36,10 @@ function setup() {
 
     }
 
-    balls[0].friction = 0.9995
+    for (const ball of balls) {
+        ball.friction = 0.9995
+    }
+
 
 }
 
@@ -57,15 +60,46 @@ function draw() {
     if (mouseIsPressed) {
         for (const ball of balls) {
             if (ball.captured == DEF_BALL_CAPTURED) {
-                const distMouse = p5.Vector.dist(createVector(mouseX, mouseY), createVector(ball.p.x, ball.p.y))
-                logs.push('distMouse ' + distMouse)
-                line(mouseX, mouseY, ball.p.x, ball.p.y)
+                throwBall(ball)
             }
 
         }
     }
 
     showInfo();
+
+}
+
+function throwBall(ball) {
+
+    // Discovery veocity
+
+    const distMouse = min(200, p5.Vector.dist(createVector(mouseX, mouseY), createVector(ball.p.x, ball.p.y)))
+
+    logs.push('distMouse ' + distMouse)
+    line(mouseX, mouseY, ball.p.x, ball.p.y)
+
+    const x = mouseX;
+    const y = mouseY;
+
+    // Calcula a direção da bola com base na posição atual da bola e na posição do mouse
+    const direction = Math.atan2(y - ball.p.y, x - ball.p.x);
+
+    const force = map(distMouse, 0, 200, 0, 2)
+
+    // Apply velocity
+    // Atualiza a posição da bola com base na direção
+    const VxF = -Math.cos(direction) * force
+    const VyF = -Math.sin(direction) * force
+
+    logs.push('direction ' + direction)
+    logs.push('Math.cos(direction) ' + Math.cos(direction))
+    logs.push('Math.sin(direction) ' + Math.sin(direction))
+
+    ball.v.x = VxF;
+    ball.v.y = VyF;
+    showInfo();
+
 
 }
 
@@ -132,8 +166,8 @@ function showInfo() {
 
     for (let i = 0; i < logs.length; i++) {
         const element = logs[i];
-        fill(255)
-        rect(10, 4, 200, (i + 1) * 20);
+        // fill(255)
+        // rect(10, 4, 200, (i + 1) * 20);
         fill(0)
         text(element, 10, (i + 1) * 20);
     }
