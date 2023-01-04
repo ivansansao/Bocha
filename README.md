@@ -14,7 +14,7 @@ Each ball has
 See, there is a solution to handle ball inside to ball!
 
 GIF...
-![Gif](src/assets/show1.gif)
+![Gif](src/assets/collisions.gif)
 
 
 Take a look at "Two-dimensional collision with two moving objects" on: https://en.wikipedia.org/wiki/Elastic_collision
@@ -46,4 +46,12 @@ ball1.dx = dx1F
 ball1.dy = dy1F                
 ball2.dx = dx2F                
 ball2.dy = dy2F
+
+// If they are still collideds, throw ball to out
+
+for (i = 0; i < 999; i++) {
+    ball1.move()
+    ball2.move()
+    if !isCollided(ball1, ball2) break
+}
 ~~~  
