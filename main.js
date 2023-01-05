@@ -627,7 +627,7 @@ class Scoreboard {
 
         textAlign(CENTER);
         textStyle(BOLD);
-        textSize(24)
+        textSize(22)
 
         noStroke()
         fill(0)
@@ -651,7 +651,7 @@ class Scoreboard {
                 fill(255)
                 rect(x + (i * wB) + 1, y2 + 1, wB - 2, h - 2)
                 fill(0)
-                text(i * 2, x + (i * wB) + 14, y2 + (h / 2) + 8)
+                text(i * 2, x + (i * wB) + 13, y2 + (h / 2) + 8)
                 stroke(0)
             }
             if (i * 2 == blue) {
@@ -659,7 +659,7 @@ class Scoreboard {
                 fill(255)
                 rect(x + (i * wB) + 1, y3 + 1, wB - 2, h - 2)
                 fill(0)
-                text(i * 2, x + (i * wB) + 14, y3 + (h / 2) + 8)
+                text(i * 2, x + (i * wB) + 13, y3 + (h / 2) + 8)
                 stroke(0)
             }
             line(x + (i * wB), y2, x + (i * wB), y2 + h)
@@ -677,7 +677,7 @@ class Scoreboard {
         if (this.roundWinner == "") {
             msg = "Vamos lá!"
         } else {
-            msg = toPT(this.roundWinner) + ' fez ' + points
+            msg = points + ' ' + toPT(this.roundWinner)
         }
         noStroke()
         fill(0)
