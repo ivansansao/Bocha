@@ -75,7 +75,7 @@ function mousePressed(event) {
 
 function mouseReleased() {
     if (clickCount % 2 == 0) {
-        releaseBalls()
+        releaseBall()
 
     }
 }
@@ -90,9 +90,16 @@ function mouseMoved() {
     }
 }
 
-function releaseBalls() {
+function releaseBall() {
     for (const ball of balls) {
-        ball.captured = DEF_BALL_RELEASED
+        if (ball.captured == DEF_BALL_CAPTURED) {
+            console.log(ball.v.y)
+            // Ig ball is moving to up them it is considered playing
+            if (ball.v.y < 0) {
+                ball.playing = true
+            }
+            ball.captured = DEF_BALL_RELEASED
+        }
     }
     box.calculatePoints = false
 }
@@ -320,9 +327,16 @@ class Box {
         this.x1 = this.x + this.width
         this.y1 = this.y + this.height
 
-        this.little = false;
-        this.nearestBocce = false;
-        this.calculatePoints = false;
+        this.little = false
+        this.nearestBocce = false
+        this.calculatePoints = false
+        this.scoreboard = new Scoreboard(20, 400)
+        // this.scoreboard = {
+        //     yellow: [],
+        //     blue: []
+        // }
+
+        this.risk = { x: this.x, y: this.height - (this.height / 4), x1: this.x + this.width, y1: this.height - (this.height / 4) }
 
     }
     putBalls() {
@@ -345,10 +359,10 @@ class Box {
         r = 20
         colr = color(48, 169, 255)
 
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 1)) - (2 * 1) }, friction, groupName: 'yellow', groupId: 5 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 2)) - (2 * 2) }, friction, groupName: 'yellow', groupId: 6 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 3)) - (2 * 3) }, friction, groupName: 'yellow', groupId: 7 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'yellow', groupId: 8 }))
+        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 1)) - (2 * 1) }, friction, groupName: 'blue', groupId: 5 }))
+        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 2)) - (2 * 2) }, friction, groupName: 'blue', groupId: 6 }))
+        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 3)) - (2 * 3) }, friction, groupName: 'blue', groupId: 7 }))
+        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'blue', groupId: 8 }))
 
     }
 
@@ -368,8 +382,12 @@ class Box {
         fill(255)
         rect(this.x, this.y, this.width, this.height)
 
-        circle(this.x, this.y, 10)
-        circle(this.x1, this.y1, 10)
+        line(this.risk.x, this.risk.y, this.risk.x1, this.risk.y1)
+
+        this.showScoreboard()
+        this.scoreboard.show()
+
+
     }
 
     move() {
@@ -378,11 +396,25 @@ class Box {
 
     onStoppedGame() {
 
-
         if (!this.calculatePoints) {
             this.calculatePoints = true
             this.verifyDistanceLittle()
             console.log("Calculei")
+        }
+
+        // Bocces is plauing now change to played.
+        for (const bocce of balls) {
+            if (bocce.playing) {
+                bocce.playing = false
+                bocce.played = true
+            }
+        }
+
+        if (this.isEndRound()) {
+            this.setRoundPoints()
+            balls = []
+            this.putBalls()
+            this.resetRound()
 
         }
     }
@@ -407,13 +439,99 @@ class Box {
 
     }
 
+    resetGame() {
+    }
+
+    resetRound() {
+
+        this.winner = ''
+        for (const bocce of balls) {
+        }
+
+    }
+
+    isEndRound() {
+        for (const b of balls) {
+            if (!b.played) {
+                return false
+            }
+        }
+        console.log('End round')
+        return true
+    }
+
+    setRoundPoints() {
+
+        balls.sort((a, b) => (a.distanceLitlle > b.distanceLitlle ? 1 : -1))
+        const winnerGroupName = balls[0].groupName
+        let pointsYellow = 0
+        let pointsBlue = 0
+
+
+        console.log('Winner: ', winnerGroupName)
+
+        for (const bocce of balls) {
+
+            if (bocce.groupName == winnerGroupName) {
+                console.log(bocce.groupName, bocce.distanceLitlle)
+                if (winnerGroupName == 'yellow') {
+                    pointsYellow += 2
+                } else {
+                    pointsBlue += 2
+                }
+            } else {
+                break
+            }
+
+        }
+
+        this.scoreboard.yellow.push(pointsYellow)
+        this.scoreboard.blue.push(pointsBlue)
+
+        console.log(this.scoreboard)
+
+    }
+
+    showScoreboard() {
+
+        const totalYellow = this.scoreboard.yellow.reduce((a, b) => a + b, 0)
+        const totalBlue = this.scoreboard.blue.reduce((a, b) => a + b, 0)
+
+        for (let i = 0; i < 13; i++) {
+            const x = 20 + (25 * i)
+            stroke(0)
+            line(x, 30, x, 130)
+            noStroke()
+            fill(0)
+
+            if (i * 2 == totalYellow) {
+                text(i * 2, x + 4, 55)
+            }
+            if (i * 2 == totalBlue) {
+                text(i * 2, x + 4, 110)
+            }
+
+            // text(this.scoreboard.yellow[i], x, 45)
+            // text(this.scoreboard.blue[i], x, 70)
+        }
+        stroke(0)
+        noFill()
+        rect(20, 30, 324, 100)
+        line(20, 80, 344, 80)
+
+    }
+
 }
+
 
 class Bocce extends Ball {
     constructor(args) {
         super(args)
         this.distanceLitlle = Infinity
         this.nearest = false
+        this.played = false
+        this.playing = false
+        this.passedRisk = false
     }
     show() {
         if (this.captured) {
@@ -436,7 +554,6 @@ class Bocce extends Ball {
 
 
     }
-
 
     throwBall() {
 
@@ -466,12 +583,85 @@ class Bocce extends Ball {
         const VyF = -Math.sin(direction) * force
 
         logs.push('direction ' + direction)
+        logs.push('force ' + force)
         logs.push('Math.cos(direction) ' + Math.cos(direction))
         logs.push('Math.sin(direction) ' + Math.sin(direction))
 
         ball.v.x = VxF;
         ball.v.y = VyF;
+
         showInfo();
+
+        return force
+
+    }
+
+
+    collideWalls(box) {
+
+        if (this.played || this.playing) {
+            super.collideWalls(box)
+        } else {
+
+            const condBox = { ...box }
+            condBox.y = box.risk.y
+            // condBox.y1 = box.risk.y1
+            super.collideWalls(condBox)
+        }
+
+    }
+}
+
+class Scoreboard {
+    constructor(x, y) {
+        this.x = x
+        this.y = y
+        this.yellow = []
+        this.blue = []
+    }
+
+    getTotalYellow() {
+        return this.yellow.reduce((a, b) => a + b, 0)
+    }
+    getTotalBlue() {
+        return this.blue.reduce((a, b) => a + b, 0)
+    }
+
+    show() {
+        const { x, y } = this
+        const y2 = y + 67
+        const w = 324
+        const h = 50
+        const yellow = this.getTotalYellow()
+        const blue = this.getTotalBlue()
+        const wB = w / 12
+
+        fill(255, 255, 0)
+        rect(x, y, w, h)
+
+        fill(48, 169, 255)
+        rect(x, y2, w, h)
+
+        stroke(0)
+        textAlign(CENTER);
+        for (let i = 0; i < 12; i++) {
+
+            if (i * 2 == yellow) {
+                noStroke()
+                fill(0)
+                text(i * 2, x + (i * wB) + 14, y + (h / 2) + 4)
+                stroke(0)
+            }
+            if (i * 2 == blue) {
+                noStroke()
+                fill(0)
+                text(i * 2, x + (i * wB) + 14, y2 + (h / 2) + 4)
+                stroke(0)
+            }
+            line(x + (i * wB), y, x + (i * wB), y + h)
+            line(x + (i * wB), y2, x + (i * wB), y2 + h)
+        }
+
 
     }
 }
