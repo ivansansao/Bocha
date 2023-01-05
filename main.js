@@ -123,13 +123,16 @@ function captureBall() {
 function showInfo() {
 
     noStroke()
+    textAlign(LEFT)
+    textSize(14)
+    textStyle(NORMAL)
 
     for (let i = 0; i < logs.length; i++) {
         const element = logs[i];
         // fill(255)
         // rect(10, 4, 200, (i + 1) * 20);
         fill(0)
-        text(element, 10, (i + 1) * 20);
+        text(element, 10, 220 + (i + 1) * 20);
     }
 
 }
@@ -330,7 +333,8 @@ class Box {
         this.little = false
         this.nearestBocce = false
         this.calculatePoints = false
-        this.scoreboard = new Scoreboard(20, 400)
+        this.scoreboard = new Scoreboard(20, 20)
+        this.busy = false;
         // this.scoreboard = {
         //     yellow: [],
         //     blue: []
@@ -384,7 +388,6 @@ class Box {
 
         line(this.risk.x, this.risk.y, this.risk.x1, this.risk.y1)
 
-        this.showScoreboard()
         this.scoreboard.show()
 
 
@@ -410,12 +413,20 @@ class Box {
             }
         }
 
-        if (this.isEndRound()) {
-            this.setRoundPoints()
-            balls = []
-            this.putBalls()
-            this.resetRound()
+        if (!this.busy) {
 
+            if (this.isEndRound()) {
+                this.busy = true
+                setTimeout(() => {
+                    this.setRoundPoints()
+                    balls = []
+                    this.putBalls()
+                    this.resetRound()
+                    this.busy = false
+
+                }, 5000)
+
+            }
         }
     }
 
@@ -463,18 +474,19 @@ class Box {
     setRoundPoints() {
 
         balls.sort((a, b) => (a.distanceLitlle > b.distanceLitlle ? 1 : -1))
-        const winnerGroupName = balls[0].groupName
+        this.scoreboard.roundWinner = balls[0].groupName
+
         let pointsYellow = 0
         let pointsBlue = 0
 
 
-        console.log('Winner: ', winnerGroupName)
+        console.log('Winner: ', this.scoreboard.roundWinner)
 
         for (const bocce of balls) {
 
-            if (bocce.groupName == winnerGroupName) {
+            if (bocce.groupName == this.scoreboard.roundWinner) {
                 console.log(bocce.groupName, bocce.distanceLitlle)
-                if (winnerGroupName == 'yellow') {
+                if (this.scoreboard.roundWinner == 'yellow') {
                     pointsYellow += 2
                 } else {
                     pointsBlue += 2
@@ -492,34 +504,6 @@ class Box {
 
     }
 
-    showScoreboard() {
-
-        const totalYellow = this.scoreboard.yellow.reduce((a, b) => a + b, 0)
-        const totalBlue = this.scoreboard.blue.reduce((a, b) => a + b, 0)
-
-        for (let i = 0; i < 13; i++) {
-            const x = 20 + (25 * i)
-            stroke(0)
-            line(x, 30, x, 130)
-            noStroke()
-            fill(0)
-
-            if (i * 2 == totalYellow) {
-                text(i * 2, x + 4, 55)
-            }
-            if (i * 2 == totalBlue) {
-                text(i * 2, x + 4, 110)
-            }
-
-            // text(this.scoreboard.yellow[i], x, 45)
-            // text(this.scoreboard.blue[i], x, 70)
-        }
-        stroke(0)
-        noFill()
-        rect(20, 30, 324, 100)
-        line(20, 80, 344, 80)
-
-    }
 
 }
 
@@ -548,7 +532,8 @@ class Bocce extends Ball {
         if (this.distanceLitlle < Infinity) {
             noStroke()
             fill(0)
-            text(floor(this.distanceLitlle), this.p.x - (this.r / 2) + 4, this.p.y + 4)
+            textSize(14)
+            text(floor(this.distanceLitlle), this.p.x - (this.r / 2) + 8, this.p.y + 4)
         }
 
 
@@ -618,6 +603,7 @@ class Scoreboard {
         this.y = y
         this.yellow = []
         this.blue = []
+        this.roundWinner = ''
     }
 
     getTotalYellow() {
@@ -628,40 +614,83 @@ class Scoreboard {
     }
 
     show() {
+
         const { x, y } = this
-        const y2 = y + 67
         const w = 324
         const h = 50
+        const hTitle = 40
+        const y2 = y + hTitle
+        const y3 = y2 + h
         const yellow = this.getTotalYellow()
         const blue = this.getTotalBlue()
         const wB = w / 12
 
-        fill(255, 255, 0)
-        rect(x, y, w, h)
+        textAlign(CENTER);
+        textStyle(BOLD);
+        textSize(24)
 
-        fill(48, 169, 255)
+        noStroke()
+        fill(0)
+        text('PLACAR', x + (w / 2), y + (hTitle / 2) + 8)
+        stroke(0)
+        noFill()
+        rect(x, y, w, hTitle)
+
+        fill(255, 255, 0)
         rect(x, y2, w, h)
 
+        fill(48, 169, 255)
+        rect(x, y3, w, h)
+
         stroke(0)
-        textAlign(CENTER);
+
         for (let i = 0; i < 12; i++) {
 
             if (i * 2 == yellow) {
                 noStroke()
+                fill(255)
+                rect(x + (i * wB) + 1, y2 + 1, wB - 2, h - 2)
                 fill(0)
-                text(i * 2, x + (i * wB) + 14, y + (h / 2) + 4)
+                text(i * 2, x + (i * wB) + 14, y2 + (h / 2) + 8)
                 stroke(0)
             }
             if (i * 2 == blue) {
                 noStroke()
+                fill(255)
+                rect(x + (i * wB) + 1, y3 + 1, wB - 2, h - 2)
                 fill(0)
-                text(i * 2, x + (i * wB) + 14, y2 + (h / 2) + 4)
+                text(i * 2, x + (i * wB) + 14, y3 + (h / 2) + 8)
                 stroke(0)
             }
-            line(x + (i * wB), y, x + (i * wB), y + h)
             line(x + (i * wB), y2, x + (i * wB), y2 + h)
+            line(x + (i * wB), y3, x + (i * wB), y3 + h)
         }
 
+        const y4 = y3 + h
+        let pointsYellow = this.yellow[this.yellow.length - 1]
+        let pointsBlue = this.blue[this.blue.length - 1]
+        let msg = ""
+        const points = pointsYellow > 0 ? pointsYellow : pointsBlue
 
+        fill(255)
+        rect(x, y4, w, h)
+        if (this.roundWinner == "") {
+            msg = "Vamos lá!"
+        } else {
+            msg = toPT(this.roundWinner) + ' fez ' + points
+        }
+        noStroke()
+        fill(0)
+        text(msg, x + (w / 2), y4 + (h / 2) + 8)
+
+    }
+}
+
+function toPT(what) {
+    switch (what) {
+        case "blue":
+            return "Azul"
+        case "yellow":
+            return "Amarelo"
     }
 }
