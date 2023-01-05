@@ -1,5 +1,3 @@
-
-
 const DEF_BALL_RELEASED = 0
 const DEF_BALL_CAPTURED = 1
 
@@ -10,14 +8,16 @@ let running = true;
 let id = 1;
 let clickCount = 0
 let box = false;
+let client = false
 
 function setup() {
+
+    client = new Client()
 
     createCanvas(window.innerWidth, window.innerHeight);
 
     box = new Box()
     box.putBalls()
-
 
 }
 
@@ -49,6 +49,8 @@ function draw() {
     logs.push('Jogo parado: ' + box.stoppedGame())
 
     showInfo();
+
+
 
 }
 
@@ -82,6 +84,7 @@ function mouseReleased() {
 
 function mouseMoved() {
 
+
     for (const ball of balls) {
         if (ball.captured) {
             ball.p.x = mouseX;
@@ -97,6 +100,7 @@ function releaseBall() {
             // Ig ball is moving to up them it is considered playing
             if (ball.v.y < 0) {
                 ball.playing = true
+                client.send(`Jogou a bola ${ball.groupName} número ${ball.groupId}`)
             }
             ball.captured = DEF_BALL_RELEASED
         }
@@ -536,8 +540,6 @@ class Bocce extends Ball {
             text(floor(this.distanceLitlle), this.p.x - (this.r / 2) + 8, this.p.y + 4)
         }
 
-
-
     }
 
     throwBall() {
@@ -693,4 +695,42 @@ function toPT(what) {
         case "yellow":
             return "Amarelo"
     }
+}
+
+class Client {
+    constructor() {
+        this.ws = null
+        this.connect()
+        this.isConnected = false
+
+    }
+    connect() {
+
+        this.ws = new WebSocket('ws://localhost:8080')
+        const ws = this.ws
+
+        ws.onopen = this.onOpen
+        ws.onmessage = this.onMessage
+
+    }
+
+    onOpen = (data) => {
+
+        this.isConnected = true
+        this.send(Date.now() + ": Conectei no server")
+    }
+
+    onMessage = (data) => {
+
+        const ws = this.ws
+        console.log("Recebido: ", data.data)
+
+    }
+
+    send = (data) => {
+        if (this.isConnected) {
+            this.ws.send(data)
+        }
+    }
+
 }

@@ -1,0 +1,8 @@
+node_modules/
+temp/
+testes*.js
+.env
+.nuxt
+.eslintrc.*
+dist
+package-lock.json

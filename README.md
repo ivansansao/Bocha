@@ -63,3 +63,13 @@ for (i = 0; i < 999; i++) {
     if !isCollided(ball1, ball2) break
 }
 ~~~  
+
+# Server
+
+You can star the server running:
+
+~~~bash
+cd server
+npm i # Just first time
+node main
+~~~
