@@ -15,7 +15,6 @@ function mouseReleased() {
 
 function mouseMoved() {
 
-
     for (const ball of balls) {
         if (ball.captured) {
             ball.p.x = mouseX;

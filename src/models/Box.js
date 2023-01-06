@@ -4,31 +4,28 @@ class Box {
         this.width = 400
         this.height = 800
 
-        this.x = (window.innerWidth / 2) - (this.width / 2)
+        this.x = max(350, (window.innerWidth / 2) - (this.width / 2))
         this.y = 4 || (window.innerHeight / 2) - (this.height / 2)
         this.x1 = this.x + this.width
         this.y1 = this.y + this.height
 
         this.little = false
         this.nearestBocce = false
-        this.calculatePoints = false
-        this.scoreboard = new Scoreboard(20, 20)
+        this.scoreboard = new Scoreboard(20, 4)
         this.isStoppedGame = true
-        // this.scoreboard = {
-        //     yellow: [],
-        //     blue: []
-        // }
 
         this.risk = { x: this.x, y: this.height - (this.height / 4), x1: this.x + this.width, y1: this.height - (this.height / 4) }
 
     }
     putBalls() {
 
-        const friction = 0.9992
+        let friction = 0.999
 
         let r = 10
         let colr = color(100)
         balls.push(new Bocce({ colr, m: 100, r, p: { x: this.x + (this.width / 2), y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'litle', groupId: 0 }))
+
+        friction = 0.9992
 
         this.little = balls[0]
 
@@ -73,7 +70,6 @@ class Box {
 
         this.scoreboard.show()
 
-
     }
 
     move() {
@@ -89,11 +85,8 @@ class Box {
 
         console.log("Stopped game")
 
-        if (!this.calculatePoints) {
-            this.calculatePoints = true
-            this.verifyDistanceLittle()
-            console.log("Calculei")
-        }
+        this.verifyDistanceLittle()
+        console.log("Calculei")
 
         // Bocces is plauing now change to played.
         for (const bocce of balls) {
@@ -103,23 +96,22 @@ class Box {
             }
         }
 
-        // if (!this.busy) {
-
         this.setRunningPoints()
 
         if (this.isEndRound()) {
-            // this.busy = true
-            this.setRoundPoints()
-            this.scoreboard.update()
+
+            setTimeout(() => {
+                this.setRoundPoints()
+                this.scoreboard.update()
+            }, 3000)
+
             setTimeout(() => {
                 balls = []
                 this.putBalls()
                 this.resetRound()
-                // this.busy = false
 
-            }, 5000)
+            }, 6000)
 
-            // }
         }
     }
 
@@ -163,7 +155,6 @@ class Box {
 
         this.scoreboard.runningYellow = pointsYellow
         this.scoreboard.runningYblue = pointsBlue
-
 
     }
 
@@ -237,38 +228,51 @@ class Box {
         console.log(this.scoreboard)
 
     }
+    throwBall() {
+
+        for (const bocce of balls) {
+            if (bocce.captured == DEF_BALL_CAPTURED) {
+                bocce.throwBall()
+
+            }
+
+        }
+    }
 
 }
 
-
 function releaseBall() {
-    for (const ball of balls) {
-        if (ball.captured == DEF_BALL_CAPTURED) {
-            console.log(ball.v.y)
+
+    for (const bocce of balls) {
+
+        if (bocce.captured == DEF_BALL_CAPTURED) {
+
+            console.log(bocce.v.y)
             // Ig ball is moving to up them it is considered playing
-            if (ball.v.y < 0) {
-                ball.playing = true
-                client.send(`Jogou a bola ${ball.groupName} número ${ball.groupId}`)
+            if (bocce.v.y < 0) {
+                bocce.playing = true
+                client.send(`Jogou a bola ${bocce.groupName} número ${bocce.groupId}`)
             }
-            ball.captured = DEF_BALL_RELEASED
+            bocce.captured = DEF_BALL_RELEASED
+
         }
+
     }
-    box.calculatePoints = false
 }
 function captureBall() {
 
-    for (const ball of balls) {
+    for (const bocce of balls) {
 
-        if (!ball.playing && !ball.played) {
+        if (!bocce.playing && !bocce.played) {
 
-            const dx = ball.p.x - mouseX;
-            const dy = ball.p.y - mouseY;
+            const dx = bocce.p.x - mouseX;
+            const dy = bocce.p.y - mouseY;
             const distance = floor(Math.sqrt(dx * dx + dy * dy));
-            const raysSum = ball.r + 1
+            const raysSum = bocce.r + 1
             const collided = distance < raysSum
 
             if (collided) {
-                ball.captured = DEF_BALL_CAPTURED
+                bocce.captured = DEF_BALL_CAPTURED
             }
         }
     }

@@ -37,7 +37,6 @@ class Ball {
         stroke(0)
         text(this.groupId, this.p.x - (this.r / 2) + 4, this.p.y + 4)
 
-
     }
 
     collideWalls(box) {
@@ -45,9 +44,6 @@ class Ball {
         if (this.p.y - this.r <= box.y) {
             this.p.y = this.r + box.y
             this.v.y = -this.v.y
-
-            this.v.x = this.v.x * 0.3
-            this.v.y = this.v.y * 0.3
         }
         if (this.p.x - this.r <= box.x) {
             this.p.x = this.r + box.x

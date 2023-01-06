@@ -1,5 +1,7 @@
 class Bocce extends Ball {
+
     constructor(args) {
+
         super(args)
         this.distanceLitlle = Infinity
         this.nearest = false
@@ -8,8 +10,11 @@ class Bocce extends Ball {
         this.passedRisk = false
         this.pointed = false
         this.runningPoints = 0
+
     }
+
     show() {
+
         if (this.captured) {
             stroke(255, 0, 0)
             noFill()
@@ -26,7 +31,6 @@ class Bocce extends Ball {
             fill(0)
             textSize(14)
             text(this.runningPoints > 0 ? this.runningPoints : '', this.p.x - (this.r / 2) + 8, this.p.y + 4)
-            // text(floor(this.distanceLitlle) + ' ' + (this.runningPoints), this.p.x - (this.r / 2) + 8, this.p.y + 4)
         }
 
     }
@@ -76,13 +80,34 @@ class Bocce extends Ball {
     collideWalls(box) {
 
         if (this.played || this.playing) {
-            super.collideWalls(box)
+            if (this.p.y - this.r <= box.y) {
+                // Top
+                this.p.y = this.r + box.y
+                this.v.y = -this.v.y
+                this.v.y = this.v.y * 0.3
+            }
         } else {
+            if (this.p.y - this.r <= box.risk.y) {
+                // Top
+                this.p.y = this.r + box.risk.y
+                this.v.y = -this.v.y
+            }
+        }
 
-            const condBox = { ...box }
-            condBox.y = box.risk.y
-            // condBox.y1 = box.risk.y1
-            super.collideWalls(condBox)
+        if (this.p.x - this.r <= box.x) {
+            // Left
+            this.p.x = this.r + box.x
+            this.v.x = -this.v.x
+        }
+        if (this.p.y + this.r >= box.y1) {
+            // bottom
+            this.p.y = box.y1 - this.r
+            this.v.y = -this.v.y
+        }
+        if (this.p.x + this.r >= box.x1) {
+            // Right
+            this.p.x = box.x1 - this.r
+            this.v.x = -this.v.x
         }
 
     }

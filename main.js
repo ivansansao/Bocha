@@ -1,11 +1,10 @@
 function setup() {
 
     client = new Client()
-
-    createCanvas(window.innerWidth, window.innerHeight);
-
     box = new Box()
     box.putBalls()
+
+    createCanvas(window.innerWidth, window.innerHeight);
 
 }
 
@@ -24,12 +23,7 @@ function draw() {
     }
 
     if (mouseIsPressed) {
-        for (const ball of balls) {
-            if (ball.captured == DEF_BALL_CAPTURED) {
-                ball.throwBall()
-            }
-
-        }
+        box.throwBall()
     }
 
     logs.push('Jogo parado: ' + box.stoppedGame())

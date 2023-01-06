@@ -58,44 +58,85 @@ class Scoreboard {
         rect(x, y, w, hTitle)
 
         fill(255, 255, 0)
-        rect(x, y2, w, h)
+        rect(x, y2, w, h) // Yellow
 
         fill(48, 169, 255)
-        rect(x, y3, w, h)
+        rect(x, y3, w, h) // Blue
 
-        stroke(0)
+        let sumYellow = 0
+        let sumBlue = 0
 
         for (let i = 0; i < 12; i++) {
+
+            stroke(0)
+            fill(0)
+            textSize(22)
+            line(x + (i * wB), y2, x + (i * wB), y2 + h)
+            line(x + (i * wB), y3, x + (i * wB), y3 + h)
+
+
+
 
             if (i * 2 == yellow) {
                 noStroke()
                 fill(255)
                 rect(x + (i * wB) + 1, y2 + 1, wB - 2, h - 2)
                 fill(0)
-                text(i * 2, x + (i * wB) + 13, y2 + (h / 2) + 8)
+                text(i * 2, x + (i * wB) + 13, y2 + (h / 2) + 7.5)
                 stroke(0)
+
+            } else {
+                fill(100)
+                stroke(100)
+                circle(x + (i * wB) + (wB / 2), y2 + (h / 2), 10)
             }
+
+
             if (i * 2 == blue) {
                 noStroke()
                 fill(255)
                 rect(x + (i * wB) + 1, y3 + 1, wB - 2, h - 2)
                 fill(0)
-                text(i * 2, x + (i * wB) + 13, y3 + (h / 2) + 8)
+                text(i * 2, x + (i * wB) + 13, y3 + (h / 2) + 7.5)
                 stroke(0)
+            } else {
+                fill(100)
+                stroke(100)
+                circle(x + (i * wB) + (wB / 2), y3 + (h / 2), 10)
+
             }
-            line(x + (i * wB), y2, x + (i * wB), y2 + h)
-            line(x + (i * wB), y3, x + (i * wB), y3 + h)
+
         }
+
+        for (let i = 0; i < 12; i++) {
+            sumYellow += this.yellow[i]
+            if (sumYellow < 24 && sumYellow > 0 && sumYellow != yellow) {
+                noStroke()
+                fill(255)
+                textSize(8)
+                text(sumYellow, x + (wB * (sumYellow / 2)) + (wB / 2), y2 + (h / 2) + 2.5)
+            }
+            sumBlue += this.blue[i]
+            if (sumBlue < 24 && sumBlue > 0 && sumBlue != blue) {
+                noStroke()
+                fill(255)
+                textSize(8)
+                text(sumBlue, x + (wB * (sumBlue / 2)) + (wB / 2), y3 + (h / 2) + 2.5)
+            }
+        }
+
+        // Bottom area
 
         const y4 = y3 + h
 
-
+        stroke(0)
         fill(255)
         rect(x, y4, w, h)
         noStroke()
         fill(0)
+        textSize(22)
         text(this.msg, x + (w / 2), y4 + (h / 2) + 8)
 
-
     }
+
 }

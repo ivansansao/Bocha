@@ -14,7 +14,7 @@ Each ball has
 See, there is a solution to handle ball inside to ball!
 
 (wait for animation)
-![Gif](src/assets/gameplay.gif)
+![Gif](src/assets/gameplay4.gif)
 
 Take a look at "Two-dimensional collision with two moving objects" on: https://en.wikipedia.org/wiki/Elastic_collision
 
