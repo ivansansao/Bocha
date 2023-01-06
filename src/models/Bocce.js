@@ -111,4 +111,12 @@ class Bocce extends Ball {
         }
 
     }
+
+    onAfterNewCollide(a, b) {
+        // Removes little elasticism
+        a.v.x *= 0.9
+        a.v.y *= 0.9
+        b.v.x *= 0.9
+        b.v.y *= 0.9
+    }
 }

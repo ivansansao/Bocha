@@ -143,10 +143,13 @@ class Ball {
                         y: c2Pos.y
                     }
 
+
                     this.v.x = (cos * c1Vel.x) - (sin * c1Vel.y);
                     this.v.y = (cos * c1Vel.y) + (sin * c1Vel.x);
                     other.v.x = (cos * c2Vel.x) - (sin * c2Vel.y);
                     other.v.y = (cos * c2Vel.y) + (sin * c2Vel.x);
+
+                    this.onAfterNewCollide(this, other)
 
                     // If it is still collided, throw ball to out
 
@@ -171,5 +174,12 @@ class Ball {
         }
 
     }
+
+    onAfterNewCollide(a, b) {
+
+
+    }
+
+
 
 }
