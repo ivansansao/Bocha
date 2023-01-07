@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     for (let i = 0; i < 999; i++) {
                         this.move()
                         other.move()
