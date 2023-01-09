@@ -35,9 +35,14 @@ wss.on('connection', function connection(ws, req) {
         switch (jMessage.command) {
             case 'login':
 
-                clients.push({ ws, login: jMessage.login })
+                let team = clients.length % 2 == 0 ? 'yellow' : 'blue'
+                clients.push({ login: jMessage.login, ws, team })
+                ws.send(JSON.stringify({ team }))
                 console.log('Logged as: ', jMessage.login)
                 break;
+
+            case 'play-bocce':
+
         }
 
     });
