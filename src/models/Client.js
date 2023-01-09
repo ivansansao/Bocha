@@ -29,8 +29,13 @@ class Client {
     }
 
     send = (data) => {
+
         if (this.isConnected) {
             this.ws.send(data)
+        } else {
+            setTimeout(() => {
+                this.ws.send(data)
+            }, 100);
         }
     }
 
