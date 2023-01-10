@@ -4,8 +4,10 @@ class Box {
         this.width = 400
         this.height = 800
 
-        this.x = max(350, (window.innerWidth / 2) - (this.width / 2))
-        this.y = 4 || (window.innerHeight / 2) - (this.height / 2)
+        // this.x = max(350, (window.innerWidth / 2) - (this.width / 2))
+        // this.y = 4 || (window.innerHeight / 2) - (this.height / 2)
+        this.x = 350
+        this.y = 4
         this.x1 = this.x + this.width
         this.y1 = this.y + this.height
 
@@ -84,15 +86,26 @@ class Box {
         this.isStoppedGame = true
 
         console.log("Stopped game")
+        this.sendPositionToEnimy()
 
         this.verifyDistanceLittle()
         console.log("Calculei")
 
+
         // Bocces is plauing now change to played.
         for (const bocce of balls) {
             if (bocce.playing) {
+
                 bocce.playing = false
-                bocce.played = true
+
+                if (bocce.p.y < this.risk.y) {
+                    bocce.passedRisk = true
+                }
+
+                if (bocce.passedRisk) {
+                    bocce.played = true
+                }
+
             }
         }
 
@@ -113,6 +126,10 @@ class Box {
             }, 6000)
 
         }
+    }
+
+    sendPositionToEnimy() {
+        client.send(JSON.stringify({ command: 'allposition', login, bocces: balls }))
     }
 
     /**
@@ -228,11 +245,13 @@ class Box {
         console.log(this.scoreboard)
 
     }
-    throwBall() {
+    throwBall(mx, my) {
 
         for (const bocce of balls) {
             if (bocce.captured == DEF_BALL_CAPTURED) {
-                bocce.throwBall()
+                console.log(bocce.p.x, bocce.p.y, ' mouse: ', mx, my)
+
+                bocce.throwBall(mx, my)
 
             }
 
@@ -250,8 +269,20 @@ function releaseBall() {
             console.log(bocce.v.y)
             // Ig ball is moving to up them it is considered playing
             if (bocce.v.y < 0) {
+                //     const data = {
+                //         command: 'threw',
+                //         login,
+                //         bocce: {
+                //             id: bocce.id,
+                //             px: bocce.p.x,
+                //             py: bocce.p.y,
+                //             mx: mouseX,
+                //             my: mouseY
+                //         }
+
+                //     }
                 bocce.playing = true
-                client.send(`Jogou a bola ${bocce.groupName} número ${bocce.groupId}`)
+                //     client.send(JSON.stringify(data))
             }
             bocce.captured = DEF_BALL_RELEASED
 

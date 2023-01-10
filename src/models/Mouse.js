@@ -8,6 +8,27 @@ function mousePressed(event) {
 
 function mouseReleased() {
     if (clickCount % 2 == 0) {
+
+        // Online
+        const bocce = balls.find((e) => e.captured == true)
+        if (bocce) {
+
+            console.log('id ', bocce.id)
+            const data = {
+                command: 'threw',
+                login,
+                bocce: {
+                    id: bocce.id,
+                    px: bocce.p.x,
+                    py: bocce.p.y,
+                    mx: mouseX,
+                    my: mouseY
+                }
+            }
+            client.send(JSON.stringify(data))
+        }
+        // 
+
         releaseBall()
 
     }

@@ -15,7 +15,7 @@ SERVER: {reponse: "adv_threw_ball",  }
 // const wss = new WebSocket.Server({ port: 8080 });
 
 import { WebSocketServer } from 'ws';
-const wss = new WebSocketServer({ port: 8080, clientTracking: true });
+const wss = new WebSocketServer({ port: 8950, clientTracking: true });
 
 let clients = []
 
@@ -32,16 +32,47 @@ wss.on('connection', function connection(ws, req) {
         } catch (error) {
         }
 
+        console.log(jMessage.command)
+
         switch (jMessage.command) {
             case 'login':
 
-                let team = clients.length % 2 == 0 ? 'yellow' : 'blue'
-                clients.push({ login: jMessage.login, ws, team })
-                ws.send(JSON.stringify({ team }))
-                console.log('Logged as: ', jMessage.login)
+                if (clients.length > 1) {
+                    ws.send("Excedeu o limite de 2")
+                    ws.close()
+                } else {
+
+                    let team = 'yellow'
+                    if (clients.length > 0) {
+                        team = clients[0].team == 'yellow' ? 'blue' : 'yellow'
+                    }
+
+                    clients.push({ login: jMessage.login, ws, team })
+                    ws.send(JSON.stringify({ team }))
+                    console.log('Logged as: ', jMessage.login)
+                }
                 break;
 
-            case 'play-bocce':
+            case 'threw':
+
+
+                for (const client of clients) {
+                    if (client.login != jMessage.login) {
+                        client.ws.send(JSON.stringify(jMessage))
+                    }
+                }
+                break
+
+            case 'allposition':
+
+
+                for (const client of clients) {
+                    if (client.login != jMessage.login) {
+                        client.ws.send(JSON.stringify(jMessage))
+                    }
+                }
+
+                break
 
         }
 

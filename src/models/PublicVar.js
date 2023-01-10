@@ -9,4 +9,5 @@ let id = 1;
 let clickCount = 0
 let box = false;
 let client = false
+let player = false;
 const toShowInfo = false;

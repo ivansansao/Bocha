@@ -26,16 +26,17 @@ class Bocce extends Ball {
         stroke(200)
         circle(this.p.x, this.p.y, this.r * 2)
 
-        if (this.distanceLitlle < Infinity) {
+        if (this.distanceLitlle <= Infinity) {
             noStroke()
             fill(0)
             textSize(14)
+            // text(ceil(this.p.x) + ',' + ceil(this.p.y) + ' - ' + (this.runningPoints > 0 ? this.runningPoints : ''), this.p.x - (this.r / 2) + 8, this.p.y + 4)
             text(this.runningPoints > 0 ? this.runningPoints : '', this.p.x - (this.r / 2) + 8, this.p.y + 4)
         }
 
     }
 
-    throwBall() {
+    throwBall(mx, my) {
 
         const ball = this
 
@@ -43,14 +44,14 @@ class Bocce extends Ball {
 
         const maxDist = 200
 
-        const distMouse = min(maxDist, p5.Vector.dist(createVector(mouseX, mouseY), createVector(ball.p.x, ball.p.y)))
+        const distMouse = min(maxDist, p5.Vector.dist(createVector(mx, my), createVector(ball.p.x, ball.p.y)))
 
         logs.push('distMouse ' + distMouse)
         stroke(0)
         line(mouseX, mouseY, ball.p.x, ball.p.y)
 
-        const x = mouseX;
-        const y = mouseY;
+        const x = mx;
+        const y = my;
 
         // Calcula a direção da bola com base na posição atual da bola e na posição do mouse
         const direction = Math.atan2(y - ball.p.y, x - ball.p.x);

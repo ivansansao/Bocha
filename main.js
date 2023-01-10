@@ -22,6 +22,8 @@ function setup() {
     client = new Client()
     client.send(JSON.stringify({ command: "login", login }))
 
+    player = new Player({ login })
+
     box = new Box()
     box.putBalls()
 
@@ -44,14 +46,14 @@ function draw() {
     }
 
     if (mouseIsPressed) {
-        box.throwBall()
+        box.throwBall(mouseX, mouseY)
     }
 
     logs.push('Jogo parado: ' + box.stoppedGame())
 
     showInfo();
     textAlign(LEFT)
-    text(login, 10, 400)
+    text(login + ' - ' + player.team, 10, 400)
 
 }
 

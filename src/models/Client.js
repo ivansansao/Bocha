@@ -7,7 +7,7 @@ class Client {
     }
     connect() {
 
-        this.ws = new WebSocket('ws://localhost:8080')
+        this.ws = new WebSocket('ws://54.147.8.210:8950')
         const ws = this.ws
 
         ws.onopen = this.onOpen
@@ -24,7 +24,53 @@ class Client {
     onMessage = (data) => {
 
         const ws = this.ws
-        console.log("Recebido: ", data.data)
+        let parseData = data.data
+        if (data.data[0] == '{') {
+            parseData = JSON.parse(data.data)
+            if (parseData.team) {
+                player.team = parseData.team
+            }
+            box.nextPlayer = parseData.team
+
+            const command = parseData.command
+
+            switch (command) {
+                case 'threw':
+
+                    // Capture bocce
+                    const bocce = balls.find((e) => e.id == parseData.bocce.id)
+                    bocce.captured = DEF_BALL_CAPTURED
+                    bocce.p.x = parseData.bocce.px
+                    bocce.p.y = parseData.bocce.py
+
+
+                    box.throwBall(parseData.bocce.mx, parseData.bocce.my)
+                    releaseBall()
+
+                    break;
+
+                case 'allposition':
+
+                    console.log("Positione suass bolas em")
+                    for (const remoteBocce of parseData.bocces) {
+                        console.log(remoteBocce.p)
+                        for (const bocce of balls) {
+                            if (remoteBocce.id == bocce.id) {
+                                bocce.p.x = remoteBocce.p.x
+                                bocce.p.y = remoteBocce.p.y
+                                break
+                            }
+                        }
+                    }
+
+                    break
+
+                default:
+                    break;
+            }
+
+        }
+        console.log("Recebido: ", parseData)
 
     }
 
@@ -35,7 +81,7 @@ class Client {
         } else {
             setTimeout(() => {
                 this.ws.send(data)
-            }, 100);
+            }, 1000);
         }
     }
 
