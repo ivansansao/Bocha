@@ -10,10 +10,16 @@ class Bocce extends Ball {
         this.passedRisk = false
         this.pointed = false
         this.runningPoints = 0
+        this.threwMx = 0
+        this.threwMy = 0
 
     }
 
     show() {
+
+        if (!this.active) {
+            return
+        }
 
         if (this.captured) {
             stroke(255, 0, 0)
@@ -21,9 +27,17 @@ class Bocce extends Ball {
             circle(this.p.x, this.p.y, (this.r * 2) + 10)
         }
 
+        if (this.groupName != 'little') {
+            if (this.groupName != player.team) {
+                if (!this.playing && !this.played) {
+                    return
+                }
+            }
+        }
+
         fill(this.color)
 
-        stroke(200)
+        stroke(0)
         circle(this.p.x, this.p.y, this.r * 2)
 
         if (this.distanceLitlle <= Infinity) {
@@ -32,16 +46,32 @@ class Bocce extends Ball {
             textSize(14)
             // text(ceil(this.p.x) + ',' + ceil(this.p.y) + ' - ' + (this.runningPoints > 0 ? this.runningPoints : ''), this.p.x - (this.r / 2) + 8, this.p.y + 4)
             text(this.runningPoints > 0 ? this.runningPoints : '', this.p.x - (this.r / 2) + 8, this.p.y + 4)
-            // text(this.id, this.p.x - (this.r / 2) + 8, this.p.y + 4)
+
+            // debug
+            if (false) {
+                textAlign(LEFT)
+                const px = this.p.x - (this.r / 2) + 8
+                const py = this.p.y + 4
+                const txt = `id: ${this.id} px: ${this.p.x.toFixed(2)} py: ${this.p.y.toFixed(2)}`
+                text(txt, px + 25, py)
+
+                if (this.active) {
+                    stroke(255)
+                    fill(255, 0, 0)
+                    circle(this.p.x + 8, this.p.y, 10)
+                }
+            }
+
         }
 
-        if (this.active) {
-            circle(this.p.x + 8, this.p.y, 10)
-        }
+
 
     }
 
     throwBall(mx, my) {
+
+        this.threwMx = mx
+        this.threwMy = my
 
         const ball = this
 

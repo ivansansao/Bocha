@@ -61,8 +61,17 @@ class Client {
                             if (remoteBocce.id == bocce.id) {
 
                                 bocce.active = bocce.active ? true : remoteBocce.active
+                                bocce.v.x = 0
+                                bocce.v.y = 0
+                                bocce.p.x = remoteBocce.p.x
                                 bocce.p.y = remoteBocce.p.y
-                                bocce.p.y = remoteBocce.p.y
+
+                                // if (bocce.id == 1) {
+                                //     console.log(remoteBocce.p.x, bocce.p.x)
+                                //     console.log(remoteBocce.p.y, bocce.p.y)
+                                //     console.log(' Vels x: ', bocce.v.x, ' y: ', bocce.v.y)
+                                // }
+
                                 break
                             }
                         }
@@ -71,13 +80,19 @@ class Client {
                     box.scoreboard.x = parseData.scoreboard.x
                     box.scoreboard.y = parseData.scoreboard.y
                     box.scoreboard.roundWinner = parseData.scoreboard.roundWinner
-                    box.scoreboard.yellow = parseData.scoreboard.yellow
-                    box.scoreboard.blue = parseData.scoreboard.blue
+                    // box.scoreboard.yellow = parseData.scoreboard.yellow
+                    // box.scoreboard.blue = parseData.scoreboard.blue
                     box.scoreboard.runningWinner = parseData.scoreboard.runningWinner
                     box.scoreboard.runningYellow = parseData.scoreboard.runningYellow
                     box.scoreboard.runningBlue = parseData.scoreboard.runningBlue
                     box.scoreboard.msg = parseData.scoreboard.msg
                     box.scoreboard.timeToPlay = parseData.scoreboard.timeToPlay
+                    box.scoreboard.loginPlayedLastBall = parseData.scoreboard.loginPlayedLastBall
+
+                    break
+
+                case 'opponentData':
+                    player.opponentLogin = parseData.opponentLogin
 
                     break
 

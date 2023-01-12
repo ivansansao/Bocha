@@ -10,6 +10,7 @@ class Scoreboard {
         this.runningBlue = 0
         this.msg = 'Vamos lá'
         this.timeToPlay = 'yellow'
+        this.loginPlayedLastBall = ''
     }
     getTotalYellow() {
         return this.yellow.reduce((a, b) => a + b, 0)
@@ -32,6 +33,10 @@ class Scoreboard {
             this.msg = points + ' ' + toPT(this.roundWinner)
         }
 
+    }
+
+    isMyTimeToPlay() {
+        return this.timeToPlay == player.team
     }
 
     show() {
@@ -147,12 +152,13 @@ class Scoreboard {
         noStroke()
         fill(0)
         textSize(22)
-        if (this.timeToPlay == player.team) {
-            if (frameCount % 40 != 0) {
+        if (this.isMyTimeToPlay()) {
+            if (frameCount % 80 != 0) {
                 text('Sua vez de jogar!!', x + (w / 2), y5 + (h / 2) + 8)
             }
-        } else {
-            text('Aguarde o ' + toPT(this.timeToPlay) + ' jogar!', x + (w / 2), y5 + (h / 2) + 8)
+            // } else {
+            //     // text('Aguarde o ' + toPT(this.timeToPlay) + ' jogar!', x + (w / 2), y5 + (h / 2) + 8)
+            //     text('Você é ' + player.login + ' (' + toPT(player.team) + ')', x + (w / 2), y5 + (h / 2) + 8)
         }
 
 

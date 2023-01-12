@@ -54,9 +54,8 @@ function draw() {
     logs.push('Jogo parado: ' + box.stoppedGame())
 
     showInfo();
-    textAlign(LEFT)
-    text(login + ' - ' + toPT(player.team), 10, 400)
-    // text('Vez de jogar: ' + toPT(box.scoreboard.timeToPlay), 10, 425)
+
+    player.show()
 
 }
 

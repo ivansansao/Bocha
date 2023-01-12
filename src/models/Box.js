@@ -6,7 +6,7 @@ class Box {
 
         // this.x = max(350, (window.innerWidth / 2) - (this.width / 2))
         // this.y = 4 || (window.innerHeight / 2) - (this.height / 2)
-        this.x = 350
+        this.x = 360
         this.y = 4
         this.x1 = this.x + this.width
         this.y1 = this.y + this.height
@@ -17,6 +17,9 @@ class Box {
         this.isStoppedGame = true
 
         this.risk = { x: this.x, y: this.height - (this.height / 4), x1: this.x + this.width, y1: this.height - (this.height / 4) }
+
+        this.yellowColor = color(255, 255, 0)
+        this.blueColor = color(48, 169, 255)
 
     }
     putBalls() {
@@ -41,12 +44,15 @@ class Box {
         let r = 0
         let colr
 
+        // bocce.p.x = this.x + (this.width / 2)
+        // bocce.p.y = this.risk.y + bocce.r
+
         if (groupName == 'little') {
 
             friction = 0.999
             r = 10
             colr = color(100)
-            balls.push(new Bocce({ colr, m: 100, r, p: { x: this.x + (this.width / 2), y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'little', groupId, active: false }))
+            balls.push(new Bocce({ colr, m: 100, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'little', groupId, active: false }))
 
             this.little = balls[0]
 
@@ -55,14 +61,14 @@ class Box {
             friction = 0.9992
             r = 20
             colr = color(255, 255, 0)
-            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (r * 1) + 1, y: this.y1 - (r * (2 * groupId)) - (2 * groupId) }, friction, groupName: 'yellow', groupId, active: false }))
+            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'yellow', groupId, active: false }))
 
         } else if (groupName == 'blue') {
 
             friction = 0.9992
             r = 20
             colr = color(48, 169, 255)
-            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * groupId)) - (2 * groupId) }, friction, groupName: 'blue', groupId, active: false }))
+            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'blue', groupId, active: false }))
 
         }
 
@@ -95,6 +101,45 @@ class Box {
 
         this.scoreboard.show()
 
+        // Show rest bocces
+        stroke(0)
+        let Yy = 0
+        let By = 0
+
+        for (let i = 0; i < balls.length; i++) {
+            const bocce = balls[i];
+
+            if (!bocce.active && bocce.groupName != 'little') {
+
+                if (bocce.groupName == 'yellow') {
+
+                    if (player.team == 'yellow') {
+
+                        fill(this.yellowColor)
+                        circle(this.x - 20 - 3, this.risk.y + (Yy * 42) + 20, 40)
+                        Yy++
+                    }
+                } else {
+                    if (player.team == 'blue') {
+                        fill(this.blueColor)
+                        circle(this.x + this.width + 20 + 3, this.risk.y + (By * 42) + 20, 40)
+                        By++
+                    }
+                }
+
+            }
+        }
+
+        if (!this.scoreboard.isMyTimeToPlay()) {
+            if (player.opponentLogin.trim()) {
+                textSize(18)
+                textAlign(CENTER)
+                noStroke()
+                fill(0)
+                text('Aguarde o ' + player.opponentLogin + ' jogar', this.x + (this.width / 2), this.risk.y + (this.height - this.risk.y) / 2)
+            }
+        }
+
     }
 
     move() {
@@ -108,10 +153,6 @@ class Box {
         }
         this.isStoppedGame = true
         console.log("Stopped game")
-
-        this.verifyDistanceLittle()
-        console.log("Calculei")
-
 
         // Bocces is plauing now change to played.
         for (const bocce of balls) {
@@ -130,6 +171,13 @@ class Box {
             }
         }
 
+        const near = this.verifyDistanceLittle()
+        this.scoreboard.runningWinner = near.groupName
+        console.log("Calculei")
+
+        console.log("near ==> ", this.scoreboard.runningWinner)
+
+
         this.setRunningPoints()
 
         this.setTimeToPlay()
@@ -140,6 +188,7 @@ class Box {
             setTimeout(() => {
                 this.setRoundPoints()
                 this.scoreboard.update()
+                this.sendPositionToEnimy()
             }, 3000)
 
             setTimeout(() => {
@@ -156,23 +205,35 @@ class Box {
     }
 
     sendPositionToEnimy() {
-        const bocces = []
-        const scoreboard = {
-            x: this.scoreboard.x,
-            y: this.scoreboard.y,
-            roundWinner: this.scoreboard.roundWinner,
-            yellow: this.scoreboard.yellow,
-            blue: this.scoreboard.blue,
-            runningWinner: this.scoreboard.runningWinner,
-            runningYellow: this.scoreboard.runningYellow,
-            runningBlue: this.scoreboard.runningBlue,
-            msg: this.scoreboard.msg,
-            timeToPlay: this.scoreboard.timeToPlay
+
+        // Only if it was me to played!
+        console.log(' last: ', this.scoreboard.loginPlayedLastBall, ' player.login: ', player.login)
+        if (this.scoreboard.loginPlayedLastBall == player.login) {
+
+            console.log("Envio de posições (allposition) para os outros! ")
+
+            const bocces = []
+            const scoreboard = {
+                x: this.scoreboard.x,
+                y: this.scoreboard.y,
+                roundWinner: this.scoreboard.roundWinner,
+                yellow: this.scoreboard.yellow,
+                blue: this.scoreboard.blue,
+                runningWinner: this.scoreboard.runningWinner,
+                runningYellow: this.scoreboard.runningYellow,
+                runningBlue: this.scoreboard.runningBlue,
+                msg: this.scoreboard.msg,
+                timeToPlay: this.scoreboard.timeToPlay,
+                loginPlayedLastBall: this.scoreboard.loginPlayedLastBall,
+
+            }
+            balls.forEach(b => {
+                bocces.push({ id: b.id, p: { x: b.p.x, y: b.p.y }, active: b.active })
+            });
+            client.send(JSON.stringify({ command: 'allposition', login, bocces, scoreboard }))
+
         }
-        balls.forEach(b => {
-            bocces.push({ id: b.id, p: { x: b.p.x, y: b.p.y }, active: b.active })
-        });
-        client.send(JSON.stringify({ command: 'allposition', login, bocces, scoreboard }))
+
     }
 
     /**
@@ -182,7 +243,7 @@ class Box {
     setRunningPoints() {
 
         balls.sort((a, b) => (a.distanceLitlle > b.distanceLitlle ? 1 : -1))
-        this.scoreboard.runningWinner = balls[0].groupName
+        // this.scoreboard.runningWinner = balls[0].groupName
 
         let pointsYellow = 0
         let pointsBlue = 0
@@ -221,10 +282,12 @@ class Box {
     verifyDistanceLittle() {
 
         let nearestBocce = false
-        let nearestD = 999
+        let nearestD = Infinity
 
         for (const b of balls) {
-            if (b != this.little) {
+            console.log(b.id, this.little.id, b.active, b.played)
+            if (b.id != this.little.id && b.active && b.played) {
+
                 b.distanceLitlle = p5.Vector.dist(createVector(this.little.p.x, this.little.p.y), createVector(b.p.x, b.p.y))
 
                 if (b.distanceLitlle < nearestD) {
@@ -248,6 +311,9 @@ class Box {
     resetRound() {
         this.winner = ''
         this.isStoppedGame = true
+        this.yellowRest = 4
+        this.blueTest = 4
+        this.addBocceToPlayer()
     }
 
     isEndRound() {
@@ -296,7 +362,8 @@ class Box {
 
         for (const bocce of balls) {
             if (bocce.captured == DEF_BALL_CAPTURED) {
-                bocce.throwBall(mx, my)
+                const force = bocce.throwBall(mx, my)
+                console.log('Lançou a bola mx: ', mx, ' my: ', my, '  force: ', force)
             }
 
         }
@@ -319,29 +386,41 @@ class Box {
 
     }
     setTimeToPlay() {
+        this.scoreboard.timeToPlay = this.getTimeToPlay()
+    }
 
-        if (this.getQtdPlayed() <= 1 && this.scoreboard.yellow == 0 && this.scoreboard.blue == 0) {
-            this.scoreboard.timeToPlay = 'yellow'
+    getTimeToPlay() {
+
+        let timeToPlay = ''
+
+        if (this.getQtdPlayed() <= 1) {
+            if (this.scoreboard.roundWinner == '' || this.scoreboard.roundWinner == 'yellow') {
+                timeToPlay = 'yellow'
+            } else {
+                timeToPlay = 'blue'
+            }
         } else {
 
             if (this.scoreboard.runningWinner == 'yellow') {
                 if (this.getQtdPlayed('blue') < 4) {
-                    this.scoreboard.timeToPlay = 'blue'
+                    timeToPlay = 'blue'
                 } else {
-                    this.scoreboard.timeToPlay = 'yellow'
+                    timeToPlay = 'yellow'
                 }
             } else if (this.scoreboard.runningWinner == 'blue') {
 
                 if (this.getQtdPlayed('yellow') < 4) {
-                    this.scoreboard.timeToPlay = 'yellow'
+                    timeToPlay = 'yellow'
                 } else {
-                    this.scoreboard.timeToPlay = 'blue'
+                    timeToPlay = 'blue'
                 }
 
             }
         }
 
-        console.log('Quem? ', this.scoreboard.timeToPlay)
+        console.log('Quem? ', timeToPlay)
+        return timeToPlay
+
     }
 
     activeBall(team) {
@@ -350,7 +429,12 @@ class Box {
             if (bocce.groupName == team) {
                 if (!bocce.played && !bocce.playing) {
                     console.log("Activando a bola ", bocce.groupName)
+                    // bocce.p.x = this.x + (this.width / 2)
+                    // bocce.p.y = this.risk.y + bocce.r
                     bocce.active = true
+                    // bocce.captured = DEF_BALL_CAPTURED
+                    // clickCount++
+                    // console.log('clickCount')
                     break
                 }
             }
@@ -358,27 +442,35 @@ class Box {
 
     }
 
+    getBocceToPlay() {
+
+        const timeToPay = this.getTimeToPlay()
+
+    }
+
     addBocceToPlayer() {
+
+        const timeToPay = this.getTimeToPlay()
 
         console.log('addBocceToPlayer ', player.team)
 
         if (player.team == 'yellow') {
 
-            if (this.scoreboard.timeToPlay == 'yellow') {
+            if (timeToPay == 'yellow') {
                 if (this.getQtdPlayed('little') == 0) {
                     this.activeBall('little')
                 } else {
-                    this.activeBall(this.scoreboard.timeToPlay)
+                    this.activeBall(timeToPay)
                 }
             }
 
         } else {
 
-            if (this.scoreboard.timeToPlay == 'blue') {
+            if (timeToPay == 'blue') {
                 if (this.getQtdPlayed('little') == 0) {
                     this.activeBall('little')
                 } else {
-                    this.activeBall(this.scoreboard.timeToPlay)
+                    this.activeBall(timeToPay)
                 }
             }
 

@@ -13,19 +13,21 @@ function mouseReleased() {
         const bocce = balls.find((e) => e.captured == true)
         if (bocce) {
 
-            console.log('id ', bocce.id)
+            console.log('threw mx: ', bocce.threwMx, ' my: ', bocce.threwMy)
+            console.log('mouse mx: ', mouseX, ' my: ', mouseY)
             const data = {
                 command: 'threw',
-                login,
+                login: player.login,
                 bocce: {
                     id: bocce.id,
                     px: bocce.p.x,
                     py: bocce.p.y,
-                    mx: mouseX,
-                    my: mouseY,
+                    mx: bocce.threwMx,
+                    my: bocce.threwMy,
                     active: bocce.active,
                 }
             }
+            box.scoreboard.loginPlayedLastBall = login
             client.send(JSON.stringify(data))
         }
         // 
