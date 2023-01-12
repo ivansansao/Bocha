@@ -54,6 +54,22 @@ wss.on('connection', function connection(ws, req) {
                     clients.push({ login: jMessage.login, ws, team })
                     ws.send(JSON.stringify({ team }))
                     aux.dateLog('Logged as: ' + jMessage.login)
+
+                    // Send to oppenents my datas
+
+                    for (const client of clients) {
+                        for (const op of clients) {
+                            if (client.login != op.login) {
+                                const myData = {
+                                    command: 'opponentData',
+                                    opponentLogin: op.login
+                                }
+                                client.ws.send(JSON.stringify(myData))
+                                break
+                            }
+                        }
+                    }
+
                 }
                 break;
 
