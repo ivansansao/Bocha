@@ -6,3 +6,4 @@ testes*.js
 .eslintrc.*
 dist
 package-lock.json
+updateprod.sh
