@@ -16,7 +16,10 @@ SERVER: {reponse: "adv_threw_ball",  }
 
 import * as aux from './src/models/Auxiliary.js'
 import { WebSocketServer } from 'ws';
-const wss = new WebSocketServer({ port: 7950, clientTracking: true });
+const port = 7950
+const wss = new WebSocketServer({ port, clientTracking: true });
+
+aux.dateLog('Bocha server is listenning...            (Port: ' + port + ')')
 
 let clients = []
 
@@ -69,6 +72,7 @@ wss.on('connection', function connection(ws, req) {
 
                 for (const client of clients) {
                     if (client.login != jMessage.login) {
+                        aux.dateLog('Enviando posição para' + client.login)
                         client.ws.send(JSON.stringify(jMessage))
                     }
                 }
