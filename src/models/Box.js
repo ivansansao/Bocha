@@ -21,30 +21,53 @@ class Box {
     }
     putBalls() {
 
+        balls = []
+
+        this.addBall('little', 0)
+        this.addBall('yellow', 1)
+        this.addBall('yellow', 2)
+        this.addBall('yellow', 3)
+        this.addBall('yellow', 4)
+        this.addBall('blue', 1)
+        this.addBall('blue', 2)
+        this.addBall('blue', 3)
+        this.addBall('blue', 4)
+
+    }
+
+    addBall(groupName, groupId) {
+
         let friction = 0.999
+        let r = 0
+        let colr
 
-        let r = 10
-        let colr = color(100)
-        balls.push(new Bocce({ colr, m: 100, r, p: { x: this.x + (this.width / 2), y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'litle', groupId: 0 }))
+        if (groupName == 'little') {
 
-        friction = 0.9992
+            friction = 0.999
+            r = 10
+            colr = color(100)
+            balls.push(new Bocce({ colr, m: 100, r, p: { x: this.x + (this.width / 2), y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'little', groupId }))
 
-        this.little = balls[0]
+            this.little = balls[0]
 
-        r = 20
-        colr = color(255, 255, 0)
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (r * 1) + 1, y: this.y1 - (r * (2 * 1)) - (2 * 1) }, friction, groupName: 'yellow', groupId: 1 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (r * 1) + 1, y: this.y1 - (r * (2 * 2)) - (2 * 2) }, friction, groupName: 'yellow', groupId: 2 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (r * 1) + 1, y: this.y1 - (r * (2 * 3)) - (2 * 3) }, friction, groupName: 'yellow', groupId: 3 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (r * 1) + 1, y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'yellow', groupId: 4 }))
+        } else if (groupName == 'yellow') {
 
-        r = 20
-        colr = color(48, 169, 255)
+            friction = 0.9992
+            r = 20
+            colr = color(255, 255, 0)
+            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (r * 1) + 1, y: this.y1 - (r * (2 * groupId)) - (2 * groupId) }, friction, groupName: 'yellow', groupId }))
 
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 1)) - (2 * 1) }, friction, groupName: 'blue', groupId: 5 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 2)) - (2 * 2) }, friction, groupName: 'blue', groupId: 6 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 3)) - (2 * 3) }, friction, groupName: 'blue', groupId: 7 }))
-        balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * 4)) - (2 * 4) }, friction, groupName: 'blue', groupId: 8 }))
+        } else if (groupName == 'blue') {
+
+            friction = 0.9992
+            r = 20
+            colr = color(48, 169, 255)
+            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + this.width - (r * 1) + 1, y: this.y1 - (r * (2 * groupId)) - (2 * groupId) }, friction, groupName: 'blue', groupId }))
+
+        }
+
+
+
 
     }
 
@@ -111,6 +134,9 @@ class Box {
 
         this.setRunningPoints()
 
+        this.setTimeToPlay()
+
+
         if (this.isEndRound()) {
 
             setTimeout(() => {
@@ -129,7 +155,22 @@ class Box {
     }
 
     sendPositionToEnimy() {
-        client.send(JSON.stringify({ command: 'allposition', login, bocces: balls }))
+        const bocces = []
+        const scoreboard = {
+            x: this.scoreboard.x,
+            y: this.scoreboard.y,
+            roundWinner: this.scoreboard.roundWinner,
+            yellow: this.scoreboard.yellow,
+            blue: this.scoreboard.blue,
+            runningWinner: this.scoreboard.runningWinner,
+            runningYellow: this.scoreboard.runningYellow,
+            runningBlue: this.scoreboard.runningBlue,
+            msg: this.scoreboard.msg,
+        }
+        balls.forEach(b => {
+            bocces.push({ id: b.id, p: { x: b.p.x, y: b.p.y } })
+        });
+        client.send(JSON.stringify({ command: 'allposition', login, bocces, scoreboard }))
     }
 
     /**
@@ -249,12 +290,49 @@ class Box {
 
         for (const bocce of balls) {
             if (bocce.captured == DEF_BALL_CAPTURED) {
-                console.log(bocce.p.x, bocce.p.y, ' mouse: ', mx, my)
-
                 bocce.throwBall(mx, my)
-
             }
 
+        }
+    }
+    getQtdPlayed(team = '') {
+
+        let qtd = 0
+        team = team.trim()
+
+        for (const b of balls) {
+            if (b.played) {
+                if (b.groupName == 'little' && team == 'little') qtd++
+                if (b.groupName == 'yellow' && team == 'yellow') qtd++
+                if (b.groupName == 'blue' && team == 'blue') qtd++
+                if (team == '') qtd++
+            }
+        }
+
+        return qtd
+
+    }
+    setTimeToPlay() {
+
+        if (this.getQtdPlayed() <= 1 && this.scoreboard.yellow == 0 && this.scoreboard.blue == 0) {
+            this.scoreboard.timeToPlay = 'yellow'
+        } else {
+
+            if (this.scoreboard.runningWinner == 'yellow') {
+                if (this.getQtdPlayed('blue') < 4) {
+                    this.scoreboard.timeToPlay = 'blue'
+                } else {
+                    this.scoreboard.timeToPlay = 'yellow'
+                }
+            } else if (this.scoreboard.runningWinner == 'blue') {
+
+                if (this.getQtdPlayed('yellow') < 4) {
+                    this.scoreboard.timeToPlay = 'yellow'
+                } else {
+                    this.scoreboard.timeToPlay = 'blue'
+                }
+
+            }
         }
     }
 

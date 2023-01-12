@@ -4,5 +4,7 @@ function toPT(what) {
             return "Azul"
         case "yellow":
             return "Amarelo"
+        default:
+            return what
     }
 }

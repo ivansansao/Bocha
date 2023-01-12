@@ -14,8 +14,9 @@ SERVER: {reponse: "adv_threw_ball",  }
 // const WebSocket = require('ws');
 // const wss = new WebSocket.Server({ port: 8080 });
 
+import * as aux from './src/models/Auxiliary.js'
 import { WebSocketServer } from 'ws';
-const wss = new WebSocketServer({ port: 8950, clientTracking: true });
+const wss = new WebSocketServer({ port: 7950, clientTracking: true });
 
 let clients = []
 
@@ -25,14 +26,14 @@ wss.on('connection', function connection(ws, req) {
 
         const sMessage = String(message)
         let jMessage = {}
-        console.log('received: ', sMessage);
+        aux.dateLog('received: ' + sMessage);
 
         try {
             jMessage = JSON.parse(sMessage)
         } catch (error) {
         }
 
-        console.log(jMessage.command)
+        aux.dateLog(jMessage.command)
 
         switch (jMessage.command) {
             case 'login':
@@ -49,7 +50,7 @@ wss.on('connection', function connection(ws, req) {
 
                     clients.push({ login: jMessage.login, ws, team })
                     ws.send(JSON.stringify({ team }))
-                    console.log('Logged as: ', jMessage.login)
+                    aux.dateLog('Logged as: ' + jMessage.login)
                 }
                 break;
 
@@ -78,7 +79,7 @@ wss.on('connection', function connection(ws, req) {
 
     });
 
-    console.log('Connectou!')
+    aux.dateLog('Connectou!')
 
     ws.send('Você conectou no server')
 
@@ -86,18 +87,18 @@ wss.on('connection', function connection(ws, req) {
 
     ws.on('close', function close(code, reason) {
 
-        console.log("Desconectou code:", code, "  Reason:", reason)
+        aux.dateLog("Desconectou code: " + code + "  Reason: " + reason)
 
-        console.log('BEFORE: ', clients.length)
+        aux.dateLog('BEFORE: ' + clients.length)
 
         clients.forEach((client) => {
             if (client.ws == ws) {
-                console.log('>> DELETING: ', client.login)
+                aux.dateLog('>> DELETING: ' + client.login)
                 clients = clients.filter((e) => e.login != client.login)
             }
         })
 
-        console.log('AFTER: ', clients.length)
+        aux.dateLog('AFTER: ' + clients.length)
 
     })
 });
@@ -108,3 +109,4 @@ function sendToAll() {
         client.ws.send("Todos receberam isso?   Clients: " + clients.length)
     })
 }
+

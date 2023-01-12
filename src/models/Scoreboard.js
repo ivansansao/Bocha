@@ -9,8 +9,8 @@ class Scoreboard {
         this.runningYellow = 0
         this.runningBlue = 0
         this.msg = 'Vamos lá'
+        this.timeToPlay = 'yellow'
     }
-
     getTotalYellow() {
         return this.yellow.reduce((a, b) => a + b, 0)
     }
@@ -125,7 +125,7 @@ class Scoreboard {
             }
         }
 
-        // Bottom area
+        // Before bottom area
 
         const y4 = y3 + h
 
@@ -137,6 +137,27 @@ class Scoreboard {
         textSize(22)
         text(this.msg, x + (w / 2), y4 + (h / 2) + 8)
 
+        // Bottom area
+
+        const y5 = y4 + h
+
+        stroke(0)
+        fill(255)
+        rect(x, y5, w, h)
+        noStroke()
+        fill(0)
+        textSize(22)
+        if (this.timeToPlay == player.team) {
+            if (frameCount % 40 != 0) {
+                text('Sua vez de jogar!!', x + (w / 2), y5 + (h / 2) + 8)
+            }
+        } else {
+            text('Aguarde o ' + toPT(this.timeToPlay) + ' jogar!', x + (w / 2), y5 + (h / 2) + 8)
+        }
+
+
     }
+
+
 
 }

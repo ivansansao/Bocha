@@ -1,6 +1,6 @@
 class Player {
-    constructor({ login }) {
-        login = login
-
+    constructor({ login, team }) {
+        this.login = login
+        this.team = team
     }
 }

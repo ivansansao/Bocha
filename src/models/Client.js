@@ -7,7 +7,10 @@ class Client {
     }
     connect() {
 
-        this.ws = new WebSocket('ws://54.147.8.210:8950')
+        const servers = {}
+        servers['local'] = 'ws://localhost:7950'
+
+        this.ws = new WebSocket(servers['local'])
         const ws = this.ws
 
         ws.onopen = this.onOpen
@@ -62,6 +65,16 @@ class Client {
                             }
                         }
                     }
+
+                    box.scoreboard.x = parseData.scoreboard.x
+                    box.scoreboard.y = parseData.scoreboard.y
+                    box.scoreboard.roundWinner = parseData.scoreboard.roundWinner
+                    box.scoreboard.yellow = parseData.scoreboard.yellow
+                    box.scoreboard.blue = parseData.scoreboard.blue
+                    box.scoreboard.runningWinner = parseData.scoreboard.runningWinner
+                    box.scoreboard.runningYellow = parseData.scoreboard.runningYellow
+                    box.scoreboard.runningBlue = parseData.scoreboard.runningBlue
+                    box.scoreboard.msg = parseData.scoreboard.msg
 
                     break
 

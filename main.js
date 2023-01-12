@@ -53,7 +53,8 @@ function draw() {
 
     showInfo();
     textAlign(LEFT)
-    text(login + ' - ' + player.team, 10, 400)
+    text(login + ' - ' + toPT(player.team), 10, 400)
+    // text('Vez de jogar: ' + toPT(box.scoreboard.timeToPlay), 10, 425)
 
 }
 
