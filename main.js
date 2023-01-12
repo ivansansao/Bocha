@@ -22,10 +22,12 @@ function setup() {
     client = new Client()
     client.send(JSON.stringify({ command: "login", login }))
 
-    player = new Player({ login })
-
     box = new Box()
     box.putBalls()
+
+    player = new Player({ login })
+
+
 
     createCanvas(window.innerWidth, window.innerHeight);
 

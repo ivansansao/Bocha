@@ -22,7 +22,8 @@ function mouseReleased() {
                     px: bocce.p.x,
                     py: bocce.p.y,
                     mx: mouseX,
-                    my: mouseY
+                    my: mouseY,
+                    active: bocce.active,
                 }
             }
             client.send(JSON.stringify(data))

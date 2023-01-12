@@ -32,6 +32,11 @@ class Bocce extends Ball {
             textSize(14)
             // text(ceil(this.p.x) + ',' + ceil(this.p.y) + ' - ' + (this.runningPoints > 0 ? this.runningPoints : ''), this.p.x - (this.r / 2) + 8, this.p.y + 4)
             text(this.runningPoints > 0 ? this.runningPoints : '', this.p.x - (this.r / 2) + 8, this.p.y + 4)
+            // text(this.id, this.p.x - (this.r / 2) + 8, this.p.y + 4)
+        }
+
+        if (this.active) {
+            circle(this.p.x + 8, this.p.y, 10)
         }
 
     }

@@ -1,6 +1,6 @@
 class Ball {
 
-    constructor({ m, r, v, p, colr, friction, groupName, groupId }) {
+    constructor({ m, r, v, p, colr, friction, groupName, groupId, active }) {
 
         this.m = m // Mass scalar
         this.r = r // Ray scalar
@@ -13,6 +13,7 @@ class Ball {
         this.color = colr
         this.groupName = groupName
         this.groupId = groupId
+        this.active = active
 
     }
 
@@ -86,7 +87,7 @@ class Ball {
             this.v.x *= this.friction
             this.v.y *= this.friction
 
-            if (abs(this.v.x) + abs(this.v.y) < 0.04) {
+            if (abs(this.v.x) + abs(this.v.y) < 0.02) {
                 this.v.x = 0
                 this.v.y = 0
             }
@@ -119,7 +120,7 @@ class Ball {
 
                 const alreadyCompared = compared.find(e => (e.id1 == this.id && e.id2 == other.id) || (e.id1 == other.id && e.id2 == this.id))
 
-                if (collided.res && !alreadyCompared) {
+                if (collided.res && !alreadyCompared && this.active && other.active) {
 
                     const { dx, dy } = collided
                     let angle = Math.atan2(dy, dx);

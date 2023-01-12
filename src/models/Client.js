@@ -30,10 +30,11 @@ class Client {
         let parseData = data.data
         if (data.data[0] == '{') {
             parseData = JSON.parse(data.data)
-            if (parseData.team) {
+            if (parseData.team && !player.team) {
                 player.team = parseData.team
+                box.startGame()
             }
-            box.nextPlayer = parseData.team
+            //  box.nextPlayer = parseData.nextPlayer
 
             const command = parseData.command
 
@@ -43,9 +44,9 @@ class Client {
                     // Capture bocce
                     const bocce = balls.find((e) => e.id == parseData.bocce.id)
                     bocce.captured = DEF_BALL_CAPTURED
+                    bocce.active = bocce.active ? true : parseData.bocce.active
                     bocce.p.x = parseData.bocce.px
                     bocce.p.y = parseData.bocce.py
-
 
                     box.throwBall(parseData.bocce.mx, parseData.bocce.my)
                     releaseBall()
@@ -56,10 +57,11 @@ class Client {
 
                     console.log("Positione suass bolas em")
                     for (const remoteBocce of parseData.bocces) {
-                        console.log(remoteBocce.p)
                         for (const bocce of balls) {
                             if (remoteBocce.id == bocce.id) {
-                                bocce.p.x = remoteBocce.p.x
+
+                                bocce.active = bocce.active ? true : remoteBocce.active
+                                bocce.p.y = remoteBocce.p.y
                                 bocce.p.y = remoteBocce.p.y
                                 break
                             }
@@ -75,6 +77,7 @@ class Client {
                     box.scoreboard.runningYellow = parseData.scoreboard.runningYellow
                     box.scoreboard.runningBlue = parseData.scoreboard.runningBlue
                     box.scoreboard.msg = parseData.scoreboard.msg
+                    box.scoreboard.timeToPlay = parseData.scoreboard.timeToPlay
 
                     break
 
