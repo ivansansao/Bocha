@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="globalstyle.css">
   <script src="lib/p5.min.js"></script>
-  <script src="lib/p5.collide2d.min.js"></script>
   <script src="src/models/Auxiliary.js"></script>
   <script src="src/models/PublicVar.js"></script>
   <script src="src/models/Generic.js"></script>
@@ -19,29 +19,45 @@
   <script src="src/models/Mouse.js"></script>
   <script src="src/models/Debug.js"></script>
   <script src="src/models/Player.js"></script>
+  <script src="src/models/Chat.js"></script>
   <script src="main.js"></script>
 
   <title>Bocha</title>
-  <style type="text/css">
-    html,
-    body,
-    main,
-    * {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    body {
-      background-color: #ffffff;
-    }
-
-    canvas {
-      display: block;
-    }
-  </style>
 </head>
 
 <body>
+
+  <div class="grid grid-template-areas-4">
+
+    <div class="item content" id="bocha"></div>
+    <div class="item online">
+      <h1>Online</h1>
+      <button onclick="">Entrar</button>
+
+    </div>
+    <div class="item chat">
+
+      <h1>Chat</h1>
+
+      <div class="chat-buttons">
+        <button onclick="chat.sendGeneralMessage(this)">Joguinha pra mais</button>
+        <button onclick="chat.sendGeneralMessage(this)">Quatrinho</button>
+        <button onclick="chat.sendGeneralMessage(this)">Doizino magro</button>
+        <button onclick="chat.sendGeneralMessage(this)">Aff</button>
+      </div>
+
+    </div>
+    <div class="item message">
+      <h1>Mensagens</h1>
+      <div>
+        <ul class="message-itens" id="general-message">
+
+        </ul>
+
+      </div>
+    </div>
+
+  </div>
 
 </body>
 

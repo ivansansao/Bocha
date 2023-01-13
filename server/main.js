@@ -95,6 +95,13 @@ wss.on('connection', function connection(ws, req) {
 
                 break
 
+            case 'general-message':
+                for (const client of clients) {
+                    aux.dateLog('Enviando mensagem para' + client.login)
+                    client.ws.send(JSON.stringify(jMessage))
+                }
+                break
+
         }
 
     });

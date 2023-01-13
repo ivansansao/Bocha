@@ -8,9 +8,11 @@ class Client {
     connect() {
 
         const servers = {}
-        servers['local'] = 'ws://localhost:7950'
+        servers['local'] = 'ws://localhost:8950'
+        servers['ex2'] = 'ws://192.168.0.12:7950'
+        servers['ex3'] = 'ws://192.168.0.12:8950'
 
-        this.ws = new WebSocket(servers['local'])
+        this.ws = new WebSocket(servers['ex2'])
         const ws = this.ws
 
         ws.onopen = this.onOpen
@@ -94,6 +96,11 @@ class Client {
                 case 'opponentData':
                     player.opponentLogin = parseData.opponentLogin
 
+                    break
+
+                case 'general-message':
+                    let ele = document.getElementById('general-message');
+                    ele.innerHTML += `<li>${parseData.message}</li>`
                     break
 
                 default:

@@ -137,3 +137,108 @@ collide2() {
 
 
 }
+*****************************
+let login = ''
+
+const pf = false
+
+const sketch = p => {
+
+    console.log(pf)
+
+    p.setup = () => {
+
+        p.createCanvas(window.innerWidth, window.innerHeight);
+        login = createName()
+
+        client = new Client()
+        client.send(JSON.stringify({ command: "login", login }))
+
+        box = new Box()
+        box.putBalls()
+
+        player = new Player({ login })
+    }
+
+    p.draw = () => {
+
+        logs = [];
+        p.background(255, 255, 255);
+
+        box.show();
+
+        compared = []
+        for (const ball of balls) {
+            ball.collide();
+            ball.collideWalls(box);
+            ball.show();
+        }
+
+        if (mouseIsPressed) {
+            box.throwBall(mouseX, mouseY)
+        }
+
+        logs.push('Jogo parado: ' + box.stoppedGame())
+
+        showInfo();
+
+        player.show()
+
+    }
+}
+
+function startP5() {
+    console.log('startP5')
+    let node = document.createElement('div');
+    pf = new p5(sketch, node);
+    console.log(pf)
+    window.document.getElementsByTagName('body')[0].appendChild(node);
+}
+
+
+
+
+
+
+
+function createName() {
+    const consoantes = 'BCDFGJKLMNPRSTVXZ';
+    const vogais = 'AEIOU';
+    let nome = '';
+    let rand;
+
+    for (let i = 0; i < 2; i++) {
+        rand = (Math.random() * (consoantes.length - 1)).toFixed(0);
+        nome = nome + consoantes[rand];
+        rand = (Math.random() * (vogais.length - 1)).toFixed(0);
+        nome = nome + vogais[rand];
+    }
+    return nome;
+}
+****
+
+ .box1 {
+      grid-column-start: 1;
+      grid-column-end: 1;
+      grid-row-start: 1;
+      grid-row-end: 1;
+      border: 2px solid black;
+      background-color: rgb(203, 184, 56);
+    }
+
+    .box2 {
+      grid-column-start: 2;
+      grid-column-end: 2;
+      grid-row-start: 2;
+      grid-row-end: 2;
+      border: 2px solid black;
+      background-color: rgb(75, 222, 80);
+    }
+
+    .box3 {
+      grid-column-start: 3;
+      grid-row-start: 3;
+      grid-row-end: 3;
+      border: 2px solid black;
+      background-color: rgb(199, 125, 196);
+    }

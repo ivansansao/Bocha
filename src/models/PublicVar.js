@@ -10,4 +10,5 @@ let clickCount = 0
 let box = false;
 let client = false
 let player = false;
+let chat = false;
 const toShowInfo = false;

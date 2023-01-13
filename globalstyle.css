@@ -1,0 +1,91 @@
+/* Grid */
+.grid {
+    display: grid;
+}
+
+.online {
+    grid-area: online;
+    background: rgb(255, 255, 255);
+    border: 4px solid rgb(149, 23, 23);
+
+}
+
+.content {
+    grid-area: content;
+    background: rgb(255, 255, 255);
+    /* min-width: 820px; */
+}
+
+
+.chat {
+    grid-area: chat;
+    background: rgb(255, 255, 255);
+    border: 4px solid rgb(33, 23, 149);
+}
+
+.message {
+    grid-area: message;
+    background: rgb(255, 255, 255);
+    border: 4px solid rgb(33, 23, 149);
+}
+
+.grid-template-areas-4 {
+    grid-template-columns: 58% 42%;
+    grid-template-rows: 20% 40% 40%;
+    grid-template-areas:
+        "content online"
+        "content chat"
+        "content message"
+    ;
+}
+
+/* Grid Item */
+.item {
+    margin: 5px;
+    /* background: rgb(80, 162, 220); */
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.grid {
+    /* max-width: 600px; */
+    margin: 0 auto;
+    border: 0px solid #ccc;
+}
+
+h1 {
+    text-align: center;
+    font-size: 1.25em;
+    font-weight: normal;
+}
+
+body {
+    font-family: monospace;
+    color: #333;
+    padding-bottom: 0px;
+    margin: 0px;
+}
+
+body>div {
+    padding: 0px 0;
+}
+
+body>div:nth-of-type(even) {
+    background: rgba(0, 0, 0, .03);
+}
+
+body>div>img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.chat-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.message-itens {
+    display: flex;
+    flex-direction: column;
+}

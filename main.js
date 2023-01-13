@@ -19,6 +19,8 @@ function setup() {
 
     login = createName()
 
+    chat = new Chat()
+
     client = new Client()
     client.send(JSON.stringify({ command: "login", login }))
 
@@ -27,9 +29,9 @@ function setup() {
 
     player = new Player({ login })
 
-
-
-    createCanvas(window.innerWidth, window.innerHeight);
+    // createCanvas(window.innerWidth, window.innerHeight)
+    const myCanvas = createCanvas(830, 820)
+    myCanvas.parent("bocha")
 
 }
 
