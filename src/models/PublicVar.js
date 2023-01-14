@@ -11,4 +11,5 @@ let box = false;
 let client = false
 let player = false;
 let chat = false;
+let game = true;
 const toShowInfo = false;

@@ -13,21 +13,20 @@ function createName() {
     return nome;
 }
 
-let login = ''
+// let login = ''
 
 function setup() {
 
-    login = createName()
+    // login = createName()
 
     chat = new Chat()
 
-    client = new Client()
-    client.send(JSON.stringify({ command: "login", login }))
 
+    game = new Game()
     box = new Box()
     box.putBalls()
 
-    player = new Player({ login })
+
 
     // createCanvas(window.innerWidth, window.innerHeight)
     const myCanvas = createCanvas(830, 820)
@@ -57,7 +56,9 @@ function draw() {
 
     showInfo();
 
-    player.show()
+    if (game.logged) {
+        player.show()
+    }
 
 }
 

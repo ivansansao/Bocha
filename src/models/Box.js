@@ -131,12 +131,17 @@ class Box {
         }
 
         if (!this.scoreboard.isMyTimeToPlay()) {
-            if (player.opponentLogin.trim()) {
-                textSize(18)
-                textAlign(CENTER)
-                noStroke()
-                fill(0)
-                text('Aguarde o ' + player.opponentLogin + ' jogar', this.x + (this.width / 2), this.risk.y + (this.height - this.risk.y) / 2)
+
+            if (game.logged) {
+
+
+                if (player.opponentLogin.trim()) {
+                    textSize(18)
+                    textAlign(CENTER)
+                    noStroke()
+                    fill(0)
+                    text('Aguarde o ' + player.opponentLogin + ' jogar', this.x + (this.width / 2), this.risk.y + (this.height - this.risk.y) / 2)
+                }
             }
         }
 
@@ -230,7 +235,7 @@ class Box {
             balls.forEach(b => {
                 bocces.push({ id: b.id, p: { x: b.p.x, y: b.p.y }, active: b.active })
             });
-            client.send(JSON.stringify({ command: 'allposition', login, bocces, scoreboard }))
+            client.send(JSON.stringify({ command: 'allposition', login: game.login, bocces, scoreboard }))
 
         }
 

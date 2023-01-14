@@ -27,7 +27,7 @@ function mouseReleased() {
                     active: bocce.active,
                 }
             }
-            box.scoreboard.loginPlayedLastBall = login
+            box.scoreboard.loginPlayedLastBall = player.login
             client.send(JSON.stringify(data))
         }
         // 

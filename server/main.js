@@ -23,6 +23,11 @@ aux.dateLog('Bocha server is listenning...            (Port: ' + port + ')')
 
 let clients = []
 
+const errors = {}
+
+errors[0] = { code: 0, reason: 'No erros' }
+errors[1] = { code: 1, reason: 'Login já existe' }
+
 wss.on('connection', function connection(ws, req) {
 
     ws.on('message', function incoming(message) {
@@ -52,7 +57,7 @@ wss.on('connection', function connection(ws, req) {
                     }
 
                     clients.push({ login: jMessage.login, ws, team })
-                    ws.send(JSON.stringify({ team }))
+                    ws.send(JSON.stringify({ ...jMessage, error: errors[0], team }))
                     aux.dateLog('Logged as: ' + jMessage.login)
 
                     // Send to oppenents my datas

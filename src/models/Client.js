@@ -32,7 +32,7 @@ class Client {
         let parseData = data.data
         if (data.data[0] == '{') {
             parseData = JSON.parse(data.data)
-            if (parseData.team && !player.team) {
+            if (false && parseData.team && !player.team) {
                 player.team = parseData.team
                 box.startGame()
             }
@@ -41,6 +41,10 @@ class Client {
             const command = parseData.command
 
             switch (command) {
+                case 'login':
+                    console.log('Cliente recebeu o login: ', parseData)
+                    game.onServerResponseLogin(parseData)
+                    break
                 case 'threw':
 
                     // Capture bocce
