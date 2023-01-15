@@ -89,3 +89,9 @@ body>div>img {
     display: flex;
     flex-direction: column;
 }
+
+.message-area {
+    height: 200px;
+    overflow-y: scroll;
+
+}

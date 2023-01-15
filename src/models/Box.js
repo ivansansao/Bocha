@@ -140,7 +140,7 @@ class Box {
                     textAlign(CENTER)
                     noStroke()
                     fill(0)
-                    text('Aguarde o ' + player.opponentLogin + ' jogar', this.x + (this.width / 2), this.risk.y + (this.height - this.risk.y) / 2)
+                    text('Aguarde ' + player.opponentLogin + ' jogar', this.x + (this.width / 2), this.risk.y + (this.height - this.risk.y) / 2)
                 }
             }
         }

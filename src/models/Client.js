@@ -103,8 +103,11 @@ class Client {
                     break
 
                 case 'general-message':
-                    let ele = document.getElementById('general-message');
-                    ele.innerHTML += `<li>${parseData.message}</li>`
+                    const messageArea = document.getElementById('messageArea')
+                    const messageItens = document.getElementById('messageItens')
+                    messageItens.innerHTML += `<li>${parseData.message}</li>`
+                    messageArea.scrollTop = messageArea.scrollHeight
+
                     break
 
                 default:
