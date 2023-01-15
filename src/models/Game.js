@@ -6,7 +6,7 @@ class Game {
 
     login(arg) {
 
-        const accessLogin = document.getElementById('access-login').value
+        const accessLogin = document.getElementById('accessLogin').value
 
         client = new Client()
         client.send(JSON.stringify({ command: "login", login: accessLogin }))

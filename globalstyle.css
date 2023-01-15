@@ -29,19 +29,60 @@
     border: 4px solid rgb(33, 23, 149);
 }
 
-.message-area {
+.chat-header {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    height: 40px;
+    border: 1px solid rgb(155, 37, 147)
+}
+
+.chat-itens {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 4px;
     height: 200px;
     overflow-y: auto;
+    border: 1px solid rgb(155, 37, 147);
 }
 
-.message-itens {
-    display: block;
-    flex-direction: column;
+.chat-div-input {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f2f5;
+    border: 1px solid rgb(155, 37, 147);
 }
 
-.message-item {
+.chat-item {
     font-size: medium;
+    font-family: "Roboto", sans-serif;
+    padding: 4px;
+    padding-top: 8px;
 }
+
+.input-message {
+    font-family: "Roboto", sans-serif;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 20px;
+    width: 98%;
+    margin: 0px;
+    border: 0px;
+}
+
+.input-message:focus {
+    outline: none !important;
+    border-color: #719ECE;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+
 
 .grid-template-areas-4 {
     grid-template-columns: 58% 42%;
@@ -64,7 +105,7 @@
 .grid {
     /* max-width: 600px; */
     margin: 0 auto;
-    border: 0px solid #ccc;
+    border: 1px solid rgb(179, 172, 172);
 }
 
 h1 {
@@ -82,6 +123,7 @@ body {
 
 body>div {
     padding: 0px 0;
+
 }
 
 body>div:nth-of-type(even) {
@@ -94,7 +136,16 @@ body>div>img {
     max-width: 100%;
 }
 
+
 .chat-buttons {
     display: flex;
     flex-direction: row;
 }
+
+/* button {
+    margin: 2px;
+    border: 0px;
+    border-radius: 4px;
+    padding: 6px 12px;
+
+} */

@@ -1,32 +1,42 @@
 class Chat {
     constructor() {
 
+        this.addListener()
+    }
+    addListener() {
+
+        let el
+        el = document.getElementById("inputMessage")
+        el.addEventListener("keyup",
+            (event) => {
+                if (event.key == 'Enter') {
+                    this.send()
+                    el.value = ''
+                }
+
+            })
+
     }
     sendGeneralMessage(message) {
 
-        const fullMessage = player.login + ': ' + message.innerText
-
         this.clientSend({
             command: 'general-message',
-            message: fullMessage
+            user: player.login,
+            message: message.innerText
         })
 
     }
 
-    onMessageReceived(message) {
-        this.addHtmlChatItem({ user: '', message: message.message })
-
+    onMessageReceived(data) {
+        this.addHtmlChatItem({ user: data.user, message: data.message })
     }
     send() {
 
-        const inputMessage = document.getElementById('inputMessage').value
-        const fullMessage = player.login + ': ' + inputMessage
-
         this.clientSend({
             command: 'general-message',
-            message: fullMessage
+            user: player.login,
+            message: document.getElementById('inputMessage').value
         })
-
 
     }
     clientSend(data) {
@@ -35,10 +45,9 @@ class Chat {
 
     addHtmlChatItem({ user, message }) {
 
-        const messageArea = document.getElementById('messageArea')
-        const messageItens = document.getElementById('messageItens')
-        messageItens.innerHTML += `<div class="message-item">${message}</div>`
-        messageArea.scrollTop = messageArea.scrollHeight
+        const chatItens = document.getElementById('chatItens')
+        chatItens.innerHTML += `<div class="chat-item"><b>${user}</b>: <span>${message}</span></div>`
+        chatItens.scrollTop = chatItens.scrollHeight
 
     }
 
