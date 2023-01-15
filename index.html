@@ -61,11 +61,15 @@
     <div class="item message">
       <h1>Mensagens</h1>
       <div class="message-area" id="messageArea">
-        <!-- <div style="overflow:scroll; height:200px;"> -->
 
-        <ul class="message-itens" id="messageItens">
-
-        </ul>
+        <div class="message-itens" id="messageItens">
+          <!-- Messages includes for server -->
+        </div>
+        <div>
+          <input class="create-message" type="text" name="input-message" id="inputMessage">
+          <button onclick="chat.send(this)">ENVIAR</button>
+          <span id="inputMessageError"></span>
+        </div>
 
       </div>
     </div>

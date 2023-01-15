@@ -29,6 +29,20 @@
     border: 4px solid rgb(33, 23, 149);
 }
 
+.message-area {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.message-itens {
+    display: block;
+    flex-direction: column;
+}
+
+.message-item {
+    font-size: medium;
+}
+
 .grid-template-areas-4 {
     grid-template-columns: 58% 42%;
     grid-template-rows: 20% 40% 40%;
@@ -83,15 +97,4 @@ body>div>img {
 .chat-buttons {
     display: flex;
     flex-direction: row;
-}
-
-.message-itens {
-    display: flex;
-    flex-direction: column;
-}
-
-.message-area {
-    height: 200px;
-    overflow-y: scroll;
-
 }

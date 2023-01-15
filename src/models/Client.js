@@ -98,16 +98,13 @@ class Client {
                     break
 
                 case 'opponentData':
-                    player.opponentLogin = parseData.opponentLogin
 
+                    player.opponentLogin = parseData.opponentLogin
                     break
 
                 case 'general-message':
-                    const messageArea = document.getElementById('messageArea')
-                    const messageItens = document.getElementById('messageItens')
-                    messageItens.innerHTML += `<li>${parseData.message}</li>`
-                    messageArea.scrollTop = messageArea.scrollHeight
 
+                    chat.onMessageReceived(parseData)
                     break
 
                 default:
