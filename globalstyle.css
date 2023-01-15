@@ -16,16 +16,24 @@
     /* min-width: 820px; */
 }
 
-
 .chat {
     grid-area: chat;
     background: rgb(255, 255, 255);
     border: 4px solid rgb(33, 23, 149);
 }
 
+.chat-item-flex1 {
+    display: flex;
+    align-items: flex-end;
+    border: 1px solid rgb(236, 70, 70);
+    width: 100%;
+}
+
+.chat-item-flex2 {}
+
 .message {
     grid-area: message;
-    background: rgb(255, 255, 255);
+    background: #ffffff;
     border: 4px solid rgb(33, 23, 149);
 }
 
@@ -44,7 +52,7 @@
     align-content: flex-start;
     align-items: flex-start;
     padding-bottom: 4px;
-    height: 200px;
+    height: 380px;
     overflow-y: auto;
     border: 1px solid rgb(155, 37, 147);
 }
@@ -60,11 +68,63 @@
 }
 
 .chat-item {
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
     font-size: medium;
     font-family: "Roboto", sans-serif;
     padding: 4px;
     padding-top: 8px;
+
 }
+
+.chat-item-other {
+    display: flex;
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.chat-item-user {
+    text-align: center;
+    background-color: beige;
+    border: 1px solid rgb(251, 94, 55);
+    border-radius: 45px;
+    margin: 30p;
+    width: 40px;
+    height: 30px;
+    padding-top: 12px;
+
+}
+
+.chat-item-message1 {
+    display: inline;
+    background-color: aquamarine;
+    margin-left: 10px;
+    border: 1px solid rgb(170, 55, 251);
+    border-radius: 0px 10px 10px 10px;
+    padding: 10px;
+}
+
+.chat-item-message2 {
+    display: inline;
+    background-color: rgb(201, 200, 255);
+    margin-left: 10px;
+    border: 1px solid rgb(239, 118, 118);
+    border-radius: 0px 10px 10px 10px;
+    padding: 10px;
+}
+
+.chat-item-message-title {
+    border: 0px solid rgb(251, 94, 55);
+    font-size: small;
+}
+
+.chat-item-message-content {
+    border: 0px solid rgb(251, 94, 55);
+    font-size: medium;
+}
+
+
 
 .input-message {
     font-family: "Roboto", sans-serif;
@@ -82,11 +142,9 @@
     box-shadow: 0 0 10px #719ECE;
 }
 
-
-
 .grid-template-areas-4 {
     grid-template-columns: 58% 42%;
-    grid-template-rows: 20% 40% 40%;
+    grid-template-rows: 20% 20% 60%;
     grid-template-areas:
         "content online"
         "content chat"
@@ -98,7 +156,7 @@
 .item {
     margin: 5px;
     /* background: rgb(80, 162, 220); */
-    text-align: center;
+    text-align: left;
     font-size: 1.5em;
 }
 
