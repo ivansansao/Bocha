@@ -63,7 +63,6 @@ class Chat {
                 <div class="chat-item-flex1">
                     <div class="chat-item">
                         <div class="chat-item-message1">
-                            <div class="chat-item-message-title"><b>${login}</b></div>
                             <div class="chat-item-message-content">${message}</div>
                         </div>
                     </div>

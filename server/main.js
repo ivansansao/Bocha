@@ -27,6 +27,8 @@ const errors = {}
 
 errors[0] = { code: 0, reason: 'No erros' }
 errors[1] = { code: 1, reason: 'Login já existe' }
+errors[2] = { code: 2, reason: 'Vamos lá digite algo maior' }
+
 
 wss.on('connection', function connection(ws, req) {
 
@@ -48,6 +50,9 @@ wss.on('connection', function connection(ws, req) {
 
                 if (clients.length > 1) {
                     ws.send("Excedeu o limite de 2")
+                    ws.close()
+                } else if (jMessage.login.trim().length < 3) {
+                    ws.send(JSON.stringify({ ...jMessage, error: errors[2] }))
                     ws.close()
                 } else {
 
