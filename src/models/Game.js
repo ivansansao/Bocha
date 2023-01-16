@@ -12,6 +12,15 @@ class Game {
         client.send(JSON.stringify({ command: "login", login: accessLogin }))
 
     }
+    close(arg) {
+
+        client.close()
+        const divAccessLogin = document.getElementById('divAccessLogin')
+        const divAccessLogged = document.getElementById('divAccessLogged')
+        divAccessLogin.style.visibility = 'visible'
+        divAccessLogged.style.visibility = 'hidden'
+
+    }
 
     onServerResponseLogin(server) {
 
@@ -22,6 +31,13 @@ class Game {
             this.logged = true
             box.startGame()
             document.getElementById('access-error').innerText = ''
+
+            const divAccessLogin = document.getElementById('divAccessLogin')
+            const divAccessLogged = document.getElementById('divAccessLogged')
+            divAccessLogin.style.visibility = 'hidden'
+            divAccessLogged.style.visibility = 'visible'
+
+
 
         } else {
             document.getElementById('access-error').innerText = server.error.reason

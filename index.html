@@ -37,13 +37,15 @@
     <div class="item content" id="bocha"></div>
     <div class="item online">
       <h1>Acesso</h1>
-      <div>
+      <div id="divAccessLogin">
         <span>Login</span>
         <input type="text" name="login" id="accessLogin" autocomplete>
         <button onclick="game.login(this)">Entrar</button>
         <span id="access-error"></span>
       </div>
-      <div id="accessLogged">
+      <div id="divAccessLogged" style="visibility: hidden">
+        Logado!
+        <button onclick="game.close(this)">Sair</button>
       </div>
     </div>
 
@@ -65,7 +67,7 @@
     </div>
     <div class="item message">
       <div class="chat-header">
-        <h1>Chat</h1>
+        <h1>Bate-papo</h1>
       </div>
       <div class="chat-itens" id="chatItens">
       </div>

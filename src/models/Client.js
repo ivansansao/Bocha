@@ -26,6 +26,10 @@ class Client {
         this.send(Date.now() + ": Conectei no server")
     }
 
+    close = (data) => {
+        this.ws.close()
+    }
+
     onMessage = (data) => {
 
         const ws = this.ws
