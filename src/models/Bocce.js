@@ -65,7 +65,6 @@ class Bocce extends Ball {
         }
 
 
-
     }
 
     throwBall(mx, my) {

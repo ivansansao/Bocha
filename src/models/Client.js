@@ -108,8 +108,12 @@ class Client {
                     game.onOpponentConnect(parseData)
 
                     break
+                case 'disconnected':
 
-                case 'general-message':
+                    game.onOpponentDisconnect(parseData)
+                    break
+
+                case 'chatmessage':
 
                     chat.onMessageReceived(parseData)
                     break

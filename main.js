@@ -46,11 +46,13 @@ function draw() {
         ball.collide();
         ball.collideWalls(box);
         ball.show();
+
     }
 
     if (mouseIsPressed) {
         box.throwBall(mouseX, mouseY)
     }
+    box.stoppedGame()
 
     logs.push('Jogo parado: ' + box.stoppedGame())
 

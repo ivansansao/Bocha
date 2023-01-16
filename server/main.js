@@ -106,7 +106,7 @@ wss.on('connection', function connection(ws, req) {
 
                 break
 
-            case 'general-message':
+            case 'chatmessage':
                 if (clients.length > 1) {
                     for (const client of clients) {
                         aux.dateLog('Enviando mensagem para' + client.login)
@@ -134,17 +134,37 @@ wss.on('connection', function connection(ws, req) {
 
         aux.dateLog('BEFORE: ' + clients.length)
 
+
         clients.forEach((client) => {
             if (client.ws == ws) {
                 aux.dateLog('>> DELETING: ' + client.login)
                 clients = clients.filter((e) => e.login != client.login)
+
+                // Comunicate of disconnecting.
+                const op = getOpponentOf(client.login)
+                if (op) {
+                    aux.dateLog("The opponent of " + client.login + " is " + op.login)
+                    op.ws.send(JSON.stringify({ command: 'disconnected', login: client.login }))
+                }
+
             }
         })
+
 
         aux.dateLog('AFTER: ' + clients.length)
 
     })
 });
+
+function getOpponentOf(login) {
+
+    for (const client of clients) {
+        aux.dateLog("A " + client.login + " B " + login)
+        if (client.login != login) {
+            return client
+        }
+    }
+}
 
 
 function sendToAll() {

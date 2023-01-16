@@ -73,22 +73,9 @@ class Box {
         }
 
 
-
-
     }
 
-    stoppedGame() {
-        for (const b of balls) {
-            if (b.v.x != 0 || b.v.y != 0) {
-                if (!b.captured) {
-                    this.isStoppedGame = false
-                    return false
-                }
-            }
-        }
-        this.onStoppedGame()
-        return true
-    }
+
 
     show() {
 
@@ -151,6 +138,19 @@ class Box {
         super.move()
     }
 
+
+    stoppedGame() {
+        for (const b of balls) {
+            if (b.v.x != 0 || b.v.y != 0) {
+                if (!b.captured) {
+                    this.isStoppedGame = false
+                    return false
+                }
+            }
+        }
+        this.onStoppedGame()
+        return true
+    }
     onStoppedGame() {
 
         if (this.isStoppedGame) {
@@ -205,8 +205,10 @@ class Box {
 
         }
 
-
         this.sendPositionToEnimy()
+
+
+
     }
 
     sendPositionToEnimy() {
@@ -305,8 +307,13 @@ class Box {
         return nearestBocce
 
     }
+    clearGame() {
+        this.scoreboard = new Scoreboard(20, 4)
+        this.putBalls()
+    }
 
     startGame() {
+        this.clearGame()
         this.addBocceToPlayer()
     }
 
@@ -314,6 +321,7 @@ class Box {
     }
 
     resetRound() {
+        console.log("stop reset round")
         this.winner = ''
         this.isStoppedGame = true
         this.yellowRest = 4
@@ -368,7 +376,7 @@ class Box {
         for (const bocce of balls) {
             if (bocce.captured == DEF_BALL_CAPTURED) {
                 const force = bocce.throwBall(mx, my)
-                console.log('Lançou a bola mx: ', mx, ' my: ', my, '  force: ', force)
+                // console.log('Lançou a bola mx: ', mx, ' my: ', my, '  force: ', force)
             }
 
         }
@@ -453,6 +461,22 @@ class Box {
 
     }
 
+    hasActiveBocceToPlay(team) {
+
+        let has = false
+        for (const b of balls) {
+            if (b.groupName == team) {
+                if (b.played == false && b.active) {
+                    has = true
+                    break
+                }
+            }
+        }
+
+        return has
+
+    }
+
     addBocceToPlayer() {
 
         const timeToPay = this.getTimeToPlay()
@@ -462,20 +486,24 @@ class Box {
         if (player.team == 'yellow') {
 
             if (timeToPay == 'yellow') {
-                if (this.getQtdPlayed('little') == 0) {
-                    this.activeBall('little')
-                } else {
-                    this.activeBall(timeToPay)
+                if (!this.hasActiveBocceToPlay(timeToPay)) {
+                    if (this.getQtdPlayed('little') == 0) {
+                        this.activeBall('little')
+                    } else {
+                        this.activeBall(timeToPay)
+                    }
                 }
             }
 
         } else {
 
             if (timeToPay == 'blue') {
-                if (this.getQtdPlayed('little') == 0) {
-                    this.activeBall('little')
-                } else {
-                    this.activeBall(timeToPay)
+                if (!this.hasActiveBocceToPlay(timeToPay)) {
+                    if (this.getQtdPlayed('little') == 0) {
+                        this.activeBall('little')
+                    } else {
+                        this.activeBall(timeToPay)
+                    }
                 }
             }
 
@@ -488,6 +516,8 @@ class Box {
 function releaseBall() {
 
     for (const bocce of balls) {
+
+
 
         if (bocce.captured == DEF_BALL_CAPTURED) {
 
@@ -507,11 +537,17 @@ function releaseBall() {
 
                 //     }
                 bocce.playing = true
+
                 //     client.send(JSON.stringify(data))
             }
             bocce.captured = DEF_BALL_RELEASED
 
+
         }
+        if (bocce.playing && bocce.v.x == 0 && bocce.v.y == 0 && !bocce.passedRisk) {
+            bocce.playing = false
+        }
+
 
     }
 }

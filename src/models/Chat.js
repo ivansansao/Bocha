@@ -21,10 +21,10 @@ class Chat {
             })
 
     }
-    sendGeneralMessage(message) {
+    sendChatMessage(message) {
 
         this.clientSend({
-            command: 'general-message',
+            command: 'chatmessage',
             login: player.login,
             message: message.innerText
         })
@@ -34,9 +34,9 @@ class Chat {
     onOpponentConnect(data) {
 
         this.clientSend({
-            command: 'general-message',
+            command: 'chatmessage',
             login: data.opponentLogin,
-            message: 'Entrou!'
+            message: 'Entrei!'
         })
 
     }
@@ -52,7 +52,7 @@ class Chat {
     send() {
 
         this.clientSend({
-            command: 'general-message',
+            command: 'chatmessage',
             login: player.login,
             message: document.getElementById('inputMessage').value
         })

@@ -17,15 +17,17 @@ class Game {
         client = new Client()
         client.send(JSON.stringify({ command: "login", login: accessLogin }))
 
+        box.clearGame()
+
 
     }
     close(arg) {
 
-        chat.clientSend({
-            command: 'general-message',
-            login: player.login,
-            message: 'Saiu!'
-        })
+        // chat.clientSend({
+        //     command: 'chatmessage',
+        //     login: player.login,
+        //     message: 'Saiu!'
+        // })
         client.close()
         document.getElementById('itemOnline').appendChild(this.loginEl)
 
@@ -41,7 +43,6 @@ class Game {
             player = new Player({ login: server.login })
             player.team = server.team
             this.logged = true
-            box.startGame()
 
             document.getElementById('itemOnline').appendChild(this.loggedEl)
             document.getElementById('access-error').innerText = ''
@@ -60,7 +61,7 @@ class Game {
 
 
             // chat.clientSend({
-            //     command: 'general-message',
+            //     command: 'chatmessage',
             //     login: player.login,
             //     message: 'Entrou!'
             // })
@@ -76,9 +77,20 @@ class Game {
         console.log("SHOWW OPP INFO", server)
 
         document.getElementById('opponent').innerText = server.opponentLogin
+        box.startGame()
 
         console.log("ANFTER OPP")
 
+    }
+
+    onOpponentDisconnect(server) {
+        chat.addHtmlChatItem({ login: server.login, message: 'Desconectou!' })
+        this.stopGame()
+    }
+
+    stopGame() {
+        player.opponentLogin = ''
+        document.getElementById('opponent').innerText = player.opponentLogin
     }
 
 }
