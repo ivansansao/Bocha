@@ -56,29 +56,35 @@ class Chat {
     getDivChatItem({ login, message }) {
 
         let div
-        let cls = 'chat-item'
-        let userSide
-        const firstChar = login[0]
 
         if (login == player.login) {
-            cls = 'chat-item'
-            userSide = '1'
-        } else {
-            cls = 'chat-item chat-item-other'
-            userSide = '2'
-        }
 
-        div = `
-            <div class="chat-item-flex${userSide}">
-                <div class="${cls}">
-                    <div class="chat-item-user">${firstChar}</div>
-                    <div class="chat-item-message${userSide}">
-                        <div class="chat-item-message-title"><b>${login}</b></div>
-                        <div class="chat-item-message-content">${message}</div>
+            div = `
+                <div class="chat-item-flex1">
+                    <div class="chat-item">
+                        <div class="chat-item-message1">
+                            <div class="chat-item-message-title"><b>${login}</b></div>
+                            <div class="chat-item-message-content">${message}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `
+            `
+        } else {
+
+            const firstChar = login[0].toUpperCase()
+
+            div = `
+                <div class="chat-item-flex2">
+                    <div class="chat-item chat-item-other">
+                        <div class="chat-item-user">${firstChar}</div>
+                        <div class="chat-item-message2">
+                            <div class="chat-item-message-title"><b>${login}</b></div>
+                            <div class="chat-item-message-content">${message}</div>
+                        </div>
+                    </div>
+                </div>
+            `
+        }
 
         return div
     }
