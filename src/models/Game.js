@@ -1,6 +1,12 @@
 class Game {
     constructor() {
+
         this.logged = false
+        this.loginEl = document.getElementById('divAccessLogin')
+        this.loggedEl = document.getElementById('divAccessLogged')
+        this.infoGameEl = document.getElementById('infoGame')
+        this.loggedEl.remove()
+        this.infoGameEl.remove()
 
     }
 
@@ -21,10 +27,10 @@ class Game {
             message: 'Saiu!'
         })
         client.close()
-        const divAccessLogin = document.getElementById('divAccessLogin')
-        const divAccessLogged = document.getElementById('divAccessLogged')
-        divAccessLogin.style.visibility = 'visible'
-        divAccessLogged.style.visibility = 'hidden'
+        document.getElementById('itemOnline').appendChild(this.loginEl)
+
+        this.loggedEl.remove()
+        this.infoGameEl.remove()
 
     }
 
@@ -36,12 +42,22 @@ class Game {
             player.team = server.team
             this.logged = true
             box.startGame()
-            document.getElementById('access-error').innerText = ''
 
-            const divAccessLogin = document.getElementById('divAccessLogin')
-            const divAccessLogged = document.getElementById('divAccessLogged')
-            divAccessLogin.style.visibility = 'hidden'
-            divAccessLogged.style.visibility = 'visible'
+            document.getElementById('itemOnline').appendChild(this.loggedEl)
+            document.getElementById('access-error').innerText = ''
+            document.getElementById('accessUserImg').innerText = server.login.trim().toUpperCase()[0]
+            document.getElementById('accessUserName').innerText = server.login.trim()
+
+            document.getElementById('itemOnline').appendChild(this.infoGameEl)
+            document.getElementById('team').innerText = toPT(player.team)
+
+            this.loginEl.remove()
+
+            // const divAccessLogin = document.getElementById('divAccessLogin')
+            // const divAccessLogged = document.getElementById('divAccessLogged')
+            // divAccessLogin.style.visibility = 'hidden'
+            // divAccessLogged.style.visibility = 'visible'
+
 
             // chat.clientSend({
             //     command: 'general-message',
@@ -50,10 +66,19 @@ class Game {
             // })
 
 
-
         } else {
             document.getElementById('access-error').innerText = server.error.reason
         }
+    }
+
+    onOpponentConnect(server) {
+
+        console.log("SHOWW OPP INFO", server)
+
+        document.getElementById('opponent').innerText = server.opponentLogin
+
+        console.log("ANFTER OPP")
+
     }
 
 }

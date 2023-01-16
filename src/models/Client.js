@@ -105,6 +105,7 @@ class Client {
 
                     player.opponentLogin = parseData.opponentLogin
                     chat.onOpponentConnect(parseData)
+                    game.onOpponentConnect(parseData)
 
                     break
 

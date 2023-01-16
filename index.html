@@ -1,5 +1,8 @@
 <!-- 
   https://medium.com/quick-code/building-a-chat-application-using-flexbox-e6936c3057ef
+
+  https://marina-ferreira.github.io/tutorials/css/flexbox/
+
  -->
 
 <!DOCTYPE html>
@@ -34,38 +37,49 @@
 
   <div class="grid grid-template-areas-4">
 
-    <div class="item content" id="bocha"></div>
-    <div class="item online">
-      <h1>Acesso</h1>
-      <div id="divAccessLogin">
+    <div class="item content" id="bocha">
+    </div>
+
+    <div class="login" id="itemOnline">
+      <div class="access-login" id="divAccessLogin">
         <span>Login</span>
         <input type="text" name="login" id="accessLogin" autocomplete>
         <button onclick="game.login(this)">Entrar</button>
         <span id="access-error"></span>
       </div>
-      <div id="divAccessLogged" style="visibility: hidden">
-        Logado!
+
+      <div class="access-logged" id="divAccessLogged" style="visibility: visible">
+        <div class="access-user-img" id="accessUserImg"></div>
+        <div id="accessUserName"></div>
         <button onclick="game.close(this)">Sair</button>
       </div>
+      <div class="info-game" id="infoGame">
+        <div>
+          <span class="label">Você joga com:</span><span class="content" id="team">...</span>
+        </div>
+        <div>
+          <span class="label">Adversário:</span><span class="content" id="opponent">...</span>
+        </div>
+      </div>
+
     </div>
 
-    <div class="item chat-ready-msg">
+    <div class="ready-msg">
 
-      <h1>Mensagens prontas</h1>
-
-      <div class="chat-buttons">
+      <div class="buttons">
         <button onclick="chat.sendGeneralMessage(this)">Joguinho pra mais</button>
         <button onclick="chat.sendGeneralMessage(this)">Quatrinho</button>
         <button onclick="chat.sendGeneralMessage(this)">Doizino magro</button>
         <button onclick="chat.sendGeneralMessage(this)">Aff</button>
         <button onclick="chat.sendGeneralMessage(this)">Ahhhahahah</button>
-        <button onclick="chat.sendGeneralMessage(this)">Eita porr..</button>
+        <button onclick="chat.sendGeneralMessage(this)">Eita..</button>
         <button onclick="chat.sendGeneralMessage(this)">Potz</button>
-        <button onclick="chat.sendGeneralMessage(this)">Faz uma tabelinha no fundo</button>
+        <button onclick="chat.sendGeneralMessage(this)">Fraca</button>
+        <button onclick="chat.sendGeneralMessage(this)">Deu quando passou</button>
       </div>
 
     </div>
-    <div class="item message">
+    <div class="chat">
       <div class="chat-header">
         <h1>Bate-papo</h1>
       </div>

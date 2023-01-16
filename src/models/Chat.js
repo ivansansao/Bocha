@@ -3,6 +3,7 @@ class Chat {
 
         this.addListener()
 
+
         // this.addHtmlChatItem({ login: 'Renata', message: 'Oiii' })
     }
 
@@ -31,7 +32,6 @@ class Chat {
     }
 
     onOpponentConnect(data) {
-
 
         this.clientSend({
             command: 'general-message',

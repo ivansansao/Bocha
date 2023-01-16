@@ -3,13 +3,18 @@
     display: grid;
 }
 
-.online {
+.login {
+
+    /* display: flex; */
+
     grid-area: online;
     background: rgb(255, 255, 255);
     border: 1px solid rgb(156, 156, 156);
     border-radius: 10px;
-    padding: 10px;
-
+    padding: 0px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .content {
@@ -18,13 +23,6 @@
     /* min-width: 820px; */
 }
 
-.chat-ready-msg {
-    grid-area: chat;
-    background: rgb(255, 255, 255);
-    border: 1px solid rgb(156, 156, 156);
-    border-radius: 10px;
-    padding: 10px;
-}
 
 .chat-item-flex1 {
     display: flex;
@@ -45,6 +43,16 @@
     background: #ffffff;
     border: 1px solid rgb(156, 156, 156);
     border-radius: 10px;
+    margin: 80px;
+}
+
+.chat {
+    grid-area: message;
+    background: #ffffff;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 10px;
+    margin-top: 4px;
+    margin-right: 20px;
 }
 
 .chat-header {
@@ -85,7 +93,6 @@
     justify-content: flex-start;
     text-align: left;
     font-size: medium;
-    font-family: "Roboto", sans-serif;
     padding: 4px;
     padding-top: 8px;
 
@@ -100,8 +107,8 @@
 .chat-item-user {
     text-align: center;
     background-color: beige;
-    border: 1px solid rgb(251, 94, 55);
-    border-radius: 45px;
+    border: 0px solid rgb(251, 94, 55);
+    border-radius: 50px;
     margin: 30p;
     width: 40px;
     height: 30px;
@@ -112,9 +119,10 @@
 .chat-item-message1 {
     display: inline;
     background-color: rgb(201, 200, 255);
+    color: rgb(0, 0, 0);
     margin-left: 10px;
     border: 1px solid rgb(239, 118, 118);
-    border-radius: 10px 0px 10px 10px;
+    border-radius: 16px 0px 16px 16px;
     padding: 10px;
     max-width: 340px;
 }
@@ -122,9 +130,10 @@
 .chat-item-message2 {
     display: inline;
     background-color: aquamarine;
+    color: rgb(0, 0, 0);
     margin-left: 10px;
     border: 1px solid rgb(170, 55, 251);
-    border-radius: 0px 10px 10px 10px;
+    border-radius: 0px 16px 16px 16px;
     padding: 10px;
     max-width: 340px;
 }
@@ -142,34 +151,34 @@
 }
 
 .input-message {
-    font-family: "Roboto", sans-serif;
     padding: 4px;
     border-radius: 4px;
     font-size: 20px;
     width: 98%;
     margin: 0px;
     border: 0px;
+    background-color: white;
 }
 
 .input-message:focus {
     outline: none !important;
     border-color: #719ECE;
-    box-shadow: 0 0 10px #719ECE;
+    /* box-shadow: 0 0 10px #719ECE; */
 }
 
 .grid-template-areas-4 {
     grid-template-columns: 58% 42%;
-    grid-template-rows: 20% 20% 60%;
+    grid-template-rows: 20% 60% 20%;
     grid-template-areas:
         "content online"
-        "content chat"
         "content message"
+        "content chat"
     ;
 }
 
 /* Grid Item */
 .item {
-    margin: 5px;
+    margin: 0px;
     /* background: rgb(80, 162, 220); */
     text-align: left;
     font-size: 1.5em;
@@ -192,28 +201,10 @@ body {
     color: #333;
     padding-bottom: 0px;
     margin: 0px;
-}
-
-body>div {
-    padding: 0px 0;
+    font-family: sans-serif;
 
 }
 
-body>div:nth-of-type(even) {
-    background: rgba(0, 0, 0, .03);
-}
-
-body>div>img {
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-}
-
-
-.chat-buttons {
-    display: flex;
-    flex-direction: row;
-}
 
 /* button {
     margin: 2px;
@@ -222,3 +213,126 @@ body>div>img {
     padding: 6px 12px;
 
 } */
+
+.access-login {
+    border: 0px solid rgb(155, 37, 147);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: medium;
+    padding: 20px;
+    margin: 0px;
+    /* background: rgb(243, 243, 243); */
+    border-radius: 0px 0px 0px 10px;
+}
+
+.access-login input {
+    flex-grow: 3;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+button {
+    background-color: #dedede;
+    border-radius: 8px;
+    display: inline-block;
+    cursor: pointer;
+    color: #000000;
+    font-size: medium;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: 0px;
+    font-weight: normal;
+    margin: 2px;
+}
+
+button:hover {
+    background-color: #e5e5e5;
+}
+
+input {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f2f5;
+    border: 1px solid grey;
+    border-radius: 8px;
+    font-size: medium;
+}
+
+.access-logged {
+
+    border: 0px solid rgb(155, 37, 147);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: medium;
+    padding-right: 20px;
+
+}
+
+
+button:active {
+    background-color: #dedede;
+}
+
+.access-logged * {
+    margin: 10px;
+}
+
+.access-user-img {
+    text-align: center;
+    background-color: beige;
+    border: 0px solid rgb(251, 94, 55);
+    border-radius: 50px;
+    margin: 0px;
+    width: 40px;
+    height: 30px;
+    padding-top: 12px;
+
+}
+
+.ready-msg {
+    grid-area: chat;
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 10px;
+    padding: 0px;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+.ready-msg h1 {
+    margin: 2px;
+    margin-bottom: 8px;
+}
+
+.ready-msg .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px;
+
+}
+
+.ready-msg button {
+    margin: 1px
+}
+
+.info-game {
+    position: relative;
+    margin: 10px
+}
+
+.info-game .label {
+    font-weight: bold;
+}
+
+.info-game .content {
+    margin-left: 10px;
+}
