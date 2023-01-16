@@ -11,9 +11,15 @@ class Game {
         client = new Client()
         client.send(JSON.stringify({ command: "login", login: accessLogin }))
 
+
     }
     close(arg) {
 
+        chat.clientSend({
+            command: 'general-message',
+            login: player.login,
+            message: 'Saiu!'
+        })
         client.close()
         const divAccessLogin = document.getElementById('divAccessLogin')
         const divAccessLogged = document.getElementById('divAccessLogged')
@@ -36,6 +42,12 @@ class Game {
             const divAccessLogged = document.getElementById('divAccessLogged')
             divAccessLogin.style.visibility = 'hidden'
             divAccessLogged.style.visibility = 'visible'
+
+            // chat.clientSend({
+            //     command: 'general-message',
+            //     login: player.login,
+            //     message: 'Entrou!'
+            // })
 
 
 

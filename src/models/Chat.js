@@ -30,8 +30,24 @@ class Chat {
 
     }
 
+    onOpponentConnect(data) {
+
+
+        this.clientSend({
+            command: 'general-message',
+            login: data.opponentLogin,
+            message: 'Entrou!'
+        })
+
+    }
+
+
     onMessageReceived(data) {
-        this.addHtmlChatItem({ login: data.login, message: data.message })
+        if (data.error.code == 0) {
+            this.addHtmlChatItem({ login: data.login, message: data.message })
+        } else {
+            this.addHtmlChatItem({ login: data.login, message: data.error.reason })
+        }
     }
     send() {
 

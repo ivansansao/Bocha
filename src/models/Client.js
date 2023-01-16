@@ -104,6 +104,8 @@ class Client {
                 case 'opponentData':
 
                     player.opponentLogin = parseData.opponentLogin
+                    chat.onOpponentConnect(parseData)
+
                     break
 
                 case 'general-message':
