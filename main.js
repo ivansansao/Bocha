@@ -20,11 +20,11 @@ function setup() {
     // login = createName()
 
     chat = new Chat()
-
-
     game = new Game()
     box = new Box()
     box.putBalls()
+
+
 
 
 

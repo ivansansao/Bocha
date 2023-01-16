@@ -243,6 +243,10 @@ class Box {
 
     }
 
+    amIWin() {
+        return this.scoreboard.runningWinner == player.team
+    }
+
     /**
      * Calculate point while round not finish
      */
@@ -283,6 +287,8 @@ class Box {
 
         this.scoreboard.runningYellow = pointsYellow
         this.scoreboard.runningYblue = pointsBlue
+
+
 
     }
 
@@ -368,6 +374,10 @@ class Box {
         this.scoreboard.yellow.push(pointsYellow)
         this.scoreboard.blue.push(pointsBlue)
 
+        if (!this.amIWin()) {
+            game.playSound('looser')
+        }
+
         console.log(this.scoreboard)
 
     }
@@ -445,6 +455,8 @@ class Box {
                     // bocce.p.x = this.x + (this.width / 2)
                     // bocce.p.y = this.risk.y + bocce.r
                     bocce.active = true
+                    game.playSound('new-bocce')
+
                     // bocce.captured = DEF_BALL_CAPTURED
                     // clickCount++
                     // console.log('clickCount')

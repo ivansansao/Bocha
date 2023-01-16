@@ -7,9 +7,15 @@ class Game {
         this.infoGameEl = document.getElementById('infoGame')
         this.loggedEl.remove()
         this.infoGameEl.remove()
+        this.soundsOn = true
 
     }
 
+    playSound(what) {
+        if (this.soundsOn) {
+            new Audio(`src/assets/sound/${what}.wav`).play()
+        }
+    }
     login(arg) {
 
         const accessLogin = document.getElementById('accessLogin').value
@@ -19,8 +25,9 @@ class Game {
 
         box.clearGame()
 
-
     }
+
+
     close(arg) {
 
         // chat.clientSend({

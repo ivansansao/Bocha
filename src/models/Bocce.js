@@ -120,6 +120,7 @@ class Bocce extends Ball {
                 this.p.y = this.r + box.y
                 this.v.y = -this.v.y
                 this.v.y = this.v.y * 0.3
+                game.playSound('court-bottom')
             }
         } else {
             if (this.p.y - this.r <= box.risk.y) {
