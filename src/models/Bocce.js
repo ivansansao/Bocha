@@ -120,7 +120,7 @@ class Bocce extends Ball {
                 this.p.y = this.r + box.y
                 this.v.y = -this.v.y
                 this.v.y = this.v.y * 0.3
-                game.playSound('court-bottom')
+                game.playSound('lateral-wall')
             }
         } else {
             if (this.p.y - this.r <= box.risk.y) {
@@ -134,21 +134,26 @@ class Bocce extends Ball {
             // Left
             this.p.x = this.r + box.x
             this.v.x = -this.v.x
+            game.playSound('lateral-wall')
         }
         if (this.p.y + this.r >= box.y1) {
             // bottom
             this.p.y = box.y1 - this.r
             this.v.y = -this.v.y
+
         }
         if (this.p.x + this.r >= box.x1) {
             // Right
             this.p.x = box.x1 - this.r
             this.v.x = -this.v.x
+            game.playSound('lateral-wall')
         }
 
     }
 
     onAfterNewCollide(a, b) {
+        game.playSound('ball')
         super.onAfterNewCollide(a, b)
+
     }
 }

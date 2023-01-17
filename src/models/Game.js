@@ -8,15 +8,35 @@ class Game {
         this.loggedEl.remove()
         this.infoGameEl.remove()
         this.soundsOn = true
+        this.addListener()
+
+    }
+
+    addListener() {
+
+        let el
+        el = document.getElementById("accessLogin")
+        el.addEventListener("keyup",
+            (event) => {
+                if (event.key == 'Enter') {
+                    game.login()
+                    el.value = ''
+                }
+
+            })
 
     }
 
     playSound(what) {
+
+        // https://freesound.org/
+        // https://mixkit.co/free-sound-effects/
+
         if (this.soundsOn) {
             new Audio(`src/assets/sound/${what}.wav`).play()
         }
     }
-    login(arg) {
+    login() {
 
         const accessLogin = document.getElementById('accessLogin').value
 
@@ -24,6 +44,9 @@ class Game {
         client.send(JSON.stringify({ command: "login", login: accessLogin }))
 
         box.clearGame()
+
+        chat.addHtmlChatItem({ login: 'Bocha', message: 'Como jogar?<br><br>1o Clique na bola e solte pra pegá-la.<br>2o Clique segure, arraste pra baixo e solte!' })
+
 
     }
 

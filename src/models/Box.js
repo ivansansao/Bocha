@@ -375,7 +375,8 @@ class Box {
         this.scoreboard.blue.push(pointsBlue)
 
         if (!this.amIWin()) {
-            game.playSound('looser')
+            game.playSound('laugh-skull')
+            // game.playSound('looser')
         }
 
         console.log(this.scoreboard)
@@ -455,7 +456,7 @@ class Box {
                     // bocce.p.x = this.x + (this.width / 2)
                     // bocce.p.y = this.risk.y + bocce.r
                     bocce.active = true
-                    game.playSound('new-bocce')
+                    game.playSound('new-bocce-1')
 
                     // bocce.captured = DEF_BALL_CAPTURED
                     // clickCount++
