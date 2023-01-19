@@ -6,7 +6,7 @@ class Bocce extends Ball {
         this.distanceLitlle = Infinity
         this.nearest = false
         this.played = false
-        this.playing = false
+        // this.playing = false // old idea
         this.passedRisk = false
         this.pointed = false
         this.runningPoints = 0
@@ -15,10 +15,26 @@ class Bocce extends Ball {
 
     }
 
+    update(box) {
+
+        if (mouseIsPressed) {
+            if (this.captured == DEF_BALL_CAPTURED) {
+                console.log('Capurada ', this.id)
+                this.calcThrowForce(mouseX, mouseY)
+            }
+        }
+
+    }
+
     show() {
 
         if (!this.active) {
             return
+        }
+
+        if (this.active) {
+            stroke(0, 255, 0)
+            circle(this.p.x - 25, this.p.y, this.r / 2)
         }
 
         if (this.captured) {
@@ -29,7 +45,8 @@ class Bocce extends Ball {
 
         if (this.groupName != 'little') {
             if (this.groupName != player.team) {
-                if (!this.playing && !this.played) {
+                // if (!this.playing && !this.played) {
+                if (this.isStopped() && !this.played) {
                     return
                 }
             }
@@ -48,7 +65,7 @@ class Bocce extends Ball {
             text(this.runningPoints > 0 ? this.runningPoints : '', this.p.x - (this.r / 2) + 8, this.p.y + 4)
 
             // debug
-            if (false) {
+            if (true) {
                 textAlign(LEFT)
                 const px = this.p.x - (this.r / 2) + 8
                 const py = this.p.y + 4
@@ -67,7 +84,7 @@ class Bocce extends Ball {
 
     }
 
-    throwBall(mx, my) {
+    calcThrowForce(mx, my) {
 
         this.threwMx = mx
         this.threwMy = my
@@ -80,41 +97,53 @@ class Bocce extends Ball {
 
         const distMouse = min(maxDist, p5.Vector.dist(createVector(mx, my), createVector(ball.p.x, ball.p.y)))
 
-        logs.push('distMouse ' + distMouse)
+        console.log('TUDO ISSO: ', mx, my, ball.p.x, ball.p.y)
         stroke(0)
-        line(mouseX, mouseY, ball.p.x, ball.p.y)
-
-        const x = mx;
-        const y = my;
+        line(mx, my, ball.p.x, ball.p.y)
 
         // Calcula a direção da bola com base na posição atual da bola e na posição do mouse
-        const direction = Math.atan2(y - ball.p.y, x - ball.p.x);
+        const direction = Math.atan2(my - ball.p.y, mx - ball.p.x);
 
         const force = map(distMouse, 0, maxDist, 0, 0.9)
 
-        // Apply velocity
-        // Atualiza a posição da bola com base na direção
+        // Caculate final velocity
         const VxF = -Math.cos(direction) * force
         const VyF = -Math.sin(direction) * force
+        console.log(VxF, VyF)
 
-        logs.push('direction ' + direction)
-        logs.push('force ' + force)
-        logs.push('Math.cos(direction) ' + Math.cos(direction))
-        logs.push('Math.sin(direction) ' + Math.sin(direction))
+        // validOrError(!(VxF == 0 && VyF == 0), `Problems calculating launch force! VxF: ${VxF} VyF: ${VyF}`)
 
-        ball.v.x = VxF;
-        ball.v.y = VyF;
+        return { VxF, VyF }
 
-        showInfo();
+    }
 
-        return force
+    throw(mx, my) {
+
+        validOrError(this.captured == DEF_BALL_CAPTURED, 'Attempting to throw uncaught ball!')
+
+        const finalVel = this.calcThrowForce(mx, my)
+
+        if (finalVel.VxF != 0 && finalVel.VyF != 0) {
+
+            this.v.x = finalVel.VxF
+            this.v.y = finalVel.VyF
+
+            this.captured = DEF_BALL_RELEASED
+            // this.playing = true // old idea
+
+            return true
+
+        }
+
+        return false
 
     }
 
 
     collideWalls(box) {
 
-        if (this.played || this.playing) {
+        // if (this.played || this.playing) {
+        if (this.played || !this.isStopped()) {
             if (this.p.y - this.r <= box.y) {
                 // Top
                 this.p.y = this.r + box.y
@@ -155,5 +184,9 @@ class Bocce extends Ball {
         game.playSound('ball')
         super.onAfterNewCollide(a, b)
 
+    }
+
+    isStopped() {
+        return this.v.x == 0 && this.v.y == 0
     }
 }

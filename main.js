@@ -24,10 +24,6 @@ function setup() {
     box = new Box()
     box.putBalls()
 
-
-
-
-
     // createCanvas(window.innerWidth, window.innerHeight)
     const myCanvas = createCanvas(830, 820)
     myCanvas.parent("bocha")
@@ -45,13 +41,12 @@ function draw() {
     for (const ball of balls) {
         ball.collide();
         ball.collideWalls(box);
+        ball.update(box);
+
         ball.show();
 
     }
 
-    if (mouseIsPressed) {
-        box.throwBall(mouseX, mouseY)
-    }
     box.stoppedGame()
 
     logs.push('Jogo parado: ' + box.stoppedGame())

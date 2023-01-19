@@ -22,9 +22,13 @@ class Box {
         this.blueColor = color(48, 169, 255)
 
     }
+    clearBalls() {
+        balls = []
+        _boccePrimaryKey = 1
+    }
     putBalls() {
 
-        balls = []
+        this.clearBalls()
 
         this.addBall('little', 0)
         this.addBall('yellow', 1)
@@ -121,7 +125,6 @@ class Box {
 
             if (game.logged) {
 
-
                 if (player.opponentLogin.trim()) {
                     textSize(18)
                     textAlign(CENTER)
@@ -161,9 +164,7 @@ class Box {
 
         // Bocces is plauing now change to played.
         for (const bocce of balls) {
-            if (bocce.playing) {
-
-                bocce.playing = false
+            if (bocce.active) {
 
                 if (bocce.p.y < this.risk.y) {
                     bocce.passedRisk = true
@@ -172,8 +173,9 @@ class Box {
                 if (bocce.passedRisk) {
                     bocce.played = true
                 }
-
+                console.log('bocce.isStopped(): ', bocce.id, bocce.isStopped(), ' Passou risco: ', bocce.passedRisk, ' played: ', bocce.played, ' Y: ', bocce.p.y, this.risk.y)
             }
+
         }
 
         const near = this.verifyDistanceLittle()
@@ -181,7 +183,6 @@ class Box {
         console.log("Calculei")
 
         console.log("near ==> ", this.scoreboard.runningWinner)
-
 
         this.setRunningPoints()
 
@@ -197,7 +198,7 @@ class Box {
             }, 3000)
 
             setTimeout(() => {
-                balls = []
+                this.clearBalls()
                 this.putBalls()
                 this.resetRound()
 
@@ -237,7 +238,7 @@ class Box {
             balls.forEach(b => {
                 bocces.push({ id: b.id, p: { x: b.p.x, y: b.p.y }, active: b.active })
             });
-            client.send(JSON.stringify({ command: 'allposition', login: game.login, bocces, scoreboard }))
+            client.send(JSON.stringify({ command: 'allposition', login: player.login, bocces, scoreboard }))
 
         }
 
@@ -382,16 +383,7 @@ class Box {
         console.log(this.scoreboard)
 
     }
-    throwBall(mx, my) {
 
-        for (const bocce of balls) {
-            if (bocce.captured == DEF_BALL_CAPTURED) {
-                const force = bocce.throwBall(mx, my)
-                // console.log('Lançou a bola mx: ', mx, ' my: ', my, '  force: ', force)
-            }
-
-        }
-    }
     getQtdPlayed(team = '') {
 
         let qtd = 0
@@ -405,6 +397,8 @@ class Box {
                 if (team == '') qtd++
             }
         }
+
+        console.log("Bolas jogadas: ", qtd, 'team: ', team)
 
         return qtd
 
@@ -451,7 +445,8 @@ class Box {
 
         for (const bocce of balls) {
             if (bocce.groupName == team) {
-                if (!bocce.played && !bocce.playing) {
+                // if (!bocce.played && !bocce.playing) {
+                if (!bocce.played) {
                     console.log("Activando a bola ", bocce.groupName)
                     // bocce.p.x = this.x + (this.width / 2)
                     // bocce.p.y = this.risk.y + bocce.r
@@ -494,7 +489,7 @@ class Box {
 
         const timeToPay = this.getTimeToPlay()
 
-        console.log('addBocceToPlayer ', player.team)
+        console.log('addBocceToPlayer - timeToPay = ', timeToPay)
 
         if (player.team == 'yellow') {
 
@@ -526,49 +521,47 @@ class Box {
 
 }
 
-function releaseBall() {
+// function releaseBall_old() {
 
-    for (const bocce of balls) {
+//     for (const bocce of balls) {
 
+//         if (bocce.captured == DEF_BALL_CAPTURED) {
 
+//             console.log(bocce.v.y)
+//             // Ig ball is moving to up them it is considered playing
+//             if (bocce.v.y < 0) {
+//                 //     const data = {
+//                 //         command: 'threw',
+//                 //         login,
+//                 //         bocce: {
+//                 //             id: bocce.id,
+//                 //             px: bocce.p.x,
+//                 //             py: bocce.p.y,
+//                 //             mx: mouseX,
+//                 //             my: mouseY
+//                 //         }
 
-        if (bocce.captured == DEF_BALL_CAPTURED) {
+//                 //     }
+//                 bocce.playing = true
 
-            console.log(bocce.v.y)
-            // Ig ball is moving to up them it is considered playing
-            if (bocce.v.y < 0) {
-                //     const data = {
-                //         command: 'threw',
-                //         login,
-                //         bocce: {
-                //             id: bocce.id,
-                //             px: bocce.p.x,
-                //             py: bocce.p.y,
-                //             mx: mouseX,
-                //             my: mouseY
-                //         }
-
-                //     }
-                bocce.playing = true
-
-                //     client.send(JSON.stringify(data))
-            }
-            bocce.captured = DEF_BALL_RELEASED
+//                 //     client.send(JSON.stringify(data))
+//             }
+//             bocce.captured = DEF_BALL_RELEASED
 
 
-        }
-        if (bocce.playing && bocce.v.x == 0 && bocce.v.y == 0 && !bocce.passedRisk) {
-            bocce.playing = false
-        }
+//         }
+//         if (bocce.playing && bocce.v.x == 0 && bocce.v.y == 0 && !bocce.passedRisk) {
+//             bocce.playing = false
+//         }
 
 
-    }
-}
+//     }
+// }
 function captureBall() {
 
     for (const bocce of balls) {
 
-        if (!bocce.playing && !bocce.played) {
+        if (bocce.isStopped() && !bocce.played) {
 
             const dx = bocce.p.x - mouseX;
             const dy = bocce.p.y - mouseY;
@@ -576,7 +569,7 @@ function captureBall() {
             const raysSum = bocce.r + 1
             const collided = distance < raysSum
 
-            if (collided) {
+            if (collided && bocce.active) {
                 if (player.team == bocce.groupName || bocce.groupName == 'little') {
 
                     if (player.team == box.scoreboard.timeToPlay) {
@@ -584,7 +577,7 @@ function captureBall() {
                         if (bocce.active) {
                             bocce.captured = DEF_BALL_CAPTURED
                         } else {
-                            console.log("Não pode pegar essa bola agora!")
+                            console.log("Não pode pegar essa bola agora! (Não está ativa!) id: ", bocce.id)
                         }
                     } else {
                         console.log("Não é a sua vez!")

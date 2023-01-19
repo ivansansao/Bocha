@@ -8,7 +8,7 @@ class Ball {
         this.p = p || { x: 0, y: 0 } // Position vector
         this.friction = friction || 1;
         this.collided = false;
-        this.id = id++;
+        this.id = _boccePrimaryKey++;
         this.captured = 0;
         this.color = colr
         this.groupName = groupName
@@ -22,7 +22,7 @@ class Ball {
         if (this.collided) {
             fill(255, 0, 0)
         } else {
-            const mapId = ceil(map(this.id, 1, id, 50, 240))
+            const mapId = ceil(map(this.id, 1, _boccePrimaryKey, 50, 240))
             if (this.color) {
                 fill(this.color)
             } else {

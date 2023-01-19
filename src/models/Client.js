@@ -51,21 +51,29 @@ class Client {
                     break
                 case 'threw':
 
-                    // Capture bocce
-                    const bocce = balls.find((e) => e.id == parseData.bocce.id)
-                    bocce.captured = DEF_BALL_CAPTURED
-                    bocce.active = bocce.active ? true : parseData.bocce.active
-                    bocce.p.x = parseData.bocce.px
-                    bocce.p.y = parseData.bocce.py
+                    // New idea
+                    if (true) {
+                        proxyPlayer.throwBocce(parseData.bocce.mx, parseData.bocce.my, parseData.bocce.id, parseData.bocce.px, parseData.bocce.py)
+                    } else {
+                        // Old idea
 
-                    box.throwBall(parseData.bocce.mx, parseData.bocce.my)
-                    releaseBall()
+                        // Capture bocce
+                        const bocce = balls.find((e) => e.id == parseData.bocce.id)
+                        bocce.captured = DEF_BALL_CAPTURED
+                        bocce.active = bocce.active ? true : parseData.bocce.active
+                        bocce.p.x = parseData.bocce.px
+                        bocce.p.y = parseData.bocce.py
+
+                        box.calcThrowForce(parseData.bocce.mx, parseData.bocce.my)
+                        releaseBall()
+                    }
 
                     break;
 
                 case 'allposition':
 
-                    console.log("Positione suass bolas em")
+                    console.log("Positione suas bolas em")
+
                     for (const remoteBocce of parseData.bocces) {
                         for (const bocce of balls) {
                             if (remoteBocce.id == bocce.id) {

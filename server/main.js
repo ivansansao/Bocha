@@ -73,7 +73,8 @@ wss.on('connection', function connection(ws, req) {
                             if (client.login != op.login) {
                                 const myData = {
                                     command: 'opponentData',
-                                    opponentLogin: op.login
+                                    login: op.login,
+                                    team: op.team
                                 }
                                 client.ws.send(JSON.stringify(myData))
                                 break

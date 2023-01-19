@@ -70,8 +70,7 @@ class Game {
 
         if (server.error.code == 0) {
 
-            player = new Player({ login: server.login })
-            player.team = server.team
+            player = new Player({ login: server.login, team: server.team, proxy: false })
             this.logged = true
 
             document.getElementById('itemOnline').appendChild(this.loggedEl)
@@ -105,8 +104,9 @@ class Game {
     onOpponentConnect(server) {
 
         console.log("SHOWW OPP INFO", server)
+        proxyPlayer = new Player({ login: server.login, team: server.team, proxy: true })
 
-        document.getElementById('opponent').innerText = server.opponentLogin
+        document.getElementById('opponent').innerText = server.login
         box.startGame()
 
         console.log("ANFTER OPP")

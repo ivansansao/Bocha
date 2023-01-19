@@ -175,7 +175,7 @@ const sketch = p => {
         }
 
         if (mouseIsPressed) {
-            box.throwBall(mouseX, mouseY)
+            box.calcThrowForce(mouseX, mouseY)
         }
 
         logs.push('Jogo parado: ' + box.stoppedGame())
