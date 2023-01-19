@@ -25,6 +25,35 @@ class Game {
 
             })
 
+        document.addEventListener('focus', (event) => {
+            chat.clientSend({
+                command: 'chatmessage',
+                login: player.login,
+                message: 'Perdeu o foco!'
+            })
+
+        });
+
+        document.addEventListener("visibilitychange", (event) => {
+            console.log('event: ', event)
+            client.send(JSON.stringify({
+                command: 'visibilitychange',
+                login: player.login,
+                visibilityState: document.visibilityState,
+                message: 'Alterou a visiblidade da página! ' + document.visibilityState
+            }))
+        });
+        document.addEventListener("suspend", (event) => {
+            console.log(event)
+            chat.clientSend({
+                command: 'chatmessage',
+                login: player.login,
+                message: 'suspend'
+            })
+        });
+
+
+
     }
 
     playSound(what) {
@@ -116,6 +145,21 @@ class Game {
     onOpponentDisconnect(server) {
         chat.addHtmlChatItem({ login: server.login, message: 'Desconectou!' })
         this.stopGame()
+    }
+
+    onOpponentVisibilityChange(server) {
+
+        console.log(server)
+
+        if (server.visibilityState == 'hidden') {
+            console.log('noLoop()')
+            noLoop()
+        } else if (server.visibilityState == 'visible') {
+            console.log('loop()')
+            loop()
+
+        }
+
     }
 
     stopGame() {

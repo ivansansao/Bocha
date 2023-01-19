@@ -19,9 +19,15 @@ class Bocce extends Ball {
 
         if (mouseIsPressed) {
             if (this.captured == DEF_BALL_CAPTURED) {
-                console.log('Capurada ', this.id)
                 this.calcThrowForce(mouseX, mouseY)
             }
+        }
+
+        if (this.p.y < box.risk.y) {
+            if (!this.passedRisk) {
+                console.log("Passou do risco")
+            }
+            this.passedRisk = true
         }
 
     }
@@ -81,7 +87,6 @@ class Bocce extends Ball {
 
         }
 
-
     }
 
     calcThrowForce(mx, my) {
@@ -89,27 +94,23 @@ class Bocce extends Ball {
         this.threwMx = mx
         this.threwMy = my
 
-        const ball = this
-
         // Discovery veocity
 
         const maxDist = 200
 
-        const distMouse = min(maxDist, p5.Vector.dist(createVector(mx, my), createVector(ball.p.x, ball.p.y)))
+        const distMouse = min(maxDist, p5.Vector.dist(createVector(mx, my), createVector(this.p.x, this.p.y)))
 
-        console.log('TUDO ISSO: ', mx, my, ball.p.x, ball.p.y)
-        stroke(0)
-        line(mx, my, ball.p.x, ball.p.y)
+        stroke(0, 200, 40)
+        line(mx, my, this.p.x, this.p.y)
 
         // Calcula a direção da bola com base na posição atual da bola e na posição do mouse
-        const direction = Math.atan2(my - ball.p.y, mx - ball.p.x);
+        const direction = Math.atan2(my - this.p.y, mx - this.p.x);
 
         const force = map(distMouse, 0, maxDist, 0, 0.9)
 
         // Caculate final velocity
         const VxF = -Math.cos(direction) * force
         const VyF = -Math.sin(direction) * force
-        console.log(VxF, VyF)
 
         // validOrError(!(VxF == 0 && VyF == 0), `Problems calculating launch force! VxF: ${VxF} VyF: ${VyF}`)
 
@@ -142,8 +143,8 @@ class Bocce extends Ball {
 
     collideWalls(box) {
 
-        // if (this.played || this.playing) {
-        if (this.played || !this.isStopped()) {
+        if (this.isRolling()) {
+
             if (this.p.y - this.r <= box.y) {
                 // Top
                 this.p.y = this.r + box.y
@@ -152,10 +153,12 @@ class Bocce extends Ball {
                 game.playSound('lateral-wall')
             }
         } else {
-            if (this.p.y - this.r <= box.risk.y) {
-                // Top
-                this.p.y = this.r + box.risk.y
-                this.v.y = -this.v.y
+            if (!this.passedRisk) {
+                if (this.p.y - this.r <= box.risk.y) {
+                    // Top
+                    this.p.y = this.r + box.risk.y
+                    this.v.y = -this.v.y
+                }
             }
         }
 
@@ -188,5 +191,9 @@ class Bocce extends Ball {
 
     isStopped() {
         return this.v.x == 0 && this.v.y == 0
+    }
+
+    isRolling() {
+        return this.v.x != 0 || this.v.y != 0
     }
 }

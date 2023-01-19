@@ -42,14 +42,10 @@ function draw() {
         ball.collide();
         ball.collideWalls(box);
         ball.update(box);
-
         ball.show();
-
     }
 
     box.stoppedGame()
-
-    logs.push('Jogo parado: ' + box.stoppedGame())
 
     showInfo();
 

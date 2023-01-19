@@ -97,13 +97,21 @@ wss.on('connection', function connection(ws, req) {
 
             case 'allposition':
 
-
                 for (const client of clients) {
                     if (client.login != jMessage.login) {
                         aux.dateLog('Enviando posição para' + client.login)
                         client.ws.send(JSON.stringify(jMessage))
                     }
                 }
+
+                break
+
+            case 'visibilitychange':
+
+                const op = getOpponentOf(jMessage.login)
+
+                aux.dateLog('Enviando mudança de visibilidade para' + op.login)
+                op.ws.send(JSON.stringify({ ...jMessage, error: errors[0] }))
 
                 break
 

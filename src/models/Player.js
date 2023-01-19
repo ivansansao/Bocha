@@ -31,34 +31,38 @@ class Player {
 
         const bocce = this.getBocceById(idBocce)
 
-        if (bocce.v.x == 0 && bocce.v.y == 0 && !bocce.passedRisk) {
+        // validOrError(bocce.captured == DEF_BALL_CAPTURED, 'Not possible to throw uncaoug ball')
+        // validOrError(bocce.active, 'Not possible to throw inactive ball')
+        validOrError(bocce.v.x == 0 && bocce.v.y == 0, 'Not possible to throw non stopped ball')
 
-            bocce.captured = DEF_BALL_CAPTURED
+        bocce.p.x = px
+        bocce.p.y = py
+
+        if (this.proxy) {
             bocce.active = true
-            bocce.p.x = px
-            bocce.p.y = py
+            bocce.captured = DEF_BALL_CAPTURED
+        }
 
-            if (bocce.throw(mx, my)) {
+        if (bocce.throw(mx, my)) {
 
-                if (!this.proxy) {
+            if (!this.proxy) {
 
-                    box.scoreboard.loginPlayedLastBall = player.login
+                box.scoreboard.loginPlayedLastBall = player.login
 
-                    const data = {
-                        command: 'threw',
-                        login: this.login,
-                        bocce: {
-                            id: idBocce,
-                            px: px,
-                            py: py,
-                            mx: mx,
-                            my: my,
-                            active: true
-                        }
+                const data = {
+                    command: 'threw',
+                    login: this.login,
+                    bocce: {
+                        id: idBocce,
+                        px: px,
+                        py: py,
+                        mx: mx,
+                        my: my,
+                        active: true
                     }
-
-                    client.send(JSON.stringify(data))
                 }
+
+                client.send(JSON.stringify(data))
             }
 
         }

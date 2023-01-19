@@ -84,6 +84,8 @@ class Client {
                                 bocce.p.x = remoteBocce.p.x
                                 bocce.p.y = remoteBocce.p.y
 
+                                console.log('Posicionando bola ' + bocce.id + ' no y = ', bocce.p.y)
+
                                 // if (bocce.id == 1) {
                                 //     console.log(remoteBocce.p.x, bocce.p.x)
                                 //     console.log(remoteBocce.p.y, bocce.p.y)
@@ -111,7 +113,7 @@ class Client {
 
                 case 'opponentData':
 
-                    player.opponentLogin = parseData.opponentLogin
+                    player.opponentLogin = parseData.login
                     chat.onOpponentConnect(parseData)
                     game.onOpponentConnect(parseData)
 
@@ -124,6 +126,12 @@ class Client {
                 case 'chatmessage':
 
                     chat.onMessageReceived(parseData)
+                    break
+
+                case 'visibilitychange':
+
+                    chat.onMessageReceived(parseData)
+                    game.onOpponentVisibilityChange(parseData)
                     break
 
                 default:

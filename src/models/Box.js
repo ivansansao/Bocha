@@ -76,10 +76,7 @@ class Box {
 
         }
 
-
     }
-
-
 
     show() {
 
@@ -141,7 +138,6 @@ class Box {
         super.move()
     }
 
-
     stoppedGame() {
         for (const b of balls) {
             if (b.v.x != 0 || b.v.y != 0) {
@@ -162,6 +158,7 @@ class Box {
         this.isStoppedGame = true
         console.log("Stopped game")
 
+
         // Bocces is plauing now change to played.
         for (const bocce of balls) {
             if (bocce.active) {
@@ -173,7 +170,7 @@ class Box {
                 if (bocce.passedRisk) {
                     bocce.played = true
                 }
-                console.log('bocce.isStopped(): ', bocce.id, bocce.isStopped(), ' Passou risco: ', bocce.passedRisk, ' played: ', bocce.played, ' Y: ', bocce.p.y, this.risk.y)
+                // console.log('bocce.isStopped(): ', bocce.id, bocce.isStopped(), ' Passou risco: ', bocce.passedRisk, ' played: ', bocce.played, ' Y: ', bocce.p.y, this.risk.y)
             }
 
         }
@@ -289,8 +286,6 @@ class Box {
         this.scoreboard.runningYellow = pointsYellow
         this.scoreboard.runningYblue = pointsBlue
 
-
-
     }
 
     verifyDistanceLittle() {
@@ -299,7 +294,7 @@ class Box {
         let nearestD = Infinity
 
         for (const b of balls) {
-            console.log(b.id, this.little.id, b.active, b.played)
+
             if (b.id != this.little.id && b.active && b.played) {
 
                 b.distanceLitlle = p5.Vector.dist(createVector(this.little.p.x, this.little.p.y), createVector(b.p.x, b.p.y))

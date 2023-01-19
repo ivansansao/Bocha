@@ -35,7 +35,7 @@ class Chat {
 
         this.clientSend({
             command: 'chatmessage',
-            login: data.opponentLogin,
+            login: data.login,
             message: 'Entrei!'
         })
 
@@ -43,6 +43,7 @@ class Chat {
 
 
     onMessageReceived(data) {
+
         if (data.error.code == 0) {
             this.addHtmlChatItem({ login: data.login, message: data.message })
         } else {
