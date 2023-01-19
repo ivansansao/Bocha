@@ -38,10 +38,7 @@ class Bocce extends Ball {
             return
         }
 
-        if (this.active) {
-            stroke(0, 255, 0)
-            circle(this.p.x - 25, this.p.y, this.r / 2)
-        }
+
 
         if (this.captured) {
             stroke(255, 0, 0)
@@ -71,7 +68,13 @@ class Bocce extends Ball {
             text(this.runningPoints > 0 ? this.runningPoints : '', this.p.x - (this.r / 2) + 8, this.p.y + 4)
 
             // debug
-            if (true) {
+            if (false) {
+
+                if (this.active) {
+                    stroke(0, 255, 0)
+                    circle(this.p.x - 25, this.p.y, this.r / 2)
+                }
+
                 textAlign(LEFT)
                 const px = this.p.x - (this.r / 2) + 8
                 const py = this.p.y + 4

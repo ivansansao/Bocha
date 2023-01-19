@@ -35,12 +35,16 @@ class Game {
         });
 
         document.addEventListener("visibilitychange", (event) => {
-            console.log('event: ', event)
+
+            let message = ''
+            if (document.visibilityState == 'hidden') message = 'Desfocou do jogo!'
+            if (document.visibilityState == 'visible') message = 'Focou do jogo!'
+
             client.send(JSON.stringify({
                 command: 'visibilitychange',
                 login: player.login,
                 visibilityState: document.visibilityState,
-                message: 'Alterou a visiblidade da página! ' + document.visibilityState
+                message
             }))
         });
         document.addEventListener("suspend", (event) => {

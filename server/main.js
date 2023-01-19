@@ -110,8 +110,11 @@ wss.on('connection', function connection(ws, req) {
 
                 const op = getOpponentOf(jMessage.login)
 
-                aux.dateLog('Enviando mudança de visibilidade para' + op.login)
-                op.ws.send(JSON.stringify({ ...jMessage, error: errors[0] }))
+                if (op) {
+                    aux.dateLog('Enviando mudança de visibilidade para' + op.login)
+                    op.ws.send(JSON.stringify({ ...jMessage, error: errors[0] }))
+                }
+
 
                 break
 

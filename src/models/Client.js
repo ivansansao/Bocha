@@ -84,14 +84,6 @@ class Client {
                                 bocce.p.x = remoteBocce.p.x
                                 bocce.p.y = remoteBocce.p.y
 
-                                console.log('Posicionando bola ' + bocce.id + ' no y = ', bocce.p.y)
-
-                                // if (bocce.id == 1) {
-                                //     console.log(remoteBocce.p.x, bocce.p.x)
-                                //     console.log(remoteBocce.p.y, bocce.p.y)
-                                //     console.log(' Vels x: ', bocce.v.x, ' y: ', bocce.v.y)
-                                // }
-
                                 break
                             }
                         }
