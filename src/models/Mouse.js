@@ -64,9 +64,11 @@ function mouseReleased() {
 
 function mouseMoved() {
 
-    if (box.scoreboard.isMyTimeToPlay()) {
-        console.log('Moveu no mouse')
+    if (!isLooping()) {
+        return
+    }
 
+    if (box.scoreboard.isMyTimeToPlay()) {
         for (const ball of balls) {
             if (ball.captured) {
                 ball.p.x = mouseX;

@@ -46,6 +46,15 @@ class Chat {
 
         if (data.error.code == 0) {
             this.addHtmlChatItem({ login: data.login, message: data.message })
+
+            // If message is not mime and I am not focced
+            if (data.login != player.login) {
+
+                if (document.visibilityState == 'hidden') {
+                    console.log('Falando....' + data.message)
+                    speaker.speak(data.message)
+                }
+            }
         } else {
             this.addHtmlChatItem({ login: data.login, message: data.error.reason })
         }
