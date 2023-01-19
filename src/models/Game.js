@@ -8,6 +8,8 @@ class Game {
         this.loggedEl.remove()
         this.infoGameEl.remove()
         this.soundsOn = true
+        this.speaker = new p5.Speech();
+        this.speaker.setVoice('Google português do Brasil');
         this.addListener()
 
     }
@@ -169,6 +171,16 @@ class Game {
     stopGame() {
         player.opponentLogin = ''
         document.getElementById('opponent').innerText = player.opponentLogin
+    }
+
+    toggleSound() {
+        this.soundsOn = document.getElementById('toggleSound').checked
+    }
+
+    speak(what) {
+        if (this.soundsOn) {
+            this.speaker.speak(what)
+        }
     }
 
 }

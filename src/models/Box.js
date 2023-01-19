@@ -81,7 +81,9 @@ class Box {
     show() {
 
         stroke(0)
-        fill(255)
+        // fill(218, 198, 171)
+        // fill(255, 235, 208)
+        fill(250, 248, 245)
         rect(this.x, this.y, this.width, this.height)
 
         stroke(200)

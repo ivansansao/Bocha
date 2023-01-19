@@ -23,8 +23,7 @@ function setup() {
     game = new Game()
     box = new Box()
     box.putBalls()
-    speaker = new p5.Speech();
-    speaker.setVoice('Google português do Brasil');
+
 
     // createCanvas(window.innerWidth, window.innerHeight)
     const myCanvas = createCanvas(830, 820)

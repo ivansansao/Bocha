@@ -13,6 +13,5 @@ let player = false;
 let proxyPlayer = false;
 let chat = false;
 let game = true;
-let speaker = false;
 const toShowInfo = false;
 

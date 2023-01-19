@@ -52,7 +52,7 @@ class Chat {
 
                 if (document.visibilityState == 'hidden') {
                     console.log('Falando....' + data.message)
-                    speaker.speak(data.message)
+                    game.speak(data.message)
                 }
             }
         } else {

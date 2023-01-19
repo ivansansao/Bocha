@@ -314,14 +314,15 @@ button:active {
 .ready-msg .buttons {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     padding: 10px;
 
 }
 
 .ready-msg button {
-    margin: 1px
+    margin: 2px;
+    font-size: small;
 }
 
 .info-game {
@@ -335,4 +336,11 @@ button:active {
 
 .info-game .content {
     margin-left: 10px;
+}
+
+.settings>div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px;
 }
