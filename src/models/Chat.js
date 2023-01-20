@@ -68,6 +68,14 @@ class Chat {
         })
 
     }
+    sendRaw(message) {
+        this.clientSend({
+            command: 'chatmessage',
+            login: player.login,
+            message
+        })
+
+    }
     clientSend(data) {
         client.send(JSON.stringify(data))
     }

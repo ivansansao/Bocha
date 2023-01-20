@@ -16,7 +16,7 @@ SERVER: {reponse: "adv_threw_ball",  }
 
 import * as aux from './src/models/Auxiliary.js'
 import { WebSocketServer } from 'ws';
-const port = 7950
+const port = 8945
 const wss = new WebSocketServer({ port, clientTracking: true });
 
 aux.dateLog('Bocha server is listenning...            (Port: ' + port + ')')

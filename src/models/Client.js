@@ -7,12 +7,13 @@ class Client {
     }
     connect() {
 
-        const servers = {}
-        servers['local'] = 'ws://localhost:8950'
-        servers['ex2'] = 'ws://192.168.0.12:7950'
-        servers['ex3'] = 'ws://192.168.0.12:8950'
+        // Return ex. localhost from url page localhost:8950
+        let ip = window.location.host.split(':')[0]
+        const url = `ws://${ip}:8945`
 
-        this.ws = new WebSocket(servers['ex2'])
+        console.log('Daddy is on: ', url)
+
+        this.ws = new WebSocket(url)
         const ws = this.ws
 
         ws.onopen = this.onOpen

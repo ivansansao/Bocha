@@ -200,6 +200,7 @@ class Box {
                 this.clearBalls()
                 this.putBalls()
                 this.resetRound()
+                this.verifyEndGame()
 
             }, 6000)
 
@@ -208,6 +209,24 @@ class Box {
         this.sendPositionToEnimy()
 
 
+
+    }
+
+    verifyEndGame() {
+
+        if (this.scoreboard.getTotalYellow() > 22) {
+            this.onEndGame('yellow')
+        } else if (this.scoreboard.getTotalBlue() > 22) {
+            this.onEndGame('blue')
+        }
+
+    }
+
+    onEndGame(winnerTeam) {
+
+        chat.sendRaw(toPT(winnerTeam) + ' GANHOU!!!')
+
+        this.resetGame()
 
     }
 
@@ -322,6 +341,8 @@ class Box {
     }
 
     resetGame() {
+        this.clearGame()
+        this.addBocceToPlayer()
     }
 
     resetRound() {

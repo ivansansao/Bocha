@@ -30,6 +30,10 @@ class Bocce extends Ball {
             this.passedRisk = true
         }
 
+        if (this.captured) {
+            cursor('grab')
+        }
+
     }
 
     show() {
@@ -153,7 +157,7 @@ class Bocce extends Ball {
                 this.p.y = this.r + box.y
                 this.v.y = -this.v.y
                 this.v.y = this.v.y * 0.3
-                game.playSound('lateral-wall')
+                if (this.isRolling()) game.playSound('lateral-wall')
             }
         } else {
             if (!this.passedRisk) {
@@ -169,7 +173,7 @@ class Bocce extends Ball {
             // Left
             this.p.x = this.r + box.x
             this.v.x = -this.v.x
-            game.playSound('lateral-wall')
+            if (this.isRolling()) game.playSound('lateral-wall')
         }
         if (this.p.y + this.r >= box.y1) {
             // bottom
@@ -181,14 +185,18 @@ class Bocce extends Ball {
             // Right
             this.p.x = box.x1 - this.r
             this.v.x = -this.v.x
-            game.playSound('lateral-wall')
+            if (this.isRolling()) game.playSound('lateral-wall')
         }
 
     }
 
     onAfterNewCollide(a, b) {
-        game.playSound('ball')
+
         super.onAfterNewCollide(a, b)
+
+        if (a.isRolling() || b.isRolling()) {
+            game.playSound('ball')
+        }
 
     }
 
@@ -198,5 +206,44 @@ class Bocce extends Ball {
 
     isRolling() {
         return this.v.x != 0 || this.v.y != 0
+    }
+    willOverlap() {
+
+        /**
+         * This method is for think in the future
+         */
+
+        for (const ball of balls) {
+
+            if (ball.active && this.id != ball.id) {
+                const distBall = dist(createVector(this.p.x + this.v.x, this.p.y + this.v.y), createVector(ball.p.x, ball.p.y))
+
+                if (distBall < this.r + ball.r) {
+                    return ball
+                }
+            }
+        }
+
+        return false
+
+    }
+    move() {
+
+        if (!this.captured) {
+
+            this.p.x += this.v.x
+            this.p.y += this.v.y
+
+            // Apply friction         
+            this.v.x *= this.friction
+            this.v.y *= this.friction
+
+            if (abs(this.v.x) + abs(this.v.y) < 0.02) {
+                this.v.x = 0
+                this.v.y = 0
+            }
+
+        }
+
     }
 }
