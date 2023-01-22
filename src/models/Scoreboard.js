@@ -153,12 +153,7 @@ class Scoreboard {
         fill(0)
         textSize(22)
         if (this.isMyTimeToPlay()) {
-            if (frameCount % 80 != 0) {
-                text('Sua vez de jogar!!', x + (w / 2), y5 + (h / 2) + 8)
-            }
-            // } else {
-            //     // text('Aguarde o ' + toPT(this.timeToPlay) + ' jogar!', x + (w / 2), y5 + (h / 2) + 8)
-            //     text('Você é ' + player.login + ' (' + toPT(player.team) + ')', x + (w / 2), y5 + (h / 2) + 8)
+            text('Sua vez de jogar!!', x + (w / 2), y5 + (h / 2) + 8)
         }
 
 

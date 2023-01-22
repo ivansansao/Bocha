@@ -50,11 +50,12 @@ class Bocce extends Ball {
             circle(this.p.x, this.p.y, (this.r * 2) + 10)
         }
 
-        if (this.groupName != 'little') {
-            if (this.groupName != player.team) {
-                // if (!this.playing && !this.played) {
-                if (this.isStopped() && !this.played) {
-                    return
+        if (!this.passedRisk) {
+            if (this.groupName != 'little') {
+                if (this.groupName != player.team) {
+                    if (this.isStopped() && !this.played) {
+                        return
+                    }
                 }
             }
         }

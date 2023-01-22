@@ -539,42 +539,6 @@ class Box {
 
 }
 
-// function releaseBall_old() {
-
-//     for (const bocce of balls) {
-
-//         if (bocce.captured == DEF_BALL_CAPTURED) {
-
-//             console.log(bocce.v.y)
-//             // Ig ball is moving to up them it is considered playing
-//             if (bocce.v.y < 0) {
-//                 //     const data = {
-//                 //         command: 'threw',
-//                 //         login,
-//                 //         bocce: {
-//                 //             id: bocce.id,
-//                 //             px: bocce.p.x,
-//                 //             py: bocce.p.y,
-//                 //             mx: mouseX,
-//                 //             my: mouseY
-//                 //         }
-
-//                 //     }
-//                 bocce.playing = true
-
-//                 //     client.send(JSON.stringify(data))
-//             }
-//             bocce.captured = DEF_BALL_RELEASED
-
-
-//         }
-//         if (bocce.playing && bocce.v.x == 0 && bocce.v.y == 0 && !bocce.passedRisk) {
-//             bocce.playing = false
-//         }
-
-
-//     }
-// }
 function captureBall() {
 
     for (const bocce of balls) {
@@ -584,16 +548,18 @@ function captureBall() {
             const dx = bocce.p.x - mouseX;
             const dy = bocce.p.y - mouseY;
             const distance = floor(Math.sqrt(dx * dx + dy * dy));
-            const raysSum = bocce.r + 1
-            const collided = distance < raysSum
+            const collided = distance < bocce.r * 2.5
 
             if (collided && bocce.active) {
+
                 if (player.team == bocce.groupName || bocce.groupName == 'little') {
 
                     if (player.team == box.scoreboard.timeToPlay) {
 
                         if (bocce.active) {
                             bocce.captured = DEF_BALL_CAPTURED
+                            bocce.p.x = mouseX
+                            bocce.p.y = mouseY
                         } else {
                             console.log("Não pode pegar essa bola agora! (Não está ativa!) id: ", bocce.id)
                         }
