@@ -30,10 +30,6 @@ class Bocce extends Ball {
             this.passedRisk = true
         }
 
-        if (this.captured) {
-            cursor('grab')
-        }
-
     }
 
     show() {
@@ -41,8 +37,6 @@ class Bocce extends Ball {
         if (!this.active) {
             return
         }
-
-
 
         if (this.captured) {
             stroke(255, 0, 0)

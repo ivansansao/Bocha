@@ -5,7 +5,9 @@ function mousePressed(event) {
     }
 
     if (box.scoreboard.isMyTimeToPlay()) {
-        if (clickCount % 2 == 0) {
+
+        const bocce = balls.find((e) => e.captured == true)
+        if (!bocce) {
             captureBall()
         }
         clickCount++;

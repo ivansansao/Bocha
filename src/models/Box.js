@@ -44,16 +44,16 @@ class Box {
 
     addBall(groupName, groupId) {
 
-        let friction = 0.999
         let r = 0
         let colr
+        let friction = 0
 
         // bocce.p.x = this.x + (this.width / 2)
         // bocce.p.y = this.risk.y + bocce.r
 
         if (groupName == 'little') {
 
-            friction = 0.999
+            friction = 0.9985
             r = 10
             colr = color(100)
             balls.push(new Bocce({ colr, m: 100, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'little', groupId, active: false }))
@@ -548,7 +548,7 @@ function captureBall() {
             const dx = bocce.p.x - mouseX;
             const dy = bocce.p.y - mouseY;
             const distance = floor(Math.sqrt(dx * dx + dy * dy));
-            const collided = distance < bocce.r * 2.5
+            const collided = distance < bocce.r * 4
 
             if (collided && bocce.active) {
 
@@ -560,6 +560,9 @@ function captureBall() {
                             bocce.captured = DEF_BALL_CAPTURED
                             bocce.p.x = mouseX
                             bocce.p.y = mouseY
+
+                            return true
+
                         } else {
                             console.log("Não pode pegar essa bola agora! (Não está ativa!) id: ", bocce.id)
                         }
@@ -572,5 +575,7 @@ function captureBall() {
             }
         }
     }
+
+    return false
 
 }

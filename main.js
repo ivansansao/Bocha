@@ -28,6 +28,7 @@ function setup() {
     // createCanvas(window.innerWidth, window.innerHeight)
     const myCanvas = createCanvas(830, 820)
     myCanvas.parent("bocha")
+    cursor('grab')
 
 }
 
