@@ -22,6 +22,11 @@ class Player {
         textSize(18)
 
     }
+    clear() {
+        this.login = ''
+        this.team = ''
+        this.opponentLogin = ''
+    }
     throwBocce(mx, my, idBocce, px, py) {
 
         const bocce = this.getBocceById(idBocce)

@@ -7,9 +7,11 @@ class Game {
         this.infoGameEl = document.getElementById('infoGame')
         this.loggedEl.remove()
         this.infoGameEl.remove()
+        this.paused = false
         this.soundsOn = true
         this.speaker = new p5.Speech();
         this.speaker.setVoice('Google português do Brasil');
+        this.loginning = false
         this.addListener()
 
     }
@@ -73,31 +75,32 @@ class Game {
     }
     login() {
 
-        const accessLogin = document.getElementById('accessLogin').value
+        if (this.loginning) return
+        this.loginning = true
 
+        if (player.length > 0) player.clear()
+        if (proxyPlayer.length > 0) proxyPlayer.clear()
+
+        this.pause(false)
+
+        const accessLogin = document.getElementById('accessLogin').value
         client = new Client()
         client.send(JSON.stringify({ command: "login", login: accessLogin }))
 
         box.clearGame()
 
-        chat.addHtmlChatItem({ login: 'Bocha', message: 'Como jogar?<br><br>1o Clique na bola e solte pra pegá-la.<br>2o Clique segure, arraste pra baixo e solte!' })
-
-
     }
 
+    close() {
 
-    close(arg) {
-
-        // chat.clientSend({
-        //     command: 'chatmessage',
-        //     login: player.login,
-        //     message: 'Saiu!'
-        // })
         client.close()
         document.getElementById('itemOnline').appendChild(this.loginEl)
 
         this.loggedEl.remove()
         this.infoGameEl.remove()
+
+        this.cancelGame()
+        this.loginning = false
 
     }
 
@@ -118,22 +121,15 @@ class Game {
 
             this.loginEl.remove()
 
-            // const divAccessLogin = document.getElementById('divAccessLogin')
-            // const divAccessLogged = document.getElementById('divAccessLogged')
-            // divAccessLogin.style.visibility = 'hidden'
-            // divAccessLogged.style.visibility = 'visible'
+            this.startGame()
 
-
-            // chat.clientSend({
-            //     command: 'chatmessage',
-            //     login: player.login,
-            //     message: 'Entrou!'
-            // })
-
+            chat.addHtmlChatItem({ login: 'Bocha', unique: true, message: 'Como jogar?<br><br>1o Clique na bola e solte pra pegá-la.<br>2o Clique segure, arraste pra baixo e solte!' })
 
         } else {
             document.getElementById('access-error').innerText = server.error.reason
         }
+
+        this.loginning = false
     }
 
     onOpponentConnect(server) {
@@ -143,6 +139,7 @@ class Game {
 
         document.getElementById('opponent').innerText = server.login
         box.startGame()
+        this.pause(false)
 
         console.log("ANFTER OPP")
 
@@ -150,7 +147,10 @@ class Game {
 
     onOpponentDisconnect(server) {
         chat.addHtmlChatItem({ login: server.login, message: 'Desconectou!' })
-        this.stopGame()
+        this.cancelGame()
+        this.close()
+
+
     }
 
     onOpponentVisibilityChange(server) {
@@ -158,13 +158,27 @@ class Game {
         console.log(server)
 
         if (server.visibilityState == 'hidden') {
-            console.log('noLoop()')
-            noLoop()
+            this.pause(true)
         } else if (server.visibilityState == 'visible') {
-            console.log('loop()')
-            loop()
-
+            this.pause(false)
         }
+
+    }
+
+    pause(status) {
+        if (status) {
+            console.log('noLoop()')
+            this.paused = true
+            noLoop()
+        } else {
+            console.log('loop()')
+            this.paused = false
+            loop()
+        }
+
+    }
+
+    startGame() {
 
     }
 
@@ -181,6 +195,16 @@ class Game {
         if (this.soundsOn) {
             this.speaker.speak(what)
         }
+    }
+
+    cancelGame() {
+        box.clearBalls()
+        player.clear()
+        if (proxyPlayer.length > 0) proxyPlayer.clear()
+        if (document.getElementById('opponent')) {
+            document.getElementById('opponent').innerText = player.opponentLogin
+        }
+        this.pause(false)
     }
 
 }

@@ -52,23 +52,7 @@ class Client {
                     break
                 case 'threw':
 
-                    // New idea
-                    if (true) {
-                        proxyPlayer.throwBocce(parseData.bocce.mx, parseData.bocce.my, parseData.bocce.id, parseData.bocce.px, parseData.bocce.py)
-                    } else {
-                        // Old idea
-
-                        // Capture bocce
-                        const bocce = balls.find((e) => e.id == parseData.bocce.id)
-                        bocce.captured = DEF_BALL_CAPTURED
-                        bocce.active = bocce.active ? true : parseData.bocce.active
-                        bocce.p.x = parseData.bocce.px
-                        bocce.p.y = parseData.bocce.py
-
-                        box.calcThrowForce(parseData.bocce.mx, parseData.bocce.my)
-                        releaseBall()
-                    }
-
+                    proxyPlayer.throwBocce(parseData.bocce.mx, parseData.bocce.my, parseData.bocce.id, parseData.bocce.px, parseData.bocce.py)
                     break;
 
                 case 'allposition':

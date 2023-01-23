@@ -134,6 +134,19 @@ class Box {
             }
         }
 
+        this.showPaused()
+
+    }
+
+    showPaused() {
+
+        if (game.paused) {
+            stroke(0)
+            fill(0)
+            textAlign('CENTER')
+            textSize(20)
+            text('PAUSADO!!!', this.x + ((this.x1 - this.x) / 2), innerHeight * 1 / 2)
+        }
     }
 
     move() {
@@ -429,28 +442,31 @@ class Box {
 
         let timeToPlay = ''
 
-        if (this.getQtdPlayed() <= 1) {
-            if (this.scoreboard.roundWinner == '' || this.scoreboard.roundWinner == 'yellow') {
-                timeToPlay = 'yellow'
+        if (player.opponentLogin) {
+
+            if (this.getQtdPlayed() <= 1) {
+                if (this.scoreboard.roundWinner == '' || this.scoreboard.roundWinner == 'yellow') {
+                    timeToPlay = 'yellow'
+                } else {
+                    timeToPlay = 'blue'
+                }
             } else {
-                timeToPlay = 'blue'
-            }
-        } else {
 
-            if (this.scoreboard.runningWinner == 'yellow') {
-                if (this.getQtdPlayed('blue') < 4) {
-                    timeToPlay = 'blue'
-                } else {
-                    timeToPlay = 'yellow'
+                if (this.scoreboard.runningWinner == 'yellow') {
+                    if (this.getQtdPlayed('blue') < 4) {
+                        timeToPlay = 'blue'
+                    } else {
+                        timeToPlay = 'yellow'
+                    }
+                } else if (this.scoreboard.runningWinner == 'blue') {
+
+                    if (this.getQtdPlayed('yellow') < 4) {
+                        timeToPlay = 'yellow'
+                    } else {
+                        timeToPlay = 'blue'
+                    }
+
                 }
-            } else if (this.scoreboard.runningWinner == 'blue') {
-
-                if (this.getQtdPlayed('yellow') < 4) {
-                    timeToPlay = 'yellow'
-                } else {
-                    timeToPlay = 'blue'
-                }
-
             }
         }
 

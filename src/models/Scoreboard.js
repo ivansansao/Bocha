@@ -36,7 +36,13 @@ class Scoreboard {
     }
 
     isMyTimeToPlay() {
-        return this.timeToPlay == player.team
+        if (this.timeToPlay == player.team) {
+            if (player.opponentLogin) {
+                return true
+            }
+        }
+
+        return false
     }
 
     show() {
@@ -154,8 +160,10 @@ class Scoreboard {
         textSize(22)
         if (this.isMyTimeToPlay()) {
             text('Sua vez de jogar!!', x + (w / 2), y5 + (h / 2) + 8)
+            cursor('grab')
+        } else {
+            cursor('progress')
         }
-
 
     }
 

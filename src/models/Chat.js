@@ -1,10 +1,7 @@
 class Chat {
     constructor() {
-
         this.addListener()
-
-
-        // this.addHtmlChatItem({ login: 'Renata', message: 'Oiii' })
+        this.messages = []
     }
 
     addListener() {
@@ -61,11 +58,15 @@ class Chat {
     }
     send() {
 
-        this.clientSend({
-            command: 'chatmessage',
-            login: player.login,
-            message: document.getElementById('inputMessage').value
-        })
+        const message = document.getElementById('inputMessage').value
+
+        if (message.length > 0) {
+            this.clientSend({
+                command: 'chatmessage',
+                login: player.login,
+                message
+            })
+        }
 
     }
     sendRaw(message) {
@@ -80,11 +81,24 @@ class Chat {
         client.send(JSON.stringify(data))
     }
 
-    addHtmlChatItem({ login, message }) {
+    addHtmlChatItem({ login, message, unique }) {
 
-        const chatItens = document.getElementById('chatItens')
-        chatItens.innerHTML += this.getDivChatItem({ login, message })
-        chatItens.scrollTop = chatItens.scrollHeight
+        if (unique) {
+            const has = this.messages.filter(m => m.login == login && m.message == message)
+            if (has.length > 0) {
+                return
+            }
+        }
+
+        if (message.trim().length > 0) {
+
+            const chatItens = document.getElementById('chatItens')
+            chatItens.innerHTML += this.getDivChatItem({ login, message })
+            chatItens.scrollTop = chatItens.scrollHeight
+
+            this.messages.push({ login, message })
+
+        }
 
     }
     getDivChatItem({ login, message }) {
