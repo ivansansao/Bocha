@@ -12,6 +12,7 @@ class Bocce extends Ball {
         this.runningPoints = 0
         this.threwMx = 0
         this.threwMy = 0
+        this.maxForce = args.maxForce
 
     }
 
@@ -108,7 +109,9 @@ class Bocce extends Ball {
         // Calcula a direção da bola com base na posição atual da bola e na posição do mouse
         const direction = Math.atan2(my - this.p.y, mx - this.p.x);
 
-        const force = map(distMouse, 0, maxDist, 0, 0.9)
+        console.log(this.maxForce)
+
+        const force = map(distMouse, 0, maxDist, 0, this.maxForce)
 
         // Caculate final velocity
         const VxF = -Math.cos(direction) * force

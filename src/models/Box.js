@@ -47,16 +47,19 @@ class Box {
         let r = 0
         let colr
         let friction = 0
+        let maxForce
 
         // bocce.p.x = this.x + (this.width / 2)
         // bocce.p.y = this.risk.y + bocce.r
 
         if (groupName == 'little') {
 
-            friction = 0.9985
+            // friction = 0.9980
+            friction = 0.9975
             r = 10
             colr = color(100)
-            balls.push(new Bocce({ colr, m: 100, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'little', groupId, active: false }))
+            maxForce = 2
+            balls.push(new Bocce({ colr, m: 10, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'little', groupId, active: false, maxForce }))
 
             this.little = balls[0]
 
@@ -65,14 +68,16 @@ class Box {
             friction = 0.9992
             r = 20
             colr = color(255, 255, 0)
-            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'yellow', groupId, active: false }))
+            maxForce = 1.1
+            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'yellow', groupId, active: false, maxForce }))
 
         } else if (groupName == 'blue') {
 
             friction = 0.9992
             r = 20
             colr = color(48, 169, 255)
-            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'blue', groupId, active: false }))
+            maxForce = 1.1
+            balls.push(new Bocce({ colr, m: 150, r, p: { x: this.x + (this.width / 2), y: this.risk.y + r + 2 }, friction, groupName: 'blue', groupId, active: false, maxForce }))
 
         }
 
