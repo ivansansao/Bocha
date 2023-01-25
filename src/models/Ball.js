@@ -104,7 +104,7 @@ class Ball {
         const raysSum = a.r + b.r
         const diference = raysSum - distance
 
-        return { res: distance < raysSum, diference, raysSum, dx, dy }
+        return { res: distance <= raysSum, diference, raysSum, dx, dy }
 
     }
     collide() {
