@@ -274,7 +274,15 @@ class Box {
             balls.forEach(b => {
                 bocces.push({ id: b.id, p: { x: b.p.x, y: b.p.y }, active: b.active })
             });
-            client.send(JSON.stringify({ command: 'allposition', login: player.login, bocces, scoreboard }))
+            client.send(JSON.stringify(
+                {
+                    from: player.login,
+                    to: player.opponentLogin,
+                    command: 'allposition',
+                    login: player.login,
+                    bocces,
+                    scoreboard
+                }))
 
         }
 

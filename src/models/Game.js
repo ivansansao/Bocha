@@ -6,7 +6,7 @@ class Game {
         this.loggedEl = document.getElementById('divAccessLogged')
         this.infoGameEl = document.getElementById('infoGame')
         this.loggedEl.remove()
-        this.infoGameEl.remove()
+        // this.infoGameEl.remove()
         this.paused = false
         this.soundsOn = true
         this.speaker = new p5.Speech();
@@ -31,6 +31,8 @@ class Game {
 
         document.addEventListener('focus', (event) => {
             chat.clientSend({
+                from: player.login,
+                to: player.opponentLogin,
                 command: 'chatmessage',
                 login: player.login,
                 message: 'Perdeu o foco!'
@@ -45,6 +47,8 @@ class Game {
             if (document.visibilityState == 'visible') message = 'Focou do jogo!'
 
             client.send(JSON.stringify({
+                from: player.login,
+                to: player.opponentLogin,
                 command: 'visibilitychange',
                 login: player.login,
                 visibilityState: document.visibilityState,
@@ -54,6 +58,8 @@ class Game {
         document.addEventListener("suspend", (event) => {
             console.log(event)
             chat.clientSend({
+                from: player.login,
+                to: player.opponentLogin,
                 command: 'chatmessage',
                 login: player.login,
                 message: 'suspend'
@@ -85,7 +91,12 @@ class Game {
 
         const accessLogin = document.getElementById('accessLogin').value
         client = new Client()
-        client.send(JSON.stringify({ command: "login", login: accessLogin }))
+        client.send(JSON.stringify({
+            from: player.login,
+            to: player.opponentLogin,
+            command: "login",
+            login: accessLogin
+        }))
 
         box.clearGame()
 
@@ -97,7 +108,7 @@ class Game {
         document.getElementById('itemOnline').appendChild(this.loginEl)
 
         this.loggedEl.remove()
-        this.infoGameEl.remove()
+        // this.infoGameEl.remove()
 
         this.cancelGame()
         this.loginning = false
@@ -116,7 +127,7 @@ class Game {
             document.getElementById('accessUserImg').innerText = server.login.trim().toUpperCase()[0]
             document.getElementById('accessUserName').innerText = server.login.trim()
 
-            document.getElementById('itemOnline').appendChild(this.infoGameEl)
+            // document.getElementById('itemOnline').appendChild(this.infoGameEl)
             document.getElementById('team').innerText = toPT(player.team)
 
             this.loginEl.remove()

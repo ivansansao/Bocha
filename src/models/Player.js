@@ -50,6 +50,8 @@ class Player {
                 box.scoreboard.loginPlayedLastBall = player.login
 
                 const data = {
+                    from: player.login,
+                    to: player.opponentLogin,
                     command: 'threw',
                     login: this.login,
                     bocce: {

@@ -55,6 +55,20 @@
         <div id="accessUserName"></div>
         <button onclick="game.close(this)">Sair</button>
       </div>
+
+    </div>
+    <div class="preference" id="preference">
+      <div class="selectOpponent">
+        <div>
+          <label for="cars">Jogar com:</label>
+          <select name="cars" id="cars">
+            <option value="volvo">Bia</option>
+            <option value="saab">Ana</option>
+            <option value="audi">Audi</option>
+          </select>
+          <button onclick="console.log('game.start()')">Jogar</button>
+        </div>
+      </div>
       <div class="info-game" id="infoGame">
         <div>
           <span class="label">Você joga com:</span><span class="content" id="team">...</span>
@@ -63,8 +77,8 @@
           <span class="label">Adversário:</span><span class="content" id="opponent">...</span>
         </div>
       </div>
-
     </div>
+
 
     <div class="ready-msg">
 

@@ -21,6 +21,8 @@ class Chat {
     sendChatMessage(message) {
 
         this.clientSend({
+            from: player.login,
+            to: player.opponentLogin,
             command: 'chatmessage',
             login: player.login,
             message: message.innerText
@@ -31,6 +33,8 @@ class Chat {
     onOpponentConnect(data) {
 
         this.clientSend({
+            from: player.login,
+            to: player.opponentLogin,
             command: 'chatmessage',
             login: data.login,
             message: 'Entrei!'
@@ -62,6 +66,8 @@ class Chat {
 
         if (message.length > 0) {
             this.clientSend({
+                from: player.login,
+                to: player.opponentLogin,
                 command: 'chatmessage',
                 login: player.login,
                 message
@@ -71,6 +77,8 @@ class Chat {
     }
     sendRaw(message) {
         this.clientSend({
+            from: player.login,
+            to: player.opponentLogin,
             command: 'chatmessage',
             login: player.login,
             message

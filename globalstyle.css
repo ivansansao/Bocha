@@ -167,10 +167,11 @@
 }
 
 .grid-template-areas-4 {
-    grid-template-columns: 58% 42%;
-    grid-template-rows: 20% 60% 20%;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 10% 10% 60% 20%;
     grid-template-areas:
         "content online"
+        "content preference"
         "content message"
         "content chat"
     ;
@@ -221,7 +222,7 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: medium;
-    padding: 20px;
+    padding: 10px;
     margin: 0px;
     /* background: rgb(243, 243, 243); */
     border-radius: 0px 0px 0px 10px;
@@ -343,4 +344,27 @@ button:active {
     flex-direction: row;
     align-items: flex-start;
     padding: 10px;
+}
+
+.preference {
+    display: flex;
+
+    grid-area: preference;
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+select {
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid grey;
+    border-radius: 8px;
+    font-size: medium;
+    min-width: 200px;
 }

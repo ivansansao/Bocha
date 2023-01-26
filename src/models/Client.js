@@ -24,7 +24,11 @@ class Client {
     onOpen = (data) => {
 
         this.isConnected = true
-        this.send(Date.now() + ": Conectei no server")
+        this.send(JSON.stringify({
+            from: player.login,
+            to: player.opponentLogin,
+            message: Date.now() + ": Conectei no server"
+        }))
     }
 
     close = (data) => {
