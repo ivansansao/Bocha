@@ -13,6 +13,7 @@ class Bocce extends Ball {
         this.threwMx = 0
         this.threwMy = 0
         this.maxForce = args.maxForce
+        this.captureStage = 0
 
     }
 

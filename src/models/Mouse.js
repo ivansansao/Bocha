@@ -23,14 +23,17 @@ function mouseReleased() {
 
     if (box.scoreboard.isMyTimeToPlay()) {
 
-        if (clickCount % 2 == 0) {
+        // if (clickCount % 2 == 0) {
 
-            const bocce = balls.find((e) => e.captured == true)
-            if (bocce) {
+        const bocce = balls.find((e) => e.captured == true)
+        if (bocce) {
+            if (bocce.captureStage == 1) {
                 player.throwBocce(mouseX, mouseY, bocce.id, bocce.p.x, bocce.p.y)
             }
-
+            bocce.captureStage++
         }
+
+        // }
     }
 }
 
