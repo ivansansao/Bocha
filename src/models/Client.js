@@ -94,9 +94,16 @@ class Client {
 
                 case 'opponentData':
 
-                    player.opponentLogin = parseData.login
+                    // player.opponentLogin = parseData.login
+                    // chat.onOpponentConnect(parseData)
+                    // game.onOpponentConnect(parseData)
+
+                    break
+                case 'start':
+
+                    player.opponentLogin = parseData.opponent
                     chat.onOpponentConnect(parseData)
-                    game.onOpponentConnect(parseData)
+                    game.onStart(parseData)
 
                     break
                 case 'disconnected':
@@ -113,6 +120,10 @@ class Client {
 
                     chat.onMessageReceived(parseData)
                     game.onOpponentVisibilityChange(parseData)
+                    break
+                case 'opponentsList':
+
+                    game.onOpponentList(parseData)
                     break
 
                 default:

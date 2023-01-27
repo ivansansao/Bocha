@@ -1,15 +1,6 @@
 import * as aux from './Auxiliary.js'
 import { Game } from './Game.js'
 
-let clients = []
-const errors = {}
-
-errors[0] = { code: 0, reason: 'No erros' }
-errors[1] = { code: 1, reason: 'Login já existe' }
-errors[2] = { code: 2, reason: 'Vamos lá digite algo maior' }
-errors[3] = { code: 3, reason: 'Jogador não conectado' }
-errors[4] = { code: 4, reason: 'Login inválido!' }
-
 export class HandleMessages {
     constructor() {
     }
@@ -30,49 +21,32 @@ export class HandleMessages {
 
         switch (jMessage.command) {
             case 'login':
-                Game.login({ ws, errors, clients, jMessage })
+                Game.login({ ws, jMessage })
+                break;
+            case 'start':
+                Game.start({ ws, jMessage })
                 break;
             case 'threw':
-                Game.threw({ ws, errors, clients, jMessage })
+                Game.threw({ ws, jMessage })
                 break
             case 'allposition':
-                Game.allposition({ ws, errors, clients, jMessage })
+                Game.allposition({ ws, jMessage })
                 break
             case 'visibilitychange':
-                Game.visibilitychange({ ws, errors, clients, jMessage })
+                Game.visibilitychange({ ws, jMessage })
                 break
             case 'chatmessage':
-                Game.chatmessage({ ws, errors, clients, jMessage })
+                Game.chatmessage({ ws, jMessage })
                 break
         }
 
     }
 
     static close(ws, code, reason) {
-
-        aux.dateLog("Desconectou code: " + code + "  Reason: " + reason)
-        aux.dateLog('BEFORE: ' + clients.length)
-
-        clients.forEach((client) => {
-            if (client.ws == ws) {
-                aux.dateLog('>> DELETING: ' + client.login)
-                clients = clients.filter((e) => e.login != client.login)
-
-                // Comunicate of disconnecting.
-                const op = getOpponentOf(client.login)
-                if (op) {
-                    op.ws.send(JSON.stringify({ command: 'disconnected', login: client.login }))
-                }
-
-            }
-        })
-
-        aux.dateLog('AFTER: ' + clients.length)
-
+        Game.close({ ws, code, reason })
     }
     static newConnection(ws) {
-        aux.dateLog('Connectou!')
-        ws.send('Você conectou no server')
+        Game.newConnection({ ws })
     }
 
 }

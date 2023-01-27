@@ -13,4 +13,11 @@ function dateLog(data) {
     console.log(getDateTime() + ": " + data)
 }
 
-export { dateLog, getDateTime }
+function hardCompare(a, b) {
+    a = a.toLowerCase().trim().replace(/\s/g, '')
+    b = b.toLowerCase().trim().replace(/\s/g, '')
+
+    return a === b
+
+}
+export { dateLog, getDateTime, hardCompare }

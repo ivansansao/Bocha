@@ -92,8 +92,8 @@ class Game {
         const accessLogin = document.getElementById('accessLogin').value
         client = new Client()
         client.send(JSON.stringify({
-            from: player.login,
-            to: player.opponentLogin,
+            from: accessLogin,
+            to: '',
             command: "login",
             login: accessLogin
         }))
@@ -132,7 +132,7 @@ class Game {
 
             this.loginEl.remove()
 
-            this.startGame()
+
 
             chat.addHtmlChatItem({ login: 'Bocha', unique: true, message: 'Como jogar?<br><br>1o Clique na bola e solte pra pegá-la.<br>2o Clique segure, arraste pra baixo e solte!' })
 
@@ -145,14 +145,14 @@ class Game {
 
     onOpponentConnect(server) {
 
-        console.log("SHOWW OPP INFO", server)
-        proxyPlayer = new Player({ login: server.login, team: server.team, proxy: true })
+        // console.log("SHOWW OPP INFO", server)
+        // proxyPlayer = new Player({ login: server.login, team: server.team, proxy: true })
 
-        document.getElementById('opponent').innerText = server.login
-        box.startGame()
-        this.pause(false)
+        // document.getElementById('opponent').innerText = server.login
+        // box.startGame()
+        // this.pause(false)
 
-        console.log("ANFTER OPP")
+        // console.log("ANFTER OPP")
 
     }
 
@@ -175,6 +175,33 @@ class Game {
         }
 
     }
+    onOpponentList(server) {
+
+        const combo = document.getElementById('opponentsList')
+        combo.innerHTML = ''
+
+        for (const op of server.opponentsList) {
+
+            const option = document.createElement("option")
+            option.text = op.login
+            combo.add(option)
+        }
+
+    }
+
+    onStart(server) {
+        console.log("(( servidor mandou iniciar ))", server)
+
+        console.log("SHOWW OPP INFO", server)
+        proxyPlayer = new Player({ login: server.login, team: server.team, proxy: true })
+
+        document.getElementById('opponent').innerText = server.opponent
+        box.startGame()
+        this.pause(false)
+
+        console.log("ANFTER OPP")
+
+    }
 
     pause(status) {
         if (status) {
@@ -189,7 +216,13 @@ class Game {
 
     }
 
-    startGame() {
+    start() {
+        client.send(JSON.stringify({
+            from: player.login,
+            to: '',
+            opponent: document.getElementById('opponentsList').value,
+            command: "start",
+        }))
 
     }
 
