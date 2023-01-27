@@ -119,7 +119,7 @@ class Game {
 
         if (server.error.code == 0) {
 
-            player = new Player({ login: server.login, team: server.team, proxy: false })
+            player = new Player({ login: server.login, team: '', proxy: false })
             this.logged = true
 
             document.getElementById('itemOnline').appendChild(this.loggedEl)
@@ -127,14 +127,11 @@ class Game {
             document.getElementById('accessUserImg').innerText = server.login.trim().toUpperCase()[0]
             document.getElementById('accessUserName').innerText = server.login.trim()
 
-            // document.getElementById('itemOnline').appendChild(this.infoGameEl)
-            document.getElementById('team').innerText = toPT(player.team)
-
             this.loginEl.remove()
 
-
-
             chat.addHtmlChatItem({ login: 'Bocha', unique: true, message: 'Como jogar?<br><br>1o Clique na bola e solte pra pegá-la.<br>2o Clique segure, arraste pra baixo e solte!' })
+
+            document.getElementById('selectOpponent').style.visibility = 'visible'
 
         } else {
             document.getElementById('access-error').innerText = server.error.reason
@@ -190,16 +187,26 @@ class Game {
     }
 
     onStart(server) {
-        console.log("(( servidor mandou iniciar ))", server)
 
-        console.log("SHOWW OPP INFO", server)
-        proxyPlayer = new Player({ login: server.login, team: server.team, proxy: true })
+        if (server.error.code == 0) {
 
-        document.getElementById('opponent').innerText = server.opponent
-        box.startGame()
-        this.pause(false)
+            console.log("(( servidor mandou iniciar ))", server)
 
-        console.log("ANFTER OPP")
+            console.log("SHOWW OPP INFO", server)
+            player.team = server.team
+            proxyPlayer = new Player({ login: server.login, team: '', proxy: true })
+
+            document.getElementById('team').innerText = toPT(server.team)
+            document.getElementById('opponent').innerText = server.opponent
+            box.startGame()
+            this.pause(false)
+
+            document.getElementById('selectOpponent').style.visibility = 'hidden'
+
+            console.log("ANFTER OPP")
+        } else {
+            chat.addHtmlChatItem({ login: 'server', message: server.error.reason })
+        }
 
     }
 

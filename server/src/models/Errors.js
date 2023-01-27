@@ -7,5 +7,6 @@ errors[3] = { code: 3, reason: 'Jogador não conectado' }
 errors[4] = { code: 4, reason: 'Login inválido!' }
 errors[5] = { code: 5, reason: 'Excedeu o limite de 2' }
 errors[6] = { code: 6, reason: 'Login inválido! (*)' }
+errors[7] = { code: 7, reason: 'Jogador parece já estar jogando' }
 
 export { errors }
