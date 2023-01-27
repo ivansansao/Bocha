@@ -6,7 +6,6 @@ let compared = []
 let logs = [];
 let running = true;
 let _boccePrimaryKey = 1;
-let clickCount = 0
 let box = false;
 let client = false
 let player = false;

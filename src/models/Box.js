@@ -500,9 +500,6 @@ class Box {
                     bocce.active = true
                     game.playSound('new-bocce-1')
 
-                    // bocce.captured = DEF_BALL_CAPTURED
-                    // clickCount++
-                    // console.log('clickCount')
                     break
                 }
             }

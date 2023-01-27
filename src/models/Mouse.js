@@ -10,7 +10,6 @@ function mousePressed(event) {
         if (!bocce) {
             captureBall()
         }
-        clickCount++;
     }
 
 }
@@ -23,8 +22,6 @@ function mouseReleased() {
 
     if (box.scoreboard.isMyTimeToPlay()) {
 
-        // if (clickCount % 2 == 0) {
-
         const bocce = balls.find((e) => e.captured == true)
         if (bocce) {
             if (bocce.captureStage == 1) {
@@ -33,7 +30,6 @@ function mouseReleased() {
             bocce.captureStage++
         }
 
-        // }
     }
 }
 
