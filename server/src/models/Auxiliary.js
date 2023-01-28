@@ -12,7 +12,7 @@ function getDateTime() {
 }
 
 function dateLog(data) {
-    console.log(colors.yellow.bold(getDateTime() + ": ") + data)
+    console.log(colors.brightWhite.bold(getDateTime() + ": ") + data)
 }
 
 function hardCompare(a, b) {
