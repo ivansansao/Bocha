@@ -231,7 +231,7 @@ class Bocce extends Ball {
             this.p.x += this.v.x
             this.p.y += this.v.y
 
-            // Apply friction         
+            // Apply friction
             this.v.x *= this.friction
             this.v.y *= this.friction
 

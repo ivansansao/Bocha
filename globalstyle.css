@@ -339,6 +339,15 @@ button:active {
     margin-left: 10px;
 }
 
+.settings {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+
 .settings>div {
     display: flex;
     flex-direction: row;

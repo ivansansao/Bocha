@@ -1,10 +1,11 @@
 import * as aux from './Auxiliary.js'
+import { Client } from './Client.js'
 import { errors } from './Errors.js'
 
 export class Game {
     static clients = []
 
-    static getWsOpponentOf(login) {
+    static getClientOpponentOf(login) {
         let opponentLogin = ''
 
         for (const client of this.clients) {
@@ -67,41 +68,22 @@ export class Game {
 
         if (this.validLogin({ ws, jMessage })) {
 
-
-            this.clients.push({ login: jMessage.login, opponent: '', ws, team: '' })
+            this.clients.push(new Client({ login: jMessage.login, ws }))
 
             ws.send(JSON.stringify({ ...jMessage, error: errors[0], team: '' }))
-            aux.dateLog('Logged as: ' + jMessage.login)
+
             this.sendOpponentsList()
-            this.showPlayers()
-
-            // // Send to oppenents my datas
-            // for (const client of this.clients) {
-            //     for (const op of this.clients) {
-            //         if (client.login != op.login) {
-            //             const myData = {
-            //                 command: 'opponentData',
-            //                 login: op.login,
-            //                 team: op.team
-            //             }
-            //             client.ws.send(JSON.stringify(myData))
-            //             break
-            //         }
-            //     }
-            // }
-
+            this.showPlayers('Logged as: ' + jMessage.login)
 
         }
     }
     static start({ ws, jMessage }) {
 
-        // this.setOpponentOf({ jMessage })
-
         const client = this.getClientByLogin(jMessage.from)
         const opponent = this.getClientByLogin(jMessage.opponent)
 
         if (client.opponent != '' || opponent.opponent != '') {
-            this.send(client.ws,
+            client.send(
                 {
                     from: 'server',
                     to: client.login,
@@ -118,7 +100,7 @@ export class Game {
         opponent.opponent = client.login
 
         // Send to player
-        this.send(client.ws,
+        client.send(
             {
                 from: 'server',
                 to: client.login,
@@ -131,7 +113,7 @@ export class Game {
         )
 
         // Send to opponnent
-        this.send(opponent.ws,
+        opponent.send(
             {
                 from: 'server',
                 to: client.opponent,
@@ -147,12 +129,7 @@ export class Game {
         this.showPlayers()
 
     }
-    // static setOpponentOf({ jMessage }) {
 
-    //     const client = this.getClientByLogin(jMessage.from)
-    //     client.opponent = jMessage.opponent
-
-    // }
     static getOpponentsList(from) {
         let list = []
 
@@ -171,7 +148,7 @@ export class Game {
 
         this.clients.forEach((client) => {
             const list = this.getOpponentsList(client.login)
-            this.send(client.ws,
+            client.send(
                 {
                     from: 'server',
                     to: client.login,
@@ -184,34 +161,21 @@ export class Game {
     }
     static threw({ jMessage }) {
 
-        const op = this.getWsOpponentOf(jMessage.login)
-        op.ws.send(JSON.stringify(jMessage))
+        const op = this.getClientOpponentOf(jMessage.login)
+        op.send(jMessage)
 
-        // for (const client of this.clients) {
-        //     if (client.login != jMessage.login) {
-        //         client.ws.send(JSON.stringify(jMessage))
-        //     }
-        // }
     }
     static allposition({ jMessage }) {
 
-        const op = this.getWsOpponentOf(jMessage.login)
-        op.ws.send(JSON.stringify(jMessage))
-
-        // for (const client of this.clients) {
-        //     if (client.login != jMessage.login) {
-        //         aux.dateLog('Enviando posição para: ' + client.login)
-        //         client.ws.send(JSON.stringify(jMessage))
-        //     }
-        // }
+        const op = this.getClientOpponentOf(jMessage.login)
+        op.send(jMessage)
 
     }
     static visibilitychange({ jMessage }) {
-        const op = this.getWsOpponentOf(jMessage.login)
+        const op = this.getClientOpponentOf(jMessage.login)
 
         if (op) {
-            aux.dateLog('Enviando mudança de visibilidade para: ' + op.login)
-            op.ws.send(JSON.stringify({ ...jMessage, error: errors[0] }))
+            op.send({ ...jMessage, error: errors[0] })
         }
 
 
@@ -219,56 +183,29 @@ export class Game {
     static chatmessage({ jMessage }) {
 
         const client = this.getClientByLogin(jMessage.login)
-        const op = this.getWsOpponentOf(jMessage.login)
+        const op = this.getClientOpponentOf(jMessage.login)
 
-        aux.dateLog('Enviando mensagem para: ' + client.login)
-        client.ws.send(JSON.stringify({ ...jMessage, error: errors[0] }))
+        client.send({ ...jMessage, error: errors[0] })
+        op.send({ ...jMessage, error: errors[0] })
 
-        aux.dateLog('Enviando mensagem para: ' + op.login)
-        op.ws.send(JSON.stringify({ ...jMessage, error: errors[0] }))
-
-        // if (this.clients.length > 1) {
-        //     for (const client of this.clients) {
-        //         aux.dateLog('Enviando mensagem para: ' + client.login)
-        //         client.ws.send(JSON.stringify({ ...jMessage, error: errors[0] }))
-        //     }
-        // } else {
-        //     aux.dateLog('Erro: ' + errors[3] + ' q: ' + this.clients.length)
-        //     ws.send(JSON.stringify({ ...jMessage, error: errors[3] }))
-        // }
     }
     static close({ ws, code, reason }) {
 
-        aux.dateLog("Desconectou code: " + code + "  Reason: " + reason)
-        aux.dateLog('BEFORE: ' + this.clients.length)
-
-
         const client = this.getClientByWs(ws)
-        const op = this.getWsOpponentOf(client.login)
+        const op = this.getClientOpponentOf(client.login)
 
-        this.showPlayers('unsetOpponent of player: ' + client.login + " A ")
         client.opponent = ''
         this.unsetOpponent(client.opponent)
-        this.showPlayers('unsetOpponent of player: ' + client.login + " B ")
 
-
-
-
-
-        aux.dateLog('>> DELETING: ' + client.login)
         this.clients = this.clients.filter((e) => e.login != client.login)
 
-        // Comunicate of disconnecting.
-
         if (op) {
-            op.ws.send(JSON.stringify({ from: 'server', to: op.login, command: 'disconnected', login: client.login }))
+            op.send({ from: 'server', to: op.login, command: 'disconnected', login: client.login })
         }
-
-        aux.dateLog('AFTER: ' + this.clients.length)
 
         this.sendOpponentsList()
 
-        this.showPlayers()
+        this.showPlayers(client.login + ' closed!')
     }
 
     static unsetOpponent(opponent) {
@@ -285,10 +222,6 @@ export class Game {
     static newConnection({ ws }) {
         aux.dateLog('Connectou!')
         ws.send('Você conectou no server')
-    }
-
-    static send(ws, data) {
-        ws.send(JSON.stringify(data))
     }
 
     static showPlayers(msg) {
