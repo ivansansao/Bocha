@@ -1,11 +1,12 @@
 import * as aux from './src/models/Auxiliary.js'
 import { WebSocketServer } from 'ws';
 import { HandleMessages } from './src/models/HandleMessages.js';
+import colors from 'colors'
 
 const port = 8945
 const wss = new WebSocketServer({ port, clientTracking: true });
 
-aux.dateLog('Bocha server is listenning...            (Port: ' + port + ')')
+aux.dateLog(colors.rainbow('Bocha server is listenning...            (Port: ' + port + ')'))
 
 wss.on('connection', function connection(ws, req) {
 

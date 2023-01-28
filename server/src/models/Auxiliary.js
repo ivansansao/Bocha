@@ -1,3 +1,5 @@
+import colors from 'colors'
+
 function addZero(i) {
     if (i < 10) { i = "0" + i }
     return i;
@@ -10,7 +12,7 @@ function getDateTime() {
 }
 
 function dateLog(data) {
-    console.log(getDateTime() + ": " + data)
+    console.log(colors.yellow.bold(getDateTime() + ": ") + data)
 }
 
 function hardCompare(a, b) {

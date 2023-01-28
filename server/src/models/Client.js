@@ -1,4 +1,5 @@
 import * as aux from './Auxiliary.js'
+import colors from 'colors'
 
 class Client {
     constructor({ login, ws }) {
@@ -9,7 +10,7 @@ class Client {
     }
     send(data) {
         this.ws.send(JSON.stringify(data))
-        aux.dateLog('Sent to (' + this.login + '): ' + JSON.stringify(data))
+        aux.dateLog(colors.brightYellow('Sent to (' + colors.bold(this.login) + '): ' + JSON.stringify(data)))
     }
 }
 
