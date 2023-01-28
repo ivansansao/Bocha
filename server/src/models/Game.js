@@ -3,6 +3,7 @@ import { Client } from './Client.js'
 import { errors } from './Errors.js'
 
 export class Game {
+
     static clients = []
 
     static getClientOpponentOf(login) {
@@ -38,7 +39,6 @@ export class Game {
         }
         return {}
     }
-
     static validLogin({ ws, jMessage }) {
 
         let valid = false
@@ -68,16 +68,15 @@ export class Game {
 
         if (this.validLogin({ ws, jMessage })) {
 
-            this.clients.push(new Client({ login: jMessage.login, ws }))
-
-            ws.send(JSON.stringify({ ...jMessage, error: errors[0], team: '' }))
-
+            const client = new Client({ login: jMessage.login, ws })
+            this.clients.push(client)
+            client.send({ ...jMessage, error: errors[0], team: '' })
             this.sendOpponentsList()
             this.showPlayers('Logged as: ' + jMessage.login)
 
         }
     }
-    static start({ ws, jMessage }) {
+    static start({ jMessage }) {
 
         const client = this.getClientByLogin(jMessage.from)
         const opponent = this.getClientByLogin(jMessage.opponent)
@@ -129,7 +128,6 @@ export class Game {
         this.showPlayers()
 
     }
-
     static getOpponentsList(from) {
         let list = []
 
@@ -207,7 +205,6 @@ export class Game {
 
         this.showPlayers(client.login + ' closed!')
     }
-
     static unsetOpponent(opponent) {
 
         for (const client of this.clients) {
@@ -218,12 +215,10 @@ export class Game {
         }
 
     }
-
     static newConnection({ ws }) {
         aux.dateLog('Connectou!')
         ws.send('Você conectou no server')
     }
-
     static showPlayers(msg) {
 
         const data = []

@@ -24,19 +24,19 @@ export class HandleMessages {
                 Game.login({ ws, jMessage })
                 break;
             case 'start':
-                Game.start({ ws, jMessage })
+                Game.start({ jMessage })
                 break;
             case 'threw':
-                Game.threw({ ws, jMessage })
+                Game.threw({ jMessage })
                 break
             case 'allposition':
-                Game.allposition({ ws, jMessage })
+                Game.allposition({ jMessage })
                 break
             case 'visibilitychange':
-                Game.visibilitychange({ ws, jMessage })
+                Game.visibilitychange({ jMessage })
                 break
             case 'chatmessage':
-                Game.chatmessage({ ws, jMessage })
+                Game.chatmessage({ jMessage })
                 break
         }
 
