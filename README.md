@@ -2,7 +2,7 @@
 
 Javascript 2d elastic collision
 
-To run? It is not necessary a server, just clone and run index.html on your computer.
+To run? just clone on your pc, run the server (take a look below) and run index.html. 
 
 Each ball has
 - Mass
@@ -66,7 +66,7 @@ for (i = 0; i < 999; i++) {
 
 # Server
 
-You can star the server running:
+You can start the server by running:
 
 ~~~bash
 cd server

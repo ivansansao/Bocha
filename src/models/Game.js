@@ -202,6 +202,8 @@ class Game {
             this.pause(false)
 
             document.getElementById('selectOpponent').style.visibility = 'hidden'
+            document.getElementById('chatUser').innerText = server.opponent
+
 
             console.log("ANFTER OPP")
         } else {
