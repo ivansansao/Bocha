@@ -24,7 +24,7 @@ function mouseReleased() {
 
         const bocce = balls.find((e) => e.captured == true)
         if (bocce) {
-            if (bocce.captureStage == 1) {
+            if (bocce.captureStage > 0) {
                 player.throwBocce(mouseX, mouseY, bocce.id, bocce.p.x, bocce.p.y)
             }
             bocce.captureStage++
