@@ -191,8 +191,10 @@ class Bocce extends Ball {
 
         super.onAfterNewCollide(a, b)
 
-        if (a.isRolling() || b.isRolling()) {
-            game.playSound('ball')
+        if (a.isRolling() && b.isRolling()) {
+            if (abs(a.v.x) + abs(a.v.y) + abs(b.v.x) + abs(b.v.y) > 0.2) {
+                game.playSound('ball')
+            }
         }
 
     }
