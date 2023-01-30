@@ -52,8 +52,8 @@ class BotPlayer {
     static specialThrow(x, y) {
 
         const bocce = balls.find((e) => e.captured == true)
-        x = map(x, 0, 1, 353, 747)
-        y = map(y, 0, 1, 598, 798)
+        x = map(x, 0, 1, bocce.p.x, bocce.p.x + 250)
+        y = map(y, 0, 1, bocce.p.y, bocce.p.y + 250) // Force is from the bocce position.
         // bocce.throw(x, y)
         player.throwBocce(x, y, bocce.id, bocce.p.x, bocce.p.y)
 
