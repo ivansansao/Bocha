@@ -204,8 +204,10 @@ class Game {
             document.getElementById('selectOpponent').style.visibility = 'hidden'
             document.getElementById('chatUser').innerText = server.opponent
 
-
             console.log("ANFTER OPP")
+
+            if (BotPlayerOn) BotPlayer.throw()
+
         } else {
             chat.addHtmlChatItem({ login: 'server', message: server.error.reason })
         }

@@ -219,6 +219,7 @@ class Box {
                 this.putBalls()
                 this.resetRound()
                 this.verifyEndGame()
+                if (BotPlayerOn) BotPlayer.throw()
 
             }, 6000)
 
@@ -226,7 +227,7 @@ class Box {
 
         this.sendPositionToEnimy()
 
-
+        if (BotPlayerOn) BotPlayer.throw()
 
     }
 
@@ -565,14 +566,14 @@ class Box {
 
 }
 
-function captureBall() {
+function captureBall(mx, my) {
 
     for (const bocce of balls) {
 
         if (bocce.isStopped() && !bocce.played) {
 
-            const dx = bocce.p.x - mouseX;
-            const dy = bocce.p.y - mouseY;
+            const dx = bocce.p.x - mx;
+            const dy = bocce.p.y - my;
             const distance = floor(Math.sqrt(dx * dx + dy * dy));
             const collided = distance < bocce.r * 4
 

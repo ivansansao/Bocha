@@ -1,6 +1,8 @@
 const DEF_BALL_RELEASED = 0
 const DEF_BALL_CAPTURED = 1
 
+
+let BotPlayerOn = false
 let balls = []
 let compared = []
 let logs = [];

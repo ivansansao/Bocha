@@ -8,9 +8,11 @@ function mousePressed(event) {
 
         const bocce = balls.find((e) => e.captured == true)
         if (!bocce) {
-            captureBall()
+            captureBall(mouseX, mouseY)
         }
     }
+
+    console.log(mouseX, mouseY)
 
 }
 
