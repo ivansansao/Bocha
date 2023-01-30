@@ -36,6 +36,19 @@ class Bocce extends Ball {
 
     show() {
 
+        if (debug) {
+            textSize(10)
+            noStroke()
+            const colr = this.groupName == 'blue' ? [0, 0, 255] : [204, 122, 0]
+            legend(this.id, colr, this.p.x - 16, this.p.y - this.r - 2, false)
+            legend('C', colr, this.p.x - 8, this.p.y - this.r - 2, this.captured)
+            legend('A', colr, this.p.x, this.p.y - this.r - 2, this.active)
+            legend('R', colr, this.p.x + 8, this.p.y - this.r - 2, this.passedRisk)
+            legend('P', colr, this.p.x + 16, this.p.y - this.r - 2, this.played)
+
+
+        }
+
         if (!this.active) {
             return
         }
@@ -45,6 +58,7 @@ class Bocce extends Ball {
             noFill()
             circle(this.p.x, this.p.y, (this.r * 2) + 10)
         }
+
 
         if (!this.passedRisk) {
             if (this.groupName != 'little') {

@@ -24,3 +24,14 @@ function validOrError(theValue, errorMsg) {
         throw errorMsg || 'False value (not accepted)'
     }
 }
+
+function legend(msg, colr, x, y, expression) {
+    textSize(10)
+    noStroke()
+    if (expression) {
+        fill(colr)
+        circle(x, y - 12, 5)
+    }
+    fill(100)
+    text(msg, x, y)
+}
