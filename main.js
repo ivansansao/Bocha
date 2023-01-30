@@ -47,12 +47,18 @@ function draw() {
         ball.show();
     }
 
+    if (BotPlayerOn) BotPlayer.update()
+
     box.stoppedGame()
 
     showInfo();
 
     if (game.logged) {
         player.show()
+    }
+
+    if (debug) {
+        showCoordToBox()
     }
 
 }

@@ -4,11 +4,13 @@ function mousePressed(event) {
         return
     }
 
-    if (box.scoreboard.isMyTimeToPlay()) {
+    if (!BotPlayerOn) {
+        if (box.scoreboard.isMyTimeToPlay()) {
 
-        const bocce = balls.find((e) => e.captured == true)
-        if (!bocce) {
-            captureBall(mouseX, mouseY)
+            const bocce = balls.find((e) => e.captured == true)
+            if (!bocce) {
+                captureBall(mouseX, mouseY)
+            }
         }
     }
 
@@ -22,14 +24,16 @@ function mouseReleased() {
         return
     }
 
-    if (box.scoreboard.isMyTimeToPlay()) {
+    if (!BotPlayerOn) {
+        if (box.scoreboard.isMyTimeToPlay()) {
 
-        const bocce = balls.find((e) => e.captured == true)
-        if (bocce) {
-            if (bocce.captureStage > 0) {
-                player.throwBocce(mouseX, mouseY, bocce.id, bocce.p.x, bocce.p.y)
+            const bocce = balls.find((e) => e.captured == true)
+            if (bocce) {
+                if (bocce.captureStage > 0) {
+                    player.throwBocce(mouseX, mouseY, bocce.id, bocce.p.x, bocce.p.y)
+                }
+                bocce.captureStage++
             }
-            bocce.captureStage++
         }
 
     }
@@ -41,11 +45,13 @@ function mouseMoved() {
         return
     }
 
-    if (box.scoreboard.isMyTimeToPlay()) {
-        for (const ball of balls) {
-            if (ball.captured) {
-                ball.p.x = mouseX;
-                ball.p.y = mouseY;
+    if (!BotPlayerOn) {
+        if (box.scoreboard.isMyTimeToPlay()) {
+            for (const ball of balls) {
+                if (ball.captured) {
+                    ball.p.x = mouseX;
+                    ball.p.y = mouseY;
+                }
             }
         }
     }

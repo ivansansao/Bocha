@@ -20,8 +20,10 @@ class Bocce extends Ball {
     update(box) {
 
         if (mouseIsPressed) {
-            if (this.captured == DEF_BALL_CAPTURED) {
-                this.calcThrowForce(mouseX, mouseY)
+            if (!BotPlayerOn) {
+                if (this.captured == DEF_BALL_CAPTURED) {
+                    this.calcThrowForce(mouseX, mouseY)
+                }
             }
         }
 
@@ -41,12 +43,11 @@ class Bocce extends Ball {
             noStroke()
             const colr = this.groupName == 'blue' ? [0, 0, 255] : [204, 122, 0]
             legend(this.id, colr, this.p.x - 16, this.p.y - this.r - 2, false)
-            legend('C', colr, this.p.x - 8, this.p.y - this.r - 2, this.captured)
-            legend('A', colr, this.p.x, this.p.y - this.r - 2, this.active)
-            legend('R', colr, this.p.x + 8, this.p.y - this.r - 2, this.passedRisk)
-            legend('P', colr, this.p.x + 16, this.p.y - this.r - 2, this.played)
-
-
+            legend('L', colr, this.p.x - 8, this.p.y - this.r - 2, this.collided)
+            legend('C', colr, this.p.x, this.p.y - this.r - 2, this.captured)
+            legend('A', colr, this.p.x + 8, this.p.y - this.r - 2, this.active)
+            legend('R', colr, this.p.x + 16, this.p.y - this.r - 2, this.passedRisk)
+            legend('P', colr, this.p.x + 24, this.p.y - this.r - 2, this.played)
         }
 
         if (!this.active) {

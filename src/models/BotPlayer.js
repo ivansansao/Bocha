@@ -1,4 +1,8 @@
 class BotPlayer {
+    static throwX = 0
+    static throwY = 0
+    static ia = new NeuralNetwork({ f1: 'sigmoid', f2: 'sigmoid' })
+
     static captureBocce() {
 
         let captured = false
@@ -22,7 +26,15 @@ class BotPlayer {
 
     }
     static think() {
-        return { start01X: random(0, 1), start01Y: random(0, 1), throw01X: random(0, 1), throw01Y: random(0, 1) }
+        const inputs = this.getViewForIA()
+        console.log('viewForIA: ', inputs)
+
+        // this.ia.mutate(Number(random(0.01, 0.8).toFixed(15)));
+        const out = Array.from(this.ia.think(inputs)).map(e => Number(e.toFixed(3)))
+
+        console.log(out)
+        return { start01X: out[0], start01Y: out[1], throw01X: out[2], throw01Y: out[3] }
+        // return { start01X: random(0, 1), start01Y: random(0, 1), throw01X: random(0, 1), throw01Y: random(0, 1) }
     }
 
     static setStartThrow(x, y) {
@@ -39,12 +51,17 @@ class BotPlayer {
             if (this.captureBocce()) {
                 const { start01X, start01Y, throw01X, throw01Y } = this.think()
                 const bocce = balls.find((e) => e.captured == true)
-                if (bocce) {
-                    this.setStartThrow(start01X, start01Y)
+
+                this.setStartThrow(start01X, start01Y)
+
+                this.throwX = map(throw01X, 0, 1, bocce.p.x, bocce.p.x + 250)
+                this.throwY = map(throw01Y, 0, 1, bocce.p.y, bocce.p.y + 250)
+
+                setTimeout(() => {
                     setTimeout(() => {
                         this.specialThrow(throw01X, throw01Y)
                     }, 1000)
-                }
+                }, 1000)
             }
         }, 1000)
     }
@@ -57,6 +74,52 @@ class BotPlayer {
         // bocce.throw(x, y)
         player.throwBocce(x, y, bocce.id, bocce.p.x, bocce.p.y)
 
+    }
+
+    static update() {
+        const bocce = balls.find((e) => e.captured == true)
+        if (bocce) {
+            bocce.calcThrowForce(this.throwX, this.throwY)
+        }
+    }
+
+    static getBallsBoxCoords() {
+
+        const toBox = []
+
+        balls.sort((a, b) => (a.id > b.id ? 1 : -1))
+
+        balls.forEach((b) => {
+            if (b.active) {
+                const conv = convertCoordToBox(b.p.x, b.p.y)
+                toBox.push(conv.x)
+                toBox.push(conv.y)
+            } else {
+                toBox.push(-1)
+                toBox.push(-1)
+            }
+
+        })
+
+        return toBox
+
+    }
+
+    static getViewForIA() {
+        const iaView = this.getBallsBoxCoords()
+        if (box.scoreboard.timeToPlay == 'yellow') {
+            iaView.push(0)
+        } else {
+            iaView.push(1)
+        }
+        return iaView
+    }
+
+    static improve() {
+        console.log('   X9 Nova rede!')
+        // this.ia = new NeuralNetwork({ f1: 'sigmoid', f2: 'sigmoid' })
+        this.ia.mutate(Number(random(0.01, 0.8).toFixed(15)));
+        console.log('  Mutada ' + this.ia.mutatedNeurons)
     }
 
 }

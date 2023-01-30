@@ -35,3 +35,21 @@ function legend(msg, colr, x, y, expression) {
     fill(100)
     text(msg, x, y)
 }
+function convertCoordToBox(x, y) {
+    return ({ x: x - box.x, y: box.y1 - y })
+}
+
+function showCoordToBox() {
+    const conv = convertCoordToBox(mouseX, mouseY)
+    const reco = convertBoxToCoord(conv.x, conv.y)
+    noStroke()
+    fill(0)
+    textSize(12)
+    text(`(${mouseX},${mouseY})-(${conv.x}, ${conv.y}) ~ (${reco.x}.${reco.y})`, mouseX, mouseY - 10)
+    stroke(0)
+    noFill()
+    circle(mouseX, mouseY, 8)
+}
+function convertBoxToCoord(x, y) {
+    return ({ x: x + box.x, y: box.y1 - y })
+}

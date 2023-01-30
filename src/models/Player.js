@@ -13,6 +13,7 @@ class Player {
         this.y = 300
         this.rowHeight = 28
         this.proxy = proxy
+        this.pointBeforePlay = 0
     }
     show() {
 
@@ -27,7 +28,41 @@ class Player {
         this.team = ''
         this.opponentLogin = ''
     }
+
+    beforePlay() {
+        if (!this.proxy) {
+            this.pointBeforePlay = player.team == 'yellow' ? box.scoreboard.runningYellow : box.scoreboard.runningBlue
+            console.log("X9 Antes de eu jogar? ", this.pointBeforePlay)
+        }
+    }
+
+    afterPlay(lastTeam) {
+
+        if (!this.proxy) {
+            if (lastTeam == this.team) {
+
+                const played = balls.some(e => e.id > 1 && e.played)
+                if (played) {
+
+                    const pointAfter = player.team == 'yellow' ? box.scoreboard.runningYellow : box.scoreboard.runningBlue
+                    console.log(' X9 ANTES: ', this.pointBeforePlay, ' DEPOIS: ', pointAfter, ' my tem: ', this.team)
+
+                    if (pointAfter == 0 || (pointAfter < this.pointBeforePlay)) {
+                        console.log('X9 Precisa melhorar')
+
+                        if (BotPlayerOn) {
+                            BotPlayer.improve()
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+    }
     throwBocce(mx, my, idBocce, px, py) {
+        this.beforePlay()
 
         const bocce = this.getBocceById(idBocce)
 

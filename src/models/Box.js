@@ -177,6 +177,7 @@ class Box {
         }
         this.isStoppedGame = true
         console.log("Stopped game")
+        const lastTeam = this.scoreboard.timeToPlay
 
 
         // Bocces is plauing now change to played.
@@ -228,6 +229,9 @@ class Box {
         this.sendPositionToEnimy()
 
         if (BotPlayerOn) BotPlayer.throw()
+
+        player.afterPlay(lastTeam)
+
 
     }
 
@@ -332,7 +336,7 @@ class Box {
         }
 
         this.scoreboard.runningYellow = pointsYellow
-        this.scoreboard.runningYblue = pointsBlue
+        this.scoreboard.runningBlue = pointsBlue
 
     }
 
@@ -585,8 +589,8 @@ function captureBall(mx, my) {
 
                         if (bocce.active) {
                             bocce.captured = DEF_BALL_CAPTURED
-                            bocce.p.x = mouseX
-                            bocce.p.y = mouseY
+                            bocce.p.x = mx
+                            bocce.p.y = my
 
                             return true
 
