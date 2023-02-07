@@ -104,9 +104,38 @@ class Ball {
         const raysSum = a.r + b.r
         const diference = raysSum - distance
 
-        return { res: distance <= raysSum, diference, raysSum, dx, dy }
+        return { res: distance < raysSum, diference, raysSum, dx, dy }
 
     }
+    // x1distanceTo(other) {
+    //     const dx = this.p.x - other.p.x;
+    //     const dy = this.p.y - other.p.y;
+    //     return Math.sqrt(dx * dx + dy * dy);
+    // }
+    // collide() {
+    //     for (const other of balls) {
+    //         if (other != this && !(this.captured || other.captured)) {
+
+    //             const dist = this.x1distanceTo(other);
+    //             const overlap = this.r + other.r - dist;
+    //             if (overlap > 0) {
+    //                 const angle = Math.atan2(other.p.y - this.p.y, other.p.x - this.p.x);
+    //                 const tx = this.p.x + overlap * Math.cos(angle);
+    //                 const ty = this.p.y + overlap * Math.sin(angle);
+    //                 const sx = tx - other.p.x;
+    //                 const sy = ty - other.p.y;
+    //                 const b = 2 * (this.v.x * sx + this.v.y * sy) / (this.r + other.r);
+    //                 this.v.x -= b * other.r * sx;
+    //                 this.v.y -= b * other.r * sy;
+    //                 other.v.x += b * this.r * sx;
+    //                 other.v.y += b * this.r * sy;
+    //             } else {
+    //                 this.move()
+    //                 other.move()
+    //             }
+    //         }
+    //     }
+    // }
     collide() {
 
         for (const other of balls) {
@@ -149,6 +178,12 @@ class Ball {
                     this.v.y = (cos * c1Vel.y) + (sin * c1Vel.x);
                     other.v.x = (cos * c2Vel.x) - (sin * c2Vel.y);
                     other.v.y = (cos * c2Vel.y) + (sin * c2Vel.x);
+
+                    // Add a little bit of non ellastic collision
+                    this.v.x = this.v.x * 0.9
+                    this.v.y = this.v.y * 0.9
+                    other.v.x = other.v.x * 0.9
+                    other.v.y = other.v.y * 0.9
 
                     this.onAfterNewCollide(this, other)
 
